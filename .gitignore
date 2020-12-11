@@ -1,0 +1,4 @@
+#captcha/cnnyzm/
+captcha/output/
+.DS_*
+captcha/cnnyzm/*.model-*
