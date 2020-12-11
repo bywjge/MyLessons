@@ -1,4 +1,5 @@
 #captcha/cnnyzm/
 captcha/output/
+captcha/cnnyzm/result/
 .DS_*
 captcha/cnnyzm/*.model-*
