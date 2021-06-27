@@ -1,0 +1,5 @@
+<!--miniprogram/pages/profile/profile.wxml-->
+<view class="container">
+  <navigation title="我的"/>
+  <developHint class="hint" />
+</view>

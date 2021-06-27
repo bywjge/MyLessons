@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="35px" viewBox="0 0 128 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>My Lesson</title>
+    <g id="初始主界面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-family="SignPainter-HouseScript, SignPainter" font-size="35" font-style="condensed" font-weight="normal" letter-spacing="2.09027778">
+        <g id="iPhone-8" transform="translate(-122.000000, -362.000000)" fill="#FFFFFF">
+            <text id="My-Lesson">
+                <tspan x="123.943889" y="384">My Lesson</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

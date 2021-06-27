@@ -1,0 +1,112 @@
+.navigationBar{
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 31rpx;
+  font-weight: 450;
+}
+.navigationBar::after{
+  content: '';
+  display: none;
+  position: absolute;
+  left: 0rpx;
+  top: 100%;
+  width: 100%;
+  /* absolute不能获得window文本流的视图 */
+  height: 9999rpx;
+  z-index: 9;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: opacity 0.3s;
+  opacity: 0; 
+}
+.navigationBar[data-show-layer="true"]::after{
+  display: block;
+}
+.navigationBar[data-show-mask="true"]::after{
+  opacity: 1;
+}
+
+.slot{
+  left: 10px;
+  position: absolute;
+  transition: opacity 0.3s;
+  display: flex;
+}
+.slot[data-hidden="true"]{
+  opacity: 0
+}
+.slot[data-hidden-layer="true"]{
+  display: none;
+}
+
+.title-btn{
+  /* color: black; */
+  /* padding: 6rpx 20rpx; */
+  /* border-radius: 8rpx; */
+  /* background-color: #ffffff60; */
+}
+
+.title-btn[data-status="show"]{
+  padding: 10rpx 15rpx;
+  border-radius: 12rpx;
+  background-color: #ffffff30;
+  transition: all 0.3s;
+}
+
+/* 菜单 */
+.operation-bar{
+  position: absolute;
+  min-width: 310rpx;
+  min-height: 100rpx;
+  border-radius: 26rpx;
+  top: 100%;
+  background-color: white;
+  color: black;
+  box-shadow: 0 9px 12px 1px rgba(0,0,0,0.14), 0 3px 16px 2px rgba(0,0,0,0.12), 0 5px 6px -3px rgba(0,0,0,0.20);
+
+  padding: 20rpx 20rpx;
+  box-sizing: border-box;
+
+  transition: all 0.2s;
+  transform-origin: 50% 0%;
+
+  z-index: 10;
+}
+
+.operation-bar[data-status='hidden']{
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+.operation-bar .item{
+  padding: 0rpx 20rpx 0rpx 72rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 20rpx;
+  position: relative;
+  color: var(--font-color);
+}
+.operation-bar .item:not(:last-child){
+  margin-bottom: 15rpx;
+}
+
+.operation-bar .item[data-selected="true"]{
+  color: var(--highlight-font-color);
+  background-color: var(--font-highlight-background-color);
+  font-weight: 600;
+}
+
+.operation-bar .item:active{
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.operation-bar .item .icon{
+  position: absolute;
+  left: 24rpx;
+}
+.operation-bar[data-show-layer="false"]{
+  display: none;
+}

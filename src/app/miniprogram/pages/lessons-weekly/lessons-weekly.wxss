@@ -1,0 +1,362 @@
+/* !!注意把所有关于颜色的配置集中 */
+/* 根节点颜色属性：data-color-scheme */
+/* 注意只能用page，不能用:root */
+page{
+  /* 防止影响到topbar */
+  overflow: hidden;
+  background-color: var(--page-background);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  --lesson-item-tile: 13rpx;
+  --lesson-item-highlight-height: 8rpx;
+}
+
+.container{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.selector-wrapper{
+  width: 100%;
+  height: 130rpx;
+  display: flex;
+  padding: 30rpx 0rpx 0rpx 16rpx;
+  box-sizing: border-box;
+
+  background-color: var(--date-selector-color);
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+
+  z-index: 5;
+}
+
+/* 周次选择器按钮 */
+.selector-wrapper .week-selector{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5.5rpx 6rpx;
+
+  border: 2rpx dashed var(--week-selector-border-color);
+  border-radius: 6rpx;
+  margin-bottom: 6rpx;
+
+  transition: background-color 0.1s;
+}
+
+.selector-wrapper .week-selector:active{
+  background-color: var(--week-selector-active-color);
+}
+
+.selector-wrapper .week-selector .month{
+  font-family: "Avenir";
+  font-weight: 700;
+  font-size: 39rpx;
+  color: var(--font-color);
+  letter-spacing: -0.21px;
+
+  display: flex;  
+  align-items: center;
+  justify-content: center;
+}
+.selector-wrapper .week-selector .month::after{
+  content: "月";
+  font-family: "PingFang";
+  font-weight: 550;
+  font-size: 20rpx;
+  margin-left: 4rpx;
+  color: var(--font-accessible-color);
+  letter-spacing: -0.1px;
+}
+
+.selector-wrapper .week-selector .week{
+  font-family: "PingFang";
+  font-weight: 700;
+  font-size: 19rpx;
+  padding: 4rpx 12rpx;
+  color: var(--font-color);
+  letter-spacing: 0.61px;
+  background-color: var(--font-background-color);
+  border-radius: 6rpx;
+}
+
+
+
+/* 日期查看器 */
+.container .selector-wrapper .day-viewer{
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 日期选择器中的每一个元素 */
+
+.container[data-color-scheme="light"] .selector-wrapper .day-viewer .item[data-status="selected"]{
+  background-color: var(--day-selected-item-color);
+  color: var(--day-selected-font-color);
+}
+
+.container[data-color-scheme="light"] .selector-wrapper .day-viewer .item[data-status="normal"]{
+  background-color: var(--day-normal-item-color);
+  color: var(--day-normal-font-color);
+}
+
+.selector-wrapper .day-viewer .item{
+  width: 81rpx;
+  height: 100%;
+
+  border-radius: 14.4rpx 14.4rpx 0 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding-bottom: 18rpx;
+  padding-top: 9rpx;
+}
+
+.selector-wrapper .day-viewer .item:not(:last-child){
+  margin-right: 10rpx;
+}
+
+.selector-wrapper .day-viewer .item .date{
+  font-family: "Avenir";
+  font-weight: 700;
+  font-size: 39rpx;
+  line-height: 39rpx;
+  color: var(--day-item-font-color);
+  margin-bottom: 3rpx;
+}
+
+.selector-wrapper .day-viewer .item .week{
+  font-family: "PingFang";
+  font-size: 20rpx;
+  font-weight: 500;
+  color: var(--day-item-font-color);
+  letter-spacing: -0.11px;
+}
+
+/* 下方课程显示区域 */
+.lesson-wrapper{
+  display: flex;
+  flex: 1;
+  z-index: 1;
+  width: 100%;
+}
+
+/* 课程节数指示器 */
+.lesson-wrapper .indexer-wrapper{
+  /* 玄学 */
+  display: inline-table;
+  width: 75rpx;
+  min-height: 100%;
+  padding: 10rpx 11rpx;
+  /* box-sizing: border-box; */
+
+  background-color: var(--indexer-background);
+  border-right: 0 solid var(--indexer-border-color);
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+}
+
+.lesson-wrapper .indexer-wrapper .item{
+  max-height: var(--indexer-height);
+  height: var(--indexer-height);
+  background-color: var(--indexer-item-background);
+  border-radius: 6rpx;
+  padding-bottom: 6rpx;
+  box-sizing: border-box;
+}
+
+.lesson-wrapper .indexer-wrapper .item:not(:last-child){
+  margin-bottom: var(--indexer-margin-bottom);
+}
+
+.lesson-wrapper .indexer-wrapper .item .index{
+  box-sizing: border-box;
+  padding-top: 10rpx;
+  padding-left: 8rpx;
+  font-family: "Avenir";
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 32rpx;
+  color: var(--font-color);
+  letter-spacing: 1.07px;
+  border-radius: 6rpx 6rpx 0rpx 0rpx;
+}
+
+.lesson-wrapper .indexer-wrapper .item .index[data-underway="true"]{
+  background-color: var(--indexer-item-index-background-underway);
+}
+
+.lesson-wrapper .indexer-wrapper .item .index[data-underway="false"]{
+  background-color: var(--indexer-item-index-background-normal);
+}
+
+.lesson-wrapper .indexer-wrapper .item .from, .to{
+  padding-left: 8rpx;
+  font-family: "Avenir";
+  font-weight: 700;
+  font-size: 23rpx;
+  color: var(--font-color);
+  line-height: 28rpx;
+  /* letter-spacing: -0.2rpx; */
+}
+
+.lesson-wrapper .indexer-wrapper .item .from{
+  margin-top: 4rpx;
+  /* margin-bottom: 2rpx; */
+}
+
+.lesson-wrapper .indexer-wrapper .item .from:before{
+  content: "从";
+  font-family: "PingFang";
+  font-weight: 700;
+  font-size: 18rpx;
+}
+
+.lesson-wrapper .indexer-wrapper .item .to:before{
+  content: "到";
+  font-family: "PingFang";
+  font-weight: 700;
+  font-size: 18rpx;
+}
+
+/* 课程区域 */
+.lesson-wrapper .day-lesson-wrapper{
+  display: flex;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* 斑马条纹 */
+.lesson-wrapper .day-lesson-wrapper .strip:nth-child(2n+1){
+  background-color: var(--lesson-strip-background);
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip{
+  width: 81rpx;
+  padding-top: 10rpx;
+  /* height: 100%; */
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip:not(:last-child){
+  margin-right: 10rpx;
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item{
+  padding-top: var(--lesson-item-tile);
+  box-sizing: border-box;
+
+  background-color: var(--lesson-card-background);
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.23);
+  border-radius: 6rpx;
+
+  /* font-family: "PingFang"; */
+  /* font-weight: 700; */
+  color: var(--lesson-card-number-color);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item:not(:last-child){
+  margin-bottom: var(--indexer-margin-bottom);
+}
+
+/* 正在上课 */
+.lesson-wrapper .day-lesson-wrapper .strip .item[data-status="underway"]{
+  border-top: solid var(--lesson-item-highlight-height) var(--highlight-color);
+  padding-top: calc(var(--lesson-item-tile) - var(--lesson-item-highlight-height));
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item[data-connect="false"]{
+  /* 保持和左侧一样的高度 */
+  height: var(--indexer-height);
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item[data-connect="true"]{
+  /* 保持和左侧一样的高度 */
+  height: calc(var(--indexer-height) * 2 + var(--indexer-margin-bottom));
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item:active{
+  animation: pressIn 0.2s forwards;
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item .name{
+  padding-left: 8rpx;
+  box-sizing: border-box;
+  font-weight: 500;
+  font-size: 23rpx;
+  color: var(--font-color);
+  letter-spacing: 0.2px;
+  line-height: 25.5rpx;
+  /* height: 122rpx; */
+  flex: 1;
+
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+  text-overflow: -o-ellipsis-lastline;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item[data-connect="false"] .name{
+  -webkit-line-clamp: 4;
+  height: 97rpx;
+  margin-bottom: 15rpx;
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item[data-connect="true"] .name{
+  height: calc(122rpx + 196rpx);
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item .bottom{
+  background-color: #F293A2;
+  border-radius: 0px 0px 6rpx 6rpx;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+
+  height: 73rpx;
+  /* padding-bottom: 6rpx; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 教室号 */
+.lesson-wrapper .day-lesson-wrapper .strip .item .number{
+  font-family: "Avenir";
+  font-weight: 900;
+  font-size: 23rpx;
+  line-height: 23rpx;
+  text-align: center;
+  padding-bottom: 3rpx;
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .item .location{
+  font-size: 18rpx;
+  text-align: center;
+  font-weight: 500;
+  line-height: 20rpx;
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .empty-item{
+  height: var(--indexer-height);
+}
+
+.lesson-wrapper .day-lesson-wrapper .strip .empty-item:not(:last-child){
+  margin-bottom: var(--indexer-margin-bottom);
+}

@@ -1,0 +1,27 @@
+<!--miniprogram/pages/login/login.wxml-->
+<!-- <text>miniprogram/pages/login/login.wxml</text> -->
+<view>
+  <navigation isShowSwitch="{{false}}" title="绑定账号"/>
+  <view class="container">
+    <view class="input-section header-text">
+      <view class="headline">教务系统账号登陆
+        <view class="decoration-bar"></view>
+      </view>
+      <text style="line-height: 30rpx; font-size: 34rpx;">\n使用<text class="bold">五邑大学教务管理系统</text>账号登陆\n并绑定到该微信账号</text>
+    </view>
+    <view class="input-section">
+      <view class="cell-text">账号 </view>
+      <input class="cell-input" bindinput="handleUserInput" auto-focus placeholder="" />
+    </view>
+
+    <view class="input-section">
+      <view class="cell-text">密码 </view>
+      <input class="cell-input" bindinput="handlePassInput" password="true"/>
+    </view>
+
+    <view class="input-section">
+      <view class="bind-button" bindtap="handleClick">绑定五邑大学教务处</view>
+    </view>
+
+  </view>
+</view>

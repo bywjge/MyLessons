@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/welcome/index",
+    "pages/login/login",
+    "pages/lesson-view/lesson-view",
+    "pages/profile/profile",
+    "pages/more/more",
+    "pages/about-test/about-test"
+  ],
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFB8C5",
+    "navigationBarTitleText": "My Lesson",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "usingComponents": {
+    "navigation": "./components/navigation-bar/navigation-bar",
+    "developHint": "./components/developHint/develop",
+    "fa": "./components/includes/fa/index",
+    "towxml":"/towxml/towxml"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

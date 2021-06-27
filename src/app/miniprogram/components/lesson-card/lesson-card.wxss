@@ -1,0 +1,241 @@
+.card-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 55rpx;
+}
+
+.card-info{
+  height: 174rpx;
+  width: 164rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: 15rpx;
+  margin-right: 32rpx;
+}
+
+/* 正在上课 */
+view[data-status="underway"] .card-info .status{
+  position: relative;
+  font-family: "PingFang";
+  font-size: 32rpx;
+  font-weight: 550;
+  color: #000000;
+  letter-spacing: -0.2px;
+  text-align: right;
+  margin-right: 9.24rpx;
+  margin-bottom: 38rpx;
+}
+view[data-status="coming"] .card-info .status{
+  position: relative;
+  font-family: "PingFang";
+  font-size: 32rpx;
+  font-weight: 550;
+  color: #000000;
+  letter-spacing: -0.2px;
+  text-align: right;
+  margin-right: 9.24rpx;
+  margin-bottom: 38rpx;
+}
+
+/* 色条 */
+view[data-status="underway"] .card-info .status::after{
+  content: '';
+  right: 0;
+  margin-top: 50rpx;
+  position: absolute;
+  height: 16rpx;
+  width: 110rpx;
+  border-radius: 9px;
+}
+/* 色条 */
+view[data-status="coming"] .card-info .status::after{
+  content: '';
+  right: 0;
+  margin-top: 50rpx;
+  position: absolute;
+  height: 16rpx;
+  width: 110rpx;
+  border-radius: 9px;
+}
+view[data-status="underway"] .card-info .status::after{
+  background: #2CBC47;
+}
+view[data-status="coming"] .card-info .status::after{
+  background: #CDCDCD;
+}
+
+/* 普通卡片（还没上课） */
+view[data-status="normal"] .card-info .status{
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 110rpx;
+  height: 34rpx;
+
+  padding: 10rpx 15rpx;
+  background: rgba(0,0,0,0.10);
+  border-radius: 8px;
+
+  margin-bottom: 12rpx;
+}
+
+view[data-status="normal"] .card-info .status > span{
+  font-weight: 700;
+  font-size: 32rpx;
+  color: #000000;
+  font-family: "Avenir";
+  text-align: center;
+}
+
+view[data-status="normal"] .card-info .status::after{
+  content: '至';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  font-family: "PingFang";
+  font-weight: 500;
+  font-size: 21rpx;
+  color: #464646;
+  letter-spacing: -0.12px;
+}
+
+.card-info .time{
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 146rpx;
+  margin-bottom: 6rpx;
+}
+
+.card-info .time .sign{
+  font-family: "PingFang";
+  font-weight: bold;
+  font-size: 22rpx;
+  color: #464646;
+  letter-spacing: -0.14px;
+}
+
+.card-info .time .text{
+  font-family: "Avenir";
+  font-weight: 900;
+  font-size: 34rpx;
+  color: #000000;
+  letter-spacing: 0.35px;
+  text-align: right;
+}
+
+/* 课程卡片 */
+.card{
+  position: relative;
+  /* width: 482rpx; */
+  width: 468rpx;
+  background: #FFFFFF;
+  box-shadow: 2px 2px 13px 0 rgba(0,0,0,0.10);
+  border-radius: 9px;
+
+  padding-top: 36rpx;
+  padding-bottom: 27rpx;
+  padding-left: 48rpx;
+  padding-right: 20rpx;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  transition: width height 0.3s;
+}
+
+/* -------- 卡片顶部装饰条 --------- */
+.card:before{
+  content: '';
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 18rpx;
+  border-radius: 9px 9px 0px 0px;
+}
+
+/* 不同状态下卡片装饰条的颜色 */
+/* 正在上课 */
+view[data-status="underway"] .card:before{
+  background-color: #FF7D7D;
+}
+/* 准备上课 */
+view[data-status="coming"] .card:before{
+  background-color: #FFAF66;
+}
+/* 未上课 */
+view[data-status="normal"] .card:before{
+  background-color: #66BFFF;
+}
+/* ------------------------------- */
+
+.card .lesson-title{
+  /* font-family: "PingFang"; */
+  font-weight: bold;
+  font-size: 34rpx;
+  color: #000000;
+  letter-spacing: -0.21px;
+  /* margin-bottom: 16rpx; */
+  margin-bottom: 18rpx;
+}
+
+.card .lesson-item{
+  display: inline-flex;
+  align-items: center;
+}
+.card .lesson-item:not(:last-child){
+  margin-bottom: 15rpx;
+}
+
+/* -------- 针对卡片内部普通的内容 --------- */
+.card .lesson-item :first-child:not(i){
+  font-family: "PingFang";
+  font-weight: 700;
+  font-size: 22rpx;
+  color: #464646;
+  letter-spacing: -0.14px;
+  margin-right: 15rpx;
+
+  min-width: 44rpx;
+}
+
+.card .lesson-item :last-child{
+  /* font-family: PingFangSC; */
+  font-size: 26rpx;
+  color: #000000;
+  letter-spacing: -0.16px;
+}
+/* ------------------------------------- */
+
+/* 卡片班级容器 */
+.class-wrapper{
+  display: flex;
+  /* width: 321rpx; */
+
+  flex-wrap: wrap;
+}
+
+/* 每一个班级 */
+.class-wrapper .class-item{
+  font-family: "Avenir" !important;
+  font-size: 24rpx !important;
+  font-weight: 500 !important;
+  margin-bottom: 6rpx !important;
+  background-color: rgba(0,0,0,0.10) !important;
+  color: black !important;
+  border-radius: 4px;
+  padding: 4rpx 12rpx;
+  margin-right: 11rpx !important;
+
+  letter-spacing: 0px !important;
+}

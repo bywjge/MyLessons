@@ -1,0 +1,63 @@
+<view class="card-wrapper" data-status="{{status}}">
+  <view class="card-info">
+    <!-- 正在上课 -->
+    <view class="status" wx:if="{{status !== 'normal'}}">
+      {{status==='underway'?'正在上课':'准备上课'}}
+    </view>
+
+    <!-- 还没上课 -->
+    <view class="status" wx:if="{{status === 'normal'}}">
+      <span>{{from.index}}</span>
+      <span>{{to.index}}</span>
+    </view>
+
+    <view class="time">
+      <view class="sign">从</view>
+      <view class="text">{{from.str}}</view>
+    </view>
+    <view class="time">
+      <view class="sign">到</view>
+      <view class="text">{{to.str}}</view>
+    </view>
+    
+  </view>
+
+  <view class="card" bindtap="handleClick">
+    <view class="lesson-title">{{info['课程名称']}}</view>
+    
+    <view class="lesson-item">
+      <view>地点</view>
+      <view>{{info['教学地点']}}</view>
+    </view>
+
+    <view class="lesson-item">
+      <view>教师</view>
+      <view>{{info['教师姓名']}}</view>
+    </view>
+
+    <!-- 展开内容 -->
+    <view 
+      wx:if="{{isExtended && info['上课班级'].length > 0}}"
+      class="lesson-item"
+    >
+      <view>班级</view>
+      <view class="class-wrapper">
+        <view 
+          class="class-item"
+          wx:for="{{info['上课班级']}}"
+          wx:for-item="e"
+          wx:key="e"
+        >{{e}}</view>
+      </view>
+    </view>
+    
+    <view 
+      wx:if="{{isExtended && info['上课内容']}}"
+      class="lesson-item"
+    >
+      <view>内容</view>
+      <view>{{info['上课内容']}}</view>
+      
+    </view>
+  </view>
+</view>

@@ -1,0 +1,8 @@
+<!--miniprogram/index/index.wxml-->
+<view class="container">
+  <view class="logo">
+    <image src="/assets/Logo.svg" class="image"></image>
+    <image src="/assets/Logo-text.svg" class="text"></image>
+  </view>
+  <button wx:if="{{showButton}}" class="button auth" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">授权并开始使用</button>
+</view>

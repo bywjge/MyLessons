@@ -1,0 +1,46 @@
+/* miniprogram/pages/about-test/about-test.wxss */
+.container{
+  background-color: white;
+  overflow: hidden;
+}
+.logo{
+  margin-top: 150rpx;
+  width: 320rpx;
+  height: 160rpx;
+}
+
+/* .scroll{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} */
+
+.about-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 120rpx;
+}
+
+.name{
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}
+
+.version{
+  display: flex;
+  align-items: center;
+  content: '当前版本: ';
+  font-size: 23rpx;
+  font-weight: 500;
+}
+
+.version .text{
+  margin-left: 15rpx;
+  padding: 0rpx 15rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  border-radius: 8rpx;
+  background-color: rgba(0, 0, 0, 0.1);
+}

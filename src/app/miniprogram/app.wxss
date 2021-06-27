@@ -1,0 +1,239 @@
+/* global style */
+@import './static/fonts/index.wxss';
+/* ------------ */
+page{
+  /* --page-background: #F7F7F7; */
+  --page-background: #EAEAEA;
+  --date-selector-color: #FFFFFF;
+
+  --day-selected-item-color: #FF8B9C;
+  --day-selected-font-color: white;
+
+  --day-normal-item-color: #F5F5F5;
+  --day-normal-font-color: #343434;
+
+  --week-selector-border-color: #A3A3A3;
+  --week-selector-active-color: #fff1f9;
+
+  --font-color: #343434;
+  --highlight-font-color: #ff617c;
+  --font-accessible-color: #343434;
+  --font-background-color: rgba(0, 0, 0, 0.1);
+  --font-highlight-background-color: rgba(255, 0, 71, 0.1);
+
+  --indexer-height: 196rpx;
+  --indexer-margin-bottom: 21rpx;
+  --indexer-background: white;
+  --indexer-border-color: #979797;
+  --indexer-item-background: #F0F0F0;
+  --indexer-item-index-background-normal: rgba(0, 0, 0, 0.1);
+  --indexer-item-index-background-underway: #ff7d8345;
+
+  --lesson-strip-background: rgba(0, 0, 0, 0.05);
+
+  --lesson-card-background: white;
+  --lesson-card-number-color: white;
+
+  --highlight-color: #FF7D7D;
+}
+
+page {
+  /* 防止影响到topbar
+  overflow: hidden; */
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+} 
+
+button {
+  background: initial;
+}
+
+input {
+  border: none;
+}
+
+button:focus{
+  outline: 0;
+}
+
+button::after{
+  border: none;
+}
+
+
+text[class="bold"]{
+  font-weight: 700;
+}
+
+.userinfo, .uploader, .tunnel {
+  margin-top: 40rpx;
+  height: 140rpx;
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: none;
+  border-right: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: all 300ms ease;
+}
+
+.userinfo-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+  background-size: cover;
+  background-color: white;
+}
+
+.userinfo-avatar:after {
+  border: none;
+}
+
+.userinfo-nickname {
+  font-size: 32rpx;
+  color: #007aff;
+  background-color: white;
+  background-size: cover;
+}
+
+.userinfo-nickname::after {
+  border: none;
+}
+
+.uploader, .tunnel {
+  height: auto;
+  padding: 0 0 0 40rpx;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.uploader-text, .tunnel-text {
+  width: 100%;
+  line-height: 52px;
+  font-size: 34rpx;
+  color: #007aff;
+}
+
+.uploader-container {
+  width: 100%;
+  height: 400rpx;
+  padding: 20rpx 20rpx 20rpx 0;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.uploader-image {
+  width: 100%;
+  height: 360rpx;
+}
+
+.tunnel {
+  padding: 0 0 0 40rpx;
+}
+
+.tunnel-text {
+  position: relative;
+  color: #222;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tunnel-text:first-child {
+  border-top: none;
+}
+
+.tunnel-switch {
+  position: absolute;
+  right: 20rpx;
+  top: -2rpx;
+}
+
+.disable {
+  color: #888;
+}
+
+.service {
+  position: fixed;
+  right: 40rpx;
+  bottom: 40rpx;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(#007aff, #0063ce);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  transition: all 300ms ease;
+}
+
+.service-button {
+  position: absolute;
+  top: 40rpx;
+}
+
+.service:active {
+  box-shadow: none;
+}
+
+.request-text {
+  padding: 20rpx 0;
+  font-size: 24rpx;
+  line-height: 36rpx;
+  word-break: break-all;
+  margin-bottom: 82rpx;
+}
+
+.dot-12px{
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  background-color: black;
+}
+
+@keyframes fadeIn{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+.hint{
+  height: 100%;
+  width: 100%;
+}
+
+@keyframes pressIn{
+  30%{
+    transform: scale(0.7);
+  }
+  100%{
+    transform: scale(0.9);
+  }
+}

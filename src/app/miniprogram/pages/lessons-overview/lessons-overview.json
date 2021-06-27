@@ -1,0 +1,11 @@
+{
+  "component": true,
+  "usingComponents": {
+    "lesson-card": "../../components/lesson-card/lesson-card"
+  },
+  "backgroundColor": "#F7F7F7",
+  "backgroundTextStyle": "light",
+  "navigationBarBackgroundColor": "#FFC0CB",
+  "navigationBarTitleText": "Dashboard",
+  "navigationBarTextStyle": "black"
+}

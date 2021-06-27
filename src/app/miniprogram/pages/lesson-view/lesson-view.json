@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "lessons-overview": "../lessons-overview/lessons-overview",
+    "lessons-weekly": "../lessons-weekly/lessons-weekly"
+  }
+}

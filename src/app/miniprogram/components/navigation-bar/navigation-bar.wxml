@@ -1,0 +1,42 @@
+<view class="navigationBar" 
+  bindtap="handleBarClick"
+  data-show-mask="{{showMenu}}"
+  data-show-layer="{{showMenuLayer}}"
+  style="min-height: {{navBarHeight }}px; width: {{windowWidth}}px; padding-top: {{statusBarHeight}}px; background-color: {{background}}; color: {{color}};"
+>
+  <view 
+    class="slot" 
+    data-hidden="{{hiddenOther}}"
+    data-hidden-layer="{{hiddenLayer}}"
+  >
+    <slot name="left"></slot>
+  </view>
+  
+  <view class="title-btn" id="title" bindtap="handleMenuClick" data-status="{{showMenu?'show':'hidden'}}">
+    {{title}}
+    <fa icon="fa fa-angle-down fa-lg"></fa> 
+  </view>
+  <view
+    class="operation-bar"
+    data-status="{{showMenu?'show':'hidden'}}"
+    data-show-layer="{{showMenuLayer}}"
+    bindtap="handleItemClick"
+  >
+    <view 
+      class="item {{(item.url === nowPage)?'selected':''}}" 
+      wx:for="{{pages}}"
+      wx:for-item="item"
+      wx:key="title"
+      data-name="{{item.title}}"
+      data-url="{{item.url}}"
+      data-selected="{{item.url === nowPage}}"
+    >
+      <fa 
+        class="icon"
+        wx:if="{{item.icon}}"
+        icon="fa fa-{{item.icon}}"
+      />
+      {{item.title}}
+    </view>
+  </view>
+</view>

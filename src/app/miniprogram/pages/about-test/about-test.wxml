@@ -1,0 +1,19 @@
+<!--miniprogram/pages/about-test/about-test.wxml-->
+<view class="container">
+  <navigation title="内测说明"/>
+  <scroll-view scroll-y="true" style="height: calc(100% - {{navBarHeight}}px)">
+    <view class="scroll">
+      <view class="about-wrapper">
+        <image src="/assets/Logo-svg-about.svg" class="logo"></image>
+        <view class="name">My Lesson (邑课程)</view>
+        <view class="version">
+          当前版本
+          <view class="text">{{version}}</view>
+        </view>
+
+      </view>
+
+      <towxml nodes="{{article}}"/>
+    </view>
+  </scroll-view>
+</view>

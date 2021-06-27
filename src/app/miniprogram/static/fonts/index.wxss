@@ -1,0 +1,4 @@
+/* merge fontmin */
+
+@import './Avenir/index.wxss';
+@import './PingFang/index.wxss';

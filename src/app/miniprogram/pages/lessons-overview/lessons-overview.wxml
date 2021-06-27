@@ -1,0 +1,60 @@
+<view class="container">
+  <!-- <navigation /> -->
+  <view class="selector-wrapper">
+    <!-- 日期显示 -->
+    <view class="date-week-viewer">
+      <view 
+        class="dot-12px"
+        style="background-color: #EF8B9A !important; margin-right: 10px;" 
+      />
+        {{nowDate.year}}年{{nowDate.month}}月，第{{nowWeek}}周
+      </view>
+
+    <!-- 日期选择器（五天） -->
+    <view class="date-selector">
+      <view 
+        class="date-button" 
+        data-selected="{{date.index === nowSelected}}" 
+        wx:for="{{dates}}" 
+        wx:for-item="date"
+        wx:key="date"
+        bindtap="handleTap"
+        data-date="{{date}}"
+      >
+        <text class="day">{{date.date}}</text>
+        <text class="day-of-week">周{{dayToChinese[date.day]}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 课程卡片显示 -->
+  <scroll-view
+    bounces="true"
+    scroll-y="true" 
+    style="height: calc(100% - 176rpx)"
+  >
+    <view class="lesson-container">
+      <!-- 显示当天有多少节课 -->
+      <view 
+        wx:if="{{lessons && lessons.length > 0}}"
+        class="lesson-counter"
+      >
+      今天有{{lessons.length}}节课
+      </view>
+      <!-- 如果当天没有课程 -->
+      <view 
+        wx:if="{{!lessons || lessons.length === 0}}"
+        class="empty-lesson"
+      >
+        当日无课程
+      </view>
+      <!-- 这里的wx:key直接指代i里面的key，不需要画蛇添足加上i. -->
+      <lesson-card 
+        wx:for="{{lessons}}"
+        wx:for-item="i"
+        wx:key="keyid"
+        info="{{i}}"
+      />
+    </view>
+  </scroll-view>
+</view>
