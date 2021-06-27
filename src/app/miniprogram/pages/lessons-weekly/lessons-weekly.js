@@ -50,7 +50,6 @@ Component({
       indexer.push(item)
     })
     const week = lessons.convertDateToWeek(new Date())
-    console.log("now week", week);
     // 初始化周次选择器数组
     const pickerArray = Array.from({ length: 22 }, (e, i) => {
       if (i === week - 1)
@@ -103,7 +102,7 @@ Component({
     refreshStatus(){
       this.refreshIndexer()
 
-      console.log(this.data.lessons, this.data.nowIndex, this.data.nowDate);
+      // console.log(this.data.lessons, this.data.nowIndex, this.data.nowDate);
       const date = new Date().format("YYYY-mm-dd")
       const month = new Date().format("m")
       this.setData({

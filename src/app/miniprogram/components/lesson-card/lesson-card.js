@@ -32,6 +32,7 @@ Component({
   data: {
     status: "normal",
     isExtended: false,
+    ignoreExtend: false,
     from: {
       index: "",
       str: ""
@@ -100,8 +101,7 @@ Component({
       // 不是同一天，直接*返回*normal
       if (date !== info['日期']){
         this.setData({
-          status: "normal",
-          isExtended: false
+          status: "normal"
         })
 
         return ;
@@ -127,6 +127,10 @@ Component({
       this.setData({
         status: newStatus
       })
+      console.log(this.data.ignoreExtend);
+      if (this.data.ignoreExtend)
+        return ;
+
       // 不上课就展开，包括准备上课
       if (newStatus !== "normal"){
         this.setData({
@@ -141,8 +145,8 @@ Component({
 
     // 处理点击展开事件
     handleClick(){
-      console.log(this.properties.info['节次']);
       this.setData({
+        ignoreExtend: true,
         isExtended: !this.data.isExtended
       })
     }
