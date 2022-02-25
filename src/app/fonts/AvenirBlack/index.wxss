@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "AVENIR-BLACK-3";
+    src:
+        url("AVENIR-BLACK-3.woff") format("woff"), /* chrome、firefox */
+        url("AVENIR-BLACK-3.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */
+
+        url("AVENIR-BLACK-3.svg#AVENIR-BLACK-3") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+
+

@@ -1,7 +1,13 @@
 <view class="container" data-color-scheme="light">
+  <view class="lesson-viewer" wx:if="{{showViewer}}">
+    <view class="viewer-title">课程预览</view>
+    <view>
+      balabal
+    </view>
+  </view>
   <!-- <navigation /> -->
   <!-- 日期选择器 -->
-  <view class="selector-wrapper">
+  <view class="selector-wrapper"  data-blur-filter="{{showViewer}}">
     <!-- 周次选择按钮 -->
     <picker 
       class="week-selector" 
@@ -30,11 +36,11 @@
   </view>
   <scroll-view 
     bounces="true"
-    scroll-y="true" 
+    scroll-y="{{!showViewer}}" 
     style="height: calc(100% - 130rpx)"
     scroll-top="{{scrollTop}}"
   >
-    <view class="lesson-wrapper">
+    <view class="lesson-wrapper" data-blur-filter="{{showViewer}}">
       <!-- 课程节数指示器 -->
       <view class="indexer-wrapper">
         <view 

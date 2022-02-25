@@ -1,0 +1,17 @@
+@import "imgs.scss";
+
+@mixin dashed-line-horizontal($color, $width: 10px, $lineWidth: 1px) {
+  background-image: linear-gradient(to right, $color 0%, $color 70%, transparent 50%);
+  background-size: $width $lineWidth;
+  background-repeat: repeat-x;
+  width: 100%;
+  height: $lineWidth;
+}
+
+@mixin dashed-line-vertical($color, $width: 10px, $lineWidth: 1px) {
+  background-image: linear-gradient(to right, $color 0%, $color 70%, transparent 50%);
+  background-size: $lineWidth $width;
+  background-repeat: repeat-y;
+  width: $lineWidth;
+  height: 1px;
+}

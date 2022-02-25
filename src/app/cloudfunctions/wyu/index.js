@@ -6,6 +6,7 @@ cloud.init({
 require("./utils/tools")
 const wyu = require("./wyu")
 const db = require("./utils/database")
+const axios = require("axios");
 
 let events = {
   login,
@@ -29,7 +30,7 @@ exports.main = async (event, context) => {
   } catch(e) {
     return {
       success: false,
-      error: e
+      error: e.message
     }
   }
 
@@ -79,6 +80,11 @@ async function getOpenid(e){
  * @description 如果不指定需要强制获取新cookie，则从数据库中获取使用; 如果过期，则重新登录
  */
 async function getCookie({ forceNew = false }){
+  // let ret = await axios({
+  //   method: 'get',
+  //   url: "http://jxgl.wyu.edu.cn/"
+  // })
+  // return {d: ret.data}
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID
   let cookie = null

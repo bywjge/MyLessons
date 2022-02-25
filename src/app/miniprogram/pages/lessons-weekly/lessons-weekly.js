@@ -22,6 +22,8 @@ Component({
     indexer: [
     ],
 
+    showViewer: false,
+
     pickerArray: [],
 
     nowIndex: null,
@@ -35,7 +37,7 @@ Component({
     lessons: [],
 
     nowDate: "",
-    nowMonth: "6"
+    nowMonth: new Date().getMonth() + 1
   },
   /**
    * 生命周期函数--监听页面加载完成
@@ -106,14 +108,15 @@ Component({
       const date = new Date().format("YYYY-mm-dd")
       const month = new Date().format("m")
       this.setData({
-        nowDate: date,
-        nowMonth: month
+        nowDate: date
       })
     },
 
     selectWeek(e){
       const index = Math.floor(e.detail.value)
+      const month = lessons.convertWeekToDate(index + 1).getMonth() + 1
       this.setData({
+        nowMonth: month,
         selectWeek: index + 1
       })
       this.getLesson()
@@ -137,8 +140,9 @@ Component({
         e.status = (d.equals(new Date()))?'selected':'normal'
         return e
       })
-
-      const lesson = wx.getStorageSync('lessons')[this.data.selectWeek - 1]
+      
+      const currentWeek = Math.max(1, this.data.selectWeek)
+      const lesson = wx.getStorageSync('lessons')[currentWeek - 1]
       let lessonSort = Array.from({ length: 7 }, () => {
         return new Array(7).fill(null)
       })

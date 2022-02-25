@@ -1,0 +1,6 @@
+/* merge fontmin */
+
+@import './AvenirBlack/index.wxss';
+@import './PingFangRegular/index.wxss';
+@import './PingFangMedium/index.wxss';
+@import './PingFangBold/index.wxss';

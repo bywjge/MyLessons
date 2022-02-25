@@ -30,7 +30,8 @@ Component({
     dates: [],
     dayToChinese: ["日", "一", "二", "三", "四", "五", "六"],
     timer: null,
-    nowWeek: ""
+    nowWeek: "",
+    termStarted: true
   },
 
   // 页面开始加载
@@ -47,26 +48,37 @@ Component({
     })
 
     // 首先获取当前日期，加载近五天的课程。
-    let date_list = [];
-    let ret = [];
-    date_list.push(new Date().nDaysAgo(2));
-    date_list.push(new Date().nDaysAgo(1));
-    date_list.push(new Date());
-    date_list.push(new Date().nDaysLater(1));
-    date_list.push(new Date().nDaysLater(2));
-    date_list.forEach(i => {
+    /**
+     * 如果还没开学(当前日期小于学期第一天) 显示未开学
+     * 如果开学了 -> 确定基数日期(最左边的那一天)
+     * 基数日期:课表第一天 / 今天的两天前 取最大值
+     */
+    // 学期第一天的日期
+    const today = new Date()
+    const firstDateForTerm = wx.getStorageSync('firstWeekDate')
+    // 还没开学呢
+    if (today.getTime() < firstDateForTerm) {
+      this.setData({ termStarted: false })
+    } else {
+      this.setData({ newSelected: 2 })
+    }
+    
+    // 基数日
+    const ret = []
+    const baseDate = new Date(Math.max(firstDateForTerm, today.nDaysAgo(2).getTime()))
+    for (let i = 0; i < 5; i++) {
+      const d = baseDate.nDaysLater(i)
       ret.push({
-        month: i.getMonth(),
-        date: i.getDate(),
-        day: i.getDay(),
+        month: d.getMonth(),
+        date: d.getDate(),
+        day: d.getDay(),
         week: 18,
-        time: i.getTime()
-      });
-    });
+        time: d.getTime()
+      })
+    }
 
     this.setData({
-      dates: ret,
-      nowSelected: 2
+      dates: ret
     });
   },
 
@@ -104,7 +116,7 @@ Component({
 
     this.setData({
       dates: x,
-      lessons: x[2].lessons
+      lessons: x[0].lessons
     })
 
     return ;

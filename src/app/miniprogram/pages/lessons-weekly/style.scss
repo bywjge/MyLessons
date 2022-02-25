@@ -1,0 +1,30 @@
+@import '../../static/style/global.scss';
+
+.lesson-viewer {
+  position: relative;
+  &::after{
+    content: '';
+    position: absolute;
+    background-image: $cut-edge;
+    left: 0;
+    top: 71rpx;
+    width: 30px;
+    height: 17px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .viewer-title{
+    position: relative;
+    padding: 25rpx 0rpx 19rpx 0rpx;
+    width: 80%;
+    text-align: center;
+  
+    &::after{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 100%;
+      @include dashed-line-horizontal(#6f6f6f);
+    }
+  }
+}

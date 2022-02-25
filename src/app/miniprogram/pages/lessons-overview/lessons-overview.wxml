@@ -8,6 +8,7 @@
         style="background-color: #EF8B9A !important; margin-right: 10px;" 
       />
         {{nowDate.year}}年{{nowDate.month}}月，第{{nowWeek}}周
+        {{!termStarted?'(还没开学哦)':''}}
       </view>
 
     <!-- 日期选择器（五天） -->

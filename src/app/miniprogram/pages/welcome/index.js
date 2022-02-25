@@ -29,7 +29,7 @@ Page({
     // }
 
     // 测试强制清空数据
-    const version = "abcd3"
+    const version = "abcd4"
     if (wx.getStorageSync('version') !== version){
       wx.showLoading({
         title: '清空重载数据',
@@ -66,6 +66,7 @@ Page({
         wx.setStorageSync('binded', true)
         wx.setStorageSync('username', isBind.username)
         wx.setStorageSync('password', isBind.password)
+        console.log("i got username");
         if (!await accountApi.checkCookie())
           await accountApi.getCookie()
         

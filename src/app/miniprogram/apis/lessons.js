@@ -53,7 +53,7 @@ async function initCookie(){
     } catch (e){
       log.info(e.message)
       if (e.message === '无法连接教务处'){
-        
+
       }
       switch (e.message){
         case '无法连接教务处':
@@ -67,7 +67,7 @@ async function initCookie(){
             title: "同步时出错",
             content: "登录教务系统时密码错误，如果您更改了密码，请点击确定重新绑定"
           })
-    
+
           wx.navigateTo({
             url: '../pages/login/login',
           })
@@ -84,11 +84,11 @@ async function initCookie(){
 
 /**
  * 获取某一周的课程
- * @param {周次} week 
- * 
+ * @param {周次} week
+ *
  * @returns 课程数组
  */
-async function getWeek(week){ 
+async function getWeek(week){
   const keyMap = {
     kcbh: '课程编号',
     kcmc: '课程名称',
@@ -113,7 +113,7 @@ async function getWeek(week){
     sknrjj: ['上课内容', str => utils.decodeHTML(str)]
   };
   const ret = await utils.request({
-    url: "https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202002&zc=" + week
+    url: "https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202102&zc=" + week
   })
   let arr = utils.keyMapConvert(ret.data[0], keyMap)
 
@@ -137,12 +137,12 @@ async function getWeek(week){
 
 /**
  * 获取课程
- * @param {周次} week 
- * 
+ * @param {周次} week
+ *
  * @description
  *   如果传入参数，则获取某一周的课程，
  *   否则将获取所有的课程
- * 
+ *
  * @returns 课程数组
  */
 async function getLesson(week = null){
@@ -171,6 +171,11 @@ async function getLesson(week = null){
 function convertDateToWeek(nowDate, convertToChinese = false){
   const chineseNumber = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十", "二十一", "二十二", "二十三", "二十四", "二十五"]
   let from = wx.getStorageSync('firstWeekDate')
+
+  // 防止一些叼毛开学前就看课程
+  if (nowDate.getTime() < from) {
+    return convertToChinese? '一': 1
+  }
 
   const week = Math.floor((nowDate.nDaysAgo(1).getTime() - from) / (1000 * 60 * 60 * 24 * 7)) + 1
   if (convertToChinese){
@@ -223,7 +228,7 @@ function convertIndexToTime(index, endTime = false){
 
   if (!endTime)
     return [timeMap[index], t]
-    
+
   t = new Date(t.getTime() + 45 * 60 * 1000)
 
   return [`${t.getHours().prefixZero(2)}:${t.getMinutes().prefixZero(2)}`, t]
@@ -247,14 +252,14 @@ function generateDate(){
 
 /**
  * 同步课表
- * @param {是否强制更新} ignoreLimit 
- * 
+ * @param {是否强制更新} ignoreLimit
+ *
  * @description
- *   从教务处同步课表，如果课表不存在，从数据库同步; 
+ *   从教务处同步课表，如果课表不存在，从数据库同步;
  *   若数据库无数据，则从教务处同步;
  *   若已经同步，则一天内不得再次同步
  *   同步时还会检查学期初是否已经获取
- * 
+ *
  */
 async function syncLessons(ignoreLimit = false){
   // 储存课表，并转换为每日的格式
@@ -290,7 +295,7 @@ async function syncLessons(ignoreLimit = false){
   if (!from || from === ""){
     log.info("新的学期初")
     const ret = await utils.request({
-      url: "https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202002&zc=1"
+      url: "https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202102&zc=1"
     })
     log.info("学期初返回", ret.data)
     let date = ""
@@ -419,7 +424,7 @@ function colorizeLesson(){
   let i = 0
   colors = colors.shuffle()
   let lessons = wx.getStorageSync('lessons')
-  lessons = lessons.map(week => 
+  lessons = lessons.map(week =>
     week.map(e => {
       if (i >= colors.length){
         i = 0

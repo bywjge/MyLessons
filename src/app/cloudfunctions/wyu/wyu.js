@@ -130,8 +130,8 @@ async function doLogin(username, password, verifyCode){
 
 /**
  * 获取某一周的课程
- * @param {周次} week 
- * 
+ * @param {周次} week
+ *
  * @returns 课程数组
  * @description 自动从数据库拿cookie，失效就自动登录
  */
@@ -164,7 +164,7 @@ async function getWeek(week, openid, cookie){
     throw new Error("lacking of cookie")
   }
   const ret = (await axios({
-    url: "https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202002&zc=" + week,
+    url: "https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202102&zc=" + week,
     headers: {
       'Cookie': cookie
     }
@@ -204,7 +204,7 @@ async function getLesson(openid, cookie, week = null){
   let counter = 0;
   for (let i = 1; i <= 22; i++) {
     const w = await getWeek(i, openid, cookie)
-    lessons[i - 1] = w; 
+    lessons[i - 1] = w;
     counter++;
     await utils.sleep(150)
   }
@@ -212,7 +212,7 @@ async function getLesson(openid, cookie, week = null){
 }
 
 async function checkCookie(cookie){
-  const ret = await axios.get("https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202002&zc=1", {
+  const ret = await axios.get("https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202102&zc=1", {
     headers: {
       'Cookie': cookie
     }
