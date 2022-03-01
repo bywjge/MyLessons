@@ -1,15 +1,22 @@
-module.exports = {
-  getWeek,
-  getLesson,
-  initCookie,
+export default {
+  getLessonFromSchool,
   convertDateToWeek,
   convertWeekToDate,
   convertIndexToTime,
   syncLessons,
-  generateDate,
   checkCloudLesson,
-  colorizeLesson
+  colorizeLesson,
+  getFirstDayOfTerm
 };
+
+import logger from '../utils/log'
+import request from '../utils/request'
+import tools from '../utils/tools'
+import accountApi from './account'
+import  * as database from '../static/js/database'
+const db = wx.cloud.database()
+const log = new logger()
+log.setKeyword('apis/lessons.js')
 
 /**
  * @TODOS
@@ -17,155 +24,139 @@ module.exports = {
  *   保存课程数据到storage
  */
 
-const db = wx.cloud.database()
-const utils = require("../utils/tools")
-const exceptions = require("../utils/exceptions");
-const api = require('./account')
-
-const { logger } = getApp().globalData
-const log = new logger()
-log.setKeyword('apis/lessons.js')
-
-async function initCookie(){
-  // // 限制重新登录频率
-  // const lastSync = wx.getStorageSync('lastSyncTime')
-  // const gap = (new Date().getTime() - lastSync) / 1000
-  // if (gap < 60 * 10)
-  //   return ;
-
-  // 新逻辑为有cookie就不重新获取
-  if (wx.getStorageSync('cookie') !== ''){
-    return ;
-  }
-
-  let counter = 10
-  while (true){
-    if (counter-- === 0){
-      utils.showModal({
-        title: "同步时出错",
-        content: "暂时无法同步您的数据，数据将在下一次打开时更新"
-      })
-      return ;
-    }
-    let ret = null
-    try{
-      ret = await api.getCookie()
-    } catch (e){
-      log.info(e.message)
-      if (e.message === '无法连接教务处'){
-
-      }
-      switch (e.message){
-        case '无法连接教务处':
-          utils.showModal({
-            title: "同步时出错",
-            content: "[debug] 教务系统繁忙, 下次打开时开始同步数据"
-          })
-          throw new Error()
-        case '密码错误':
-          await utils.showModal({
-            title: "同步时出错",
-            content: "登录教务系统时密码错误，如果您更改了密码，请点击确定重新绑定"
-          })
-
-          wx.navigateTo({
-            url: '../pages/login/login',
-          })
-          return ;
-      }
-    }
-    if (ret)
-      break ;
-
-    // 如果登录不成功，那就三秒后重试
-    await utils.sleep(3000)
+/**
+ * 必要的初始化检查
+ * @description
+ *  1.检查学期初是否已经储存
+ */
+async function initCheck() {
+  /** 检查学期初是否为空 */
+  const firstDate = wx.getStorageSync('firstWeekDate')
+  if (!firstDate || firstDate === "") {
+    console.log('学期初需要初始化')
+    // 计算现在的学期
+    const { year, term } = getTerm()
+    await getFirstDayOfTerm(year, term)
   }
 }
 
 /**
- * 获取某一周的课程
- * @param {周次} week
- *
- * @returns 课程数组
+ * 获取某个学期第一周第一天的日期
+ * @param {number | string} year 年份，四位数
+ * @param {1 | 2} [term = 1] 学期，1代表第一学期，2代表第二学期
+ * @description 从云端获取，如果云端没有，则从教务处拿，然后写入到云端
+ * @returns {Promise<Date>} 第一天的时间
  */
-async function getWeek(week){
+async function getFirstDayOfTerm(year, term) {
+  let date = null
+
+  /** 从云端获取试试 */
+  date = await database.getFirstDayOfTerm(year, term)
+  if (date !== null) {
+    wx.setStorageSync('firstWeekDate', date)
+    return Promise.resolve(date)
+  }
+
+  /** 如果后端没有, 从教务系统获取 */
+  const ret = await request({
+    url: `https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=${year}0${term}&zc=1`
+  })
+  console.log(year, term, ret.data)
+  try {
+    date = ret.data[1][0]['rq']
+  } catch(e) {
+    log.error('获取学期初出错', e)
+    console.log(ret.data)
+    return Promise.reject('获取学期初时出错')
+  }
+
+  date = tools.strToDate(date)
+
+  /** 上报云端 */
+  database.setFirstDayOfTerm(year, term, date)
+  /** 储存日期 */
+  wx.setStorageSync('firstWeekDate', date)
+  return Promise.resolve(date)
+}
+
+/**
+ * 获取当前的学年和学期
+ */
+function getTerm() {
+  const now = new Date()
+  let year = now.getFullYear() - 1
+  // 大于七月就是下学期
+  let term = ((now.getMonth() + 1) >= 8) ? 1: 2
+  // 如果是第一学期，就是今年的年份，否则就是去年的年份
+  if (term === 1) {
+    year--
+  }
+  return { year, term }
+}
+
+/**
+ * 从教务系统获取某个学期的课程
+ * @param {number | string} year 年份，四位数
+ * @param {1 | 2} [term = 1] 学期，1代表第一学期，2代表第二学期
+ */
+async function getLessonFromSchool(year, term = 1) {
   const keyMap = {
     kcbh: '课程编号',
     kcmc: '课程名称',
     teaxms: '教师姓名',
     jxbmc: '上课班级',
-    zc: '上课周次',
+    zc: '上课周次', 
+    /** 只有每周课表是jcdm2 */
+    jcdm: ['节次', str => {
+      str = str.trim()
+      if (str.length < 4)
+        return null;
+      
+      let arr = [0, 0]
+      arr[0] = str.slice(0, 2)
+      arr[1] = str.slice(str.length - 2, str.length)
+      return arr;
+    }],
     jcdm2: ['节次', str => {
       str = str.trim().split(',')
-      if(str.length < 2){
+      if(str.length < 2)
         return null;
-      }
-      let arr = [0, 0];
-      arr[0] = str[0];
-      arr[1] = str[str.length - 1];
-      return arr;
+
+      let arr = [0, 0]
+      arr[0] = str[0]
+      arr[1] = str[str.length - 1]
+      return arr
     }],
     xq: '星期',
     jxcdmc: '教学地点',
     pkrs: '排课人数',
     kxh: '课序号',
     jxhjmc: '讲课',
-    sknrjj: ['上课内容', str => utils.decodeHTML(str)]
-  };
-  const ret = await utils.request({
-    url: "https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202102&zc=" + week
-  })
-  let arr = utils.keyMapConvert(ret.data[0], keyMap)
+    sknrjj: ['上课内容', str => tools.decodeHTML(str)]
+  }
 
-  const firstDay = convertWeekToDate(week)
-  return arr.map(e => {
-    // 星期从星期一开始，所以不要算
-    const index = e['星期'] * 1 - 1
-    e['日期'] = firstDay.nDaysLater(index).format("YYYY-mm-dd")
-    // console.log("firstDay", firstDay, "now", e['日期']);
-
-    // 做班级排序
-    const lesson = e['上课班级'].split(',').sort((a, b) => {
-      return a - b
-    })
-    e['上课班级'] = lesson
-
-    return e
+  const ret = await request({
+    url: `https://jxgl.wyu.edu.cn/xsgrkbcx!getDataList.action?page=1&rows=1000&xnxqdm=${year}0${term}`
   })
 
-}
+  // 课程总数 课程内容
+  const { total, rows } = ret.data
+  const formattedRows = tools.keyMapConvert(rows, keyMap)
+  formattedRows.forEach(e => {
+    const week = Number(e['上课周次'])
+    /** 课程所在周的第一天（星期一）是什么时候 */
+    const firstDayInWeek = convertWeekToDate(week)
+    /** 课程对应的星期几是第几天，从0开始算 */
+    const dayInWeek = Number(e['星期']) - 1
+    /** 为每一节课加上对应的日期 */
+    e['日期'] = firstDayInWeek.nDaysLater(dayInWeek).format("YYYY-mm-dd")
 
-/**
- * 获取课程
- * @param {周次} week
- *
- * @description
- *   如果传入参数，则获取某一周的课程，
- *   否则将获取所有的课程
- *
- * @returns 课程数组
- */
-async function getLesson(week = null){
-  // 一个学期22周
-  let lessons = new Array(22)
-  if (week){
-    return await getWeek(week)
-  }
-  let counter = 0;
-  for (let i = 1; i <= 22; i++) {
-    getWeek(i)
-    .then(ret => { lessons[i - 1] = ret; counter++; })
-    .catch(err => {
-      log.info("err,", err)
-      throw new Error(err)
-    })
-    await utils.sleep(100)
-  }
+    /** 班级升序排序 */
+    const classes = e['上课班级'].split(',').sort((a, b) => a - b)
+    e['上课班级'] = classes
+  })
 
-  while(counter !== 22){
-    await utils.sleep(200)
-  }
-  return lessons
+  return formattedRows
 }
 
 function convertDateToWeek(nowDate, convertToChinese = false){
@@ -177,7 +168,7 @@ function convertDateToWeek(nowDate, convertToChinese = false){
     return convertToChinese? '一': 1
   }
 
-  const week = Math.floor((nowDate.nDaysAgo(1).getTime() - from) / (1000 * 60 * 60 * 24 * 7)) + 1
+  const week = Math.floor((nowDate.nDaysAgo(1).getTime() - from.getTime()) / (1000 * 60 * 60 * 24 * 7)) + 1
   if (convertToChinese){
     return chineseNumber[week - 1]
   }
@@ -189,13 +180,16 @@ function convertWeekToDate(week){
   if (!from || from === "")
     throw new Error("学期初未指定")
 
-  return new Date(from).nDaysLater((week - 1) * 7 + 1)
+  // fixed: Febr.28, 2022 微信破坏性更新导致从storage取出的Date没有自定义方法
+  return Date.prototype.nDaysLater.apply(from, [(week - 1) * 7 + 1])
 }
 
 /**
  * 根据节数获取上/下课时间
- * @param {*} index 节数索引，从1开始，不得大于14
- * @param {*} endTime 是否获取本节课的结束时间，默认为否
+ * @param {number} index 节数索引，从1开始，不得大于14
+ * @param {boolean} [endTime = false] 是否获取本节课的结束时间，默认为否
+ * @return {[string, Date]} 时间数组，包括一个字符串格式的24小时制时间，以及Date格式的时间
+ * @description 节数指的是小节；返回的格式如08:15
  */
 function convertIndexToTime(index, endTime = false){
   // 上课时间
@@ -219,133 +213,192 @@ function convertIndexToTime(index, endTime = false){
   if (typeof index !== 'number' || index < 1 || index > 14)
     throw new Error("输入错误")
 
-  const hour = ~~timeMap[index].split(":")[0]
-  const min  = ~~timeMap[index].split(":")[1]
+  const time = timeMap[index].split(":")
+  const hour = Number(time[0])
+  const min  = Number(time[1])
 
   let t = new Date()
   t.setHours(hour)
   t.setMinutes(min)
 
+  // 如果不是获取结束时间
   if (!endTime)
     return [timeMap[index], t]
 
   t = new Date(t.getTime() + 45 * 60 * 1000)
-
   return [`${t.getHours().prefixZero(2)}:${t.getMinutes().prefixZero(2)}`, t]
-}
-
-function generateDate(){
-  let lessons = wx.getStorageSync('lessons')
-  let lessonsByDay = {}
-  lessons.forEach(week => {
-    week.forEach(e => {
-      const date = e['日期']
-      if (!(date in lessonsByDay))
-        lessonsByDay[date] = []
-
-      lessonsByDay[date].push(e)
-    })
-  })
-
-  wx.setStorageSync('lessonsByDay', lessonsByDay)
 }
 
 /**
  * 同步课表
- * @param {是否强制更新} ignoreLimit
- *
+ * @param {boolean} [forceFromSchool = false] 是否强制更新，从教务系统获取
+ * @TODO 没有分学期储存，云端或者本地都只能储存一个学期
  * @description
+ *   不需要手动获取cookie
  *   从教务处同步课表，如果课表不存在，从数据库同步;
  *   若数据库无数据，则从教务处同步;
  *   若已经同步，则一天内不得再次同步
  *   同步时还会检查学期初是否已经获取
  *
  */
-async function syncLessons(ignoreLimit = false){
-  // 储存课表，并转换为每日的格式
-  function convertAndSync(obj){
-    // 这里还有一个将周课表转换为每日课表的操作
-    // firstWeekDate 是课表里第一周的星期日
-    // 课表的排序是：(日 一 二 三 四 五 六)
+async function syncLessons(forceFromSchool = false){
+  await initCheck()
 
-    let lessonsByDay = {}
-    obj.forEach(week => {
-      week.forEach(e => {
-        const date = e['日期']
-        if (!(date in lessonsByDay))
-          lessonsByDay[date] = []
-
-        lessonsByDay[date].push(e)
-      })
-    })
-
-    wx.setStorageSync('lessonsByDay', lessonsByDay)
-    wx.setStorageSync('lessons', obj)
-
-    // 上色
-    colorizeLesson()
-    log.info("课表存储成功");
-    wx.setStorageSync('lastSyncTime', new Date().getTime())
-  }
-
-  // 初始化学期初
-  let from = wx.getStorageSync('firstWeekDate')
-  log.info("检查学期初", from)
-
-  if (!from || from === ""){
-    log.info("新的学期初")
-    const ret = await utils.request({
-      url: "https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202102&zc=1"
-    })
-    log.info("学期初返回", ret.data)
-    let date = ""
-    try{
-      date = ret.data[1][0]['rq']
-    } catch(e) {
-      throw new Error("教务处出错")
-    }
-    from = utils.strToDate(date)
-    from = from.getTime()
-    log.info("storage", from, date, utils.strToDate(date))
-    wx.setStorageSync('firstWeekDate', from)
-  }
-
-  // 如果本地没有课程，先看看云端有没有
-  let lessons = wx.getStorageSync("lessons")
-  if (!ignoreLimit && (!lessons || lessons === "")){
+  // 如果本地没有课程，则从云端检查
+  let lessons = wx.getStorageSync("lessonsByDay")
+  if (!forceFromSchool && (!lessons || lessons === "")){
     const cloud = await checkCloudLesson()
-    // log.info(cloud);
-    if (cloud){
-      // 直接用云端
-      convertAndSync(cloud.lessons)
+    if (cloud) {
+      convertAndStorage(cloud.lessons)
       return ;
     }
   }
 
-  // 限制频率
-  const lastSync = wx.getStorageSync('lastSyncTime')
-  const gap = (new Date().getTime() - lastSync) / 1000
-  const limit = 3600 * 24 // 1 day
-  if (gap < limit && !ignoreLimit)
-    return ;
-
-  lessons = []
-  try{
-    lessons = await getLesson()
-  } catch(e) {
-    log.info("error occurred when sync lessons", e.message)
-    return ;
-  }
-
-  convertAndSync(lessons)
+  /** 从教务系统获取 */
+  const { year, term } = getTerm()
+  lessons = await getLessonFromSchool(year, term)
+  convertAndStorage(lessons)
   updateCloudLesson(lessons)
 }
 
 /**
- * 检查数据库，看微信账号是否有课程储存
- * @description
- *   如果已经绑定，则返回对象，包含账号密码
- *   如果没有绑定，则返回null
+ * 转换为每日课表，对课程上色并储存到本地
+ * @param {array} lessons 全学期课程
+ */
+function convertAndStorage(lessons) {
+  // firstWeekDate 是课表里第一周的星期日
+  // 课表的排序是：(日 一 二 三 四 五 六)
+
+  /** 生成每日课表 */
+  const lessonsByDay = {}
+  lessons.forEach(lesson => {
+    const date = lesson['日期']
+
+    if (!Array.isArray(lessonsByDay[date]))
+      lessonsByDay[date] = []
+
+    lessonsByDay[date].push(lesson)
+  })
+
+  /** 合并大节的课 */
+  for (const key in lessonsByDay) {
+    const lessons = lessonsByDay[key]
+    lessons.sort((a, b) => Number(a['节次'][0]) - Number(b['节次'][0]))
+    lessonsByDay[key] = lessons.filter((e, index, raw) => {
+      // 跳过第一节课
+      if (index === 0)
+        return true
+      
+      const pre = raw[index - 1]
+      const now = e
+      if (!pre || !now)
+        return false;
+
+      // 如果前后两节课名字一样，合并
+      if (now['课程名称'] === pre['课程名称']) {
+        pre['节次'][1] = now['节次'][1]
+        return false
+      }
+
+      return true
+    })
+  }
+
+  // 上色
+  colorizeLesson(lessonsByDay)
+
+  /** 
+   * 生成课表映射
+   * 1.统计每一节课出现的时间
+   * 2.上课起始 / 终止时间
+   * 3.老师（可能是一个数组）
+   * 4.上课地点（可能是一个数组）
+   */
+  const lessonMap = {}
+  for (const date in lessonsByDay) {
+    const lessons = lessonsByDay[date]
+    const dayDate = new Date(date)
+    lessons.forEach(lesson => {
+      const name = lesson['课程名称']
+      if (!lessonMap[name]) {
+        lessonMap[name] = Object.assign({}, {
+          '课程节数': 0,
+          '教师姓名': new Array(0),
+          '教学地点': new Array(0),
+          '排课人数': Number(lesson['排课人数']),
+          '卡片颜色': lesson['卡片颜色'],
+          '上课时间': new Array(0),
+          '上课周次': [9999, -1]
+        })
+      }
+
+      const e = lessonMap[name]
+      const 节次 = Number(lesson['节次'][1])
+      const _time = convertIndexToTime(节次, true)[1]
+      const time = new Date(dayDate.getTime())
+      time.setHours(_time.getHours())
+      time.setMinutes(_time.getMinutes())
+
+      e['课程节数']++
+      e['上课时间'].push(time)
+      e['上课时间'] = e['上课时间'].sort((a, b) => a.getTime() - b.getTime())
+
+      if (e['教师姓名'].indexOf(lesson['教师姓名']) === -1) {
+        e['教师姓名'].push(lesson['教师姓名'])
+      }
+
+      if (e['教学地点'].indexOf(lesson['教学地点']) === -1) {
+        e['教学地点'].push(lesson['教学地点'])
+      }
+      if (e['上课周次'][0] === null) {
+        e['上课周次'][0] = Number(lesson['上课周次'])
+      }
+
+      e['上课周次'][0] = Math.min(e['上课周次'][0], Number(lesson['上课周次']))
+      e['上课周次'][1] = Math.max(e['上课周次'][1], Number(lesson['上课周次']))
+
+    })
+  }
+  wx.setStorageSync('lessonsMap', lessonMap)
+  
+  // 先储存到storage，避免影响
+  wx.setStorageSync('lessonsByDay', lessonsByDay)
+
+  /** 生成每周课表 */
+  // 初始化一个[22][7][7]的数组，而且里面全部是null
+  const lessonsByWeek = new Array(22).fill(null).map(() => {
+    return Array.from({ length: 7 }, () => {
+      return new Array(7).fill(null)
+    })
+  })
+
+  for (const date in lessonsByDay) {
+    const lessons = lessonsByDay[date]
+    lessons.forEach(lesson => {
+      const 上课教室编号 = /\w+/.exec(lesson['教学地点'])
+      lesson['编号'] = 上课教室编号? 上课教室编号[0]: ""
+      lesson['地点'] = lesson['教学地点'].replace(/\w/g, "")
+
+      /** 对于超长的教学楼给省略号 */
+      if (lesson['地点'].length > 7) {
+        lesson['地点'] = lesson['地点'].substr(0, 6) + "..."
+      }
+
+      /** 加入到每日课表 */
+      const week = Number(lesson['上课周次'])
+      const day = Number(lesson['星期'])
+      const 课程开始节次 = Number(lesson['节次'][0]) - 1
+      lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = lesson
+    })
+  }
+
+  wx.setStorageSync('lessonsByWeek', lessonsByWeek)
+  log.info("课表存储成功");
+  wx.setStorageSync('lastSyncTime', new Date())
+}
+
+/**
+ * 检查数据库是否有课程储存
  */
 function checkCloudLesson(){
   const openid = wx.getStorageSync('openid')
@@ -363,45 +416,45 @@ function checkCloudLesson(){
   })
 }
 
-async function updateCloudLesson(obj){
+/**
+ * 将课程表上传到云端
+ * @param {array} lessons 全学期课程
+ */
+async function updateCloudLesson(lessons){
   const isBind = await checkCloudLesson()
-
-  // 如果没有记录，则新增
-  if (!isBind){
-    log.info("新增记录_课程")
+  /** 如果后端没有课程，则添加课程 */
+  if (!isBind) {
+    log.info("新增课程")
     return new Promise((resolve, reject) => {
       db.collection('lessons').add({
         data: {
-          lessons: obj
+          lessons: lessons
         },
-        success: res => resolve(res),
-        fail: err => reject(err)
+        success: resolve,
+        fail: reject
       })
     });
   }
-  // 如果已经有记录，则更新
-  log.info("更新记录_课程")
+
+  /** 如果后端已经有课程，则更新课程 */
+  log.info("更新课程")
   const { _id: id } = isBind
   return new Promise((resolve, reject) => {
     db.collection('lessons').doc(id).update({
       data: {
-        lessons: obj
+        lessons: lessons
       },
-      success(){
-        resolve()
-      },
-      fail(){
-        reject()
-      }
+      success: resolve,
+      fail: reject
     })
   })
 }
 
 /**
  * 对课程着色
- * 如果所有颜色都用完，那么就重新用
+ * @description 循环使用颜色表内的颜色进行着色
  */
-function colorizeLesson(){
+function colorizeLesson(lessons){
   let colors = [
     "#B1C7DC",
     "#B4C2D0",
@@ -418,24 +471,21 @@ function colorizeLesson(){
     "#9CC1DA",
     "#8CB5D0"
   ]
-  let colorMap = {
 
-  }
+  let colorMap = { }
   let i = 0
   colors = colors.shuffle()
-  let lessons = wx.getStorageSync('lessons')
-  lessons = lessons.map(week =>
-    week.map(e => {
-      if (i >= colors.length){
-        i = 0
-      }
-      const id = e['课程编号']
-      if (!(id in colorMap)){
+
+  for (const key in lessons) {
+    lessons[key].forEach(e => {
+      i = (i === colors.length)? 0: i
+      const id = e['课程编号'] || e['课程名称']
+      if (!(id in colorMap)) {
         colorMap[id] = colors[i++]
       }
       e['卡片颜色'] = colorMap[id]
-      return e
     })
-  )
-  wx.setStorageSync('lessons', lessons)
+  }
+
+  return lessons
 }

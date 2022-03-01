@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   checkBind,
   bindAccount,
   getOpenId,
@@ -6,7 +6,8 @@ module.exports = {
 }
 
 const db = wx.cloud.database()
-const { logger } = getApp().globalData
+import logger from '../utils/log'
+import cloud from '../utils/cloud'
 const log = new logger()
 log.setKeyword('apis/app.js')
 
@@ -83,21 +84,15 @@ async function bindAccount(username, password){
  * @description
  *   注意需要用户授权后才能调用
  */
-function getOpenId(){
-  return new Promise((resolve, reject) => {
-    wx.cloud.callFunction({
-      name: 'login',
-      data: {
-        action: 'getOpenid',
-      },
-      success: res => {
-        resolve(res.result.openid);
-      },
-      fail: err => {
-        reject(err)
-      }
-    })
+async function getOpenId(){
+  const ret = await cloud.callFunction({
+    name: 'login',
+    data: {
+      action: 'getOpenid',
+    }
   })
+
+  return ret.openid
 }
 
 function isAppAuthed(){

@@ -2,10 +2,9 @@
 
 // eventBus in @/static/eventBus.js
 
-const api = require('../../apis/lessons')
-const accountApi = require('../../apis/account')
 
-const { utils, exceptions, logger } = getApp().globalData
+import api from '../../apis/lessons'
+import logger from '../../utils/log'
 
 const app = getApp();
 const eventBus = app.globalData.eventBus;
@@ -46,40 +45,33 @@ Component({
       },
       nowWeek
     })
+    this.initCalendar()
+  },
 
-    // 首先获取当前日期，加载近五天的课程。
-    /**
-     * 如果还没开学(当前日期小于学期第一天) 显示未开学
-     * 如果开学了 -> 确定基数日期(最左边的那一天)
-     * 基数日期:课表第一天 / 今天的两天前 取最大值
-     */
-    // 学期第一天的日期
-    const today = new Date()
-    const firstDateForTerm = wx.getStorageSync('firstWeekDate')
-    // 还没开学呢
-    if (today.getTime() < firstDateForTerm) {
-      this.setData({ termStarted: false })
-    } else {
-      this.setData({ newSelected: 2 })
-    }
-    
-    // 基数日
-    const ret = []
-    const baseDate = new Date(Math.max(firstDateForTerm, today.nDaysAgo(2).getTime()))
-    for (let i = 0; i < 5; i++) {
-      const d = baseDate.nDaysLater(i)
-      ret.push({
-        month: d.getMonth(),
-        date: d.getDate(),
-        day: d.getDay(),
-        week: 18,
-        time: d.getTime()
+  // 页面加载完毕
+  ready(){
+    const lessons = this.data.dates.map((date, index) => {
+      const formatDate = new Date(date.time).format('YYYY-mm-dd')
+      let lessons = wx.getStorageSync('lessonsByDay')[formatDate]
+      if (!lessons)
+        lessons = []
+
+      // 添加需要的信息
+      lessons.forEach(e => {
+        e['keyid'] = Math.random()
+        // 班级需要为数组
+        if (!Array.isArray(e['上课班级'])){
+          e['上课班级'] = e['上课班级'].split(',')
+        }
+
+        e['节次'] = e['节次'].map(d => Math.floor(d)) 
       })
-    }
+      lessons.sort((a, b) => a['节次'][0] - b['节次'][0] )
+      
+      return { ...date, lessons, index }
+    })
 
-    this.setData({
-      dates: ret
-    });
+    this.setData({ dates: lessons })
   },
 
   // 页面卸载
@@ -88,46 +80,6 @@ Component({
     clearInterval(this.data.timer)
   },
 
-  // 页面初次加载完毕
-  async ready(){
-    const x = this.data.dates.map((date, index) => {
-      const formatDate = new Date(date.time).format('YYYY-mm-dd')
-      let lessons = wx.getStorageSync('lessonsByDay')[formatDate]
-      if (!lessons)
-        lessons = []
-
-
-      lessons = lessons.map(e => {
-        e['keyid'] = Math.random()
-        if (!(e['上课班级'] instanceof Array)){
-          // 避免课程混乱
-          e['上课班级'] = e['上课班级'].split(',')
-        }
-        e['节次'] = e['节次'].map(d => Math.floor(d)) 
-        return e
-      })
-
-      lessons.sort((a, b) => {
-        return a['节次'][0] - b['节次'][0]
-      })
-      
-      return { ...date, lessons, index }
-    })
-
-    this.setData({
-      dates: x,
-      lessons: x[0].lessons
-    })
-
-    return ;
-    // 获得凭据
-    log.info(await accountApi.checkCookie())
-    // 同步课表
-    await api.syncLessons()
-    log.info(api.convertWeekToDate(10));
-    log.info("当前周：", nowWeek)
-    log.info("本周课程:", wx.getStorageSync('lessons')[nowWeek - 1])
-  },
   pageLifetimes:{
     // 页面显示
     show: function () {
@@ -148,15 +100,54 @@ Component({
   },
 
   methods: {
+    // 日历板初始化
+    initCalendar() {
+      /**
+       * 获取当前日期，加载近五天的课程。
+       * 1.如果还没开学(当前日期小于学期第一天) 显示未开学
+       * 2.如果开学了 -> 确定基数日期(最左边的那一天)
+       * 基数日期:课表第一天 / 今天的两天前 取最大值
+       */
+
+      // 学期第一天的日期
+      const today = new Date()
+      const firstDayOfTerm = wx.getStorageSync('firstWeekDate')
+
+      // 还没开学呢
+      if (today.getTime() < firstDayOfTerm) {
+        this.setData({ termStarted: false })
+      }
+      
+      // 基数日
+      const ret = []
+      const baseDate = new Date(Math.max(firstDayOfTerm.getTime(), today.nDaysAgo(2).getTime()))
+
+      for (let i = 0; i < 5; i++) {
+        const d = baseDate.nDaysLater(i)
+        if (d.format('YYYY'))
+        ret.push({
+          month: d.getMonth(),
+          date: d.getDate(),
+          day: d.getDay(),
+          week: 18,
+          time: d.getTime()
+        })
+      }
+
+      this.setData({
+        dates: ret,
+        nowSelected: Math.floor(new Date(Math.max(0, today - baseDate)).getTime() / (24 * 3600 * 1000))
+      })
+    },
+
     // 日期选择器点击
-    handleTap(e){
+    handleTap(e) {
       const date = e.currentTarget.dataset.date
       if (this.data.nowSelected === date.index)
         return;
       
       this.setData({
-        nowSelected: date.index,
-        lessons: date.lessons.concat([])
+        nowSelected: date.index
       })
 
       eventBus.emit("allClose")

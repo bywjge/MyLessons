@@ -1,7 +1,10 @@
-require("./utils/global.js");
+import { log } from './utils/log'
+import './utils/global.js'
 
 console.log("hello {0}, I am {1}".format("World", "MeetinaXD"));
 // require('./utils/decode.js')
+
+
 App({
   onLaunch: function () {
     const { height, top } = wx.getMenuButtonBoundingClientRect()
@@ -13,15 +16,8 @@ App({
     })
 
     const { eventBus } = require('./static/eventBus')
-    require('./utils/debug')
 
     this.globalData = {
-      utils: 
-        require('./utils/tools'),
-      exceptions: 
-        require('./utils/exceptions'),
-      logger:
-        require('./utils/log').log,
       eventBus,
       navBarHeight,
       statusBarHeight,
@@ -30,8 +26,11 @@ App({
       // 首页显示的课程模式（日或周），即day/week
       indexMode: "day",
 
-      version: "0.3.9.2"
+      version: "0.3.9.5"
     }
+  },
+  onError(error) {
+    log.error(error)
   },
 
   towxml:require('/towxml/index')

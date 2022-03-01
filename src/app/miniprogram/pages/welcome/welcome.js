@@ -1,9 +1,13 @@
 // miniprogram/index/index.js
-const { utils, logger } = getApp().globalData
-const api = require('../../apis/app')
-const lessonApi = require('../../apis/lessons')
-const accountApi = require('../../apis/account')
+import logger from '../../utils/log'
+import api from '../../apis/app'
+import tools from '../../utils/tools'
+import lessonApi from '../../apis/lessons'
+import accountApi from '../../apis/account'
+
 const log = new logger()
+log.setKeyword('Page:index')
+
 /**
  * @TODOS
  *   授权未测试
@@ -18,18 +22,12 @@ Page({
    * 进行一系列判断决定需要跳转到什么页面
    */
   onLoad: async function () {
-    log.setKeyword('Page:index')
+    require('../../utils/debug')
+
     // lessonApi.colorizeLesson()
 
-    // if (wx.getSystemInfoSync().SDKVersion !== "2.16.1"){
-    //   await utils.showModal({
-    //     title: "SDK 版本库错误",
-    //     content: "您的微信SDK版本库未受支持",
-    //   })
-    // }
-
     // 测试强制清空数据
-    const version = "abcd4"
+    const version = "abcd1"
     if (wx.getStorageSync('version') !== version){
       wx.showLoading({
         title: '清空重载数据',
@@ -42,34 +40,39 @@ Page({
     // 页面加载，判断storage是否已经授权
     const authed = await api.isAppAuthed()
     const binded = wx.getStorageSync('binded')
-    const lessons = wx.getStorageSync('lessons')
+    const lessons = wx.getStorageSync('lessonsByDay')
     log.info("authed, binded = ", authed, binded);
 
-    // 未授权，留在本页面
+    // 微信未授权，留在本页面
     if (!authed){
       this.setData({
         showButton: true
       })
       return ;
     }
+
     // 已经授权未绑定，跳到绑定页面
     if (!binded || lessons === ""){
       wx.showLoading({
         title: '云端同步中',
       })
+
       log.warn("如果很慢那是因为教务处的锅，clear重开就好")
       // 也许是因为清理了缓存，联网到数据库检查一遍
       const isBind = await api.checkBind()
+
       // 有绑定，重新设置值
-      if (isBind){
+      if (isBind) {
+        // 先拿cookie
+        await accountApi.getCookie()
         // 有绑定，重新设置值，并跳转到课程表页面
         wx.setStorageSync('binded', true)
         wx.setStorageSync('username', isBind.username)
         wx.setStorageSync('password', isBind.password)
-        console.log("i got username");
-        if (!await accountApi.checkCookie())
-          await accountApi.getCookie()
+        // if (!await accountApi.checkCookie())
+        //   await accountApi.getCookie()
         
+        // 获取课表
         await lessonApi.syncLessons()
         wx.redirectTo({
           url: '../lesson-view/lesson-view',
@@ -78,8 +81,9 @@ Page({
       }
 
       wx.hideLoading()
+
       // 未绑定账号，弹框提示
-      utils.showModal({
+      tools.showModal({
         title: "需要绑定账号",
         content: "您的微信账号需要绑定五邑大学教务处账号，点击确定继续",
       }).then(() => {
@@ -96,9 +100,6 @@ Page({
       url: '../lesson-view/lesson-view',
     })
     return ;
-    wx.redirectTo({
-      url: '../lessons-overview/lessons-overview',
-    })
   },
 
   /**

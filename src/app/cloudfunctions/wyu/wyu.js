@@ -111,7 +111,7 @@ async function doLogin(username, password, verifyCode){
   })
 
   if (!ret.data.message){
-    return ""
+    return Promise.reject({code: 503, msg: "internal"})
   }
 
   const message = ret.data.message
@@ -211,6 +211,10 @@ async function getLesson(openid, cookie, week = null){
   return lessons
 }
 
+/**
+ *
+ * @param {*} cookie
+ */
 async function checkCookie(cookie){
   const ret = await axios.get("https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202102&zc=1", {
     headers: {
@@ -218,7 +222,6 @@ async function checkCookie(cookie){
     }
   })
 
-  let rq = null
   if (typeof ret.data === "string"){
     console.log("cookie 过期")
     return false

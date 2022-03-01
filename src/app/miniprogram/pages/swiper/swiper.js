@@ -1,39 +1,18 @@
-// miniprogram/pages/about-test/about-test.js
-import request from '../../utils/request'
-
-const app = getApp();
-const { navBarHeight } = app.globalData
-
+// pages/swiper/swiper.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    version: app.globalData.version,
-    article: {},
-    navBarHeight
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: async function (options) {
-    const md = (await request({
-      url: 'https://meetinaxd.ltiex.com/static/about.md'
-    })).data
-    let result = app.towxml(md,'markdown',{
-			events:{					// 为元素绑定的事件方法
-				tap:(e)=>{
-					console.log('tap',e);
-				}
-			}
-		});
+  onLoad: function (options) {
 
-		// 更新解析数据
-		this.setData({
-			article:result
-		});
   },
 
   /**

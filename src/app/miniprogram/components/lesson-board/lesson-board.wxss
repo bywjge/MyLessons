@@ -1,0 +1,132 @@
+/* 课程区域 */
+
+.day-lesson-wrapper{
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* 斑马条纹 */
+ .day-lesson-wrapper .strip:nth-child(2n+1){
+  background-color: var(--lesson-strip-background);
+}
+
+ .day-lesson-wrapper .strip{
+  width: 81rpx;
+  padding-top: 10rpx;
+  /* height: 100%; */
+}
+
+ .day-lesson-wrapper .strip:not(:last-child){
+  margin-right: 10rpx;
+}
+
+ .day-lesson-wrapper .strip .item{
+  padding-top: var(--lesson-item-tile);
+  box-sizing: border-box;
+
+  background-color: var(--lesson-card-background);
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.23);
+  border-radius: 6rpx;
+
+  /* font-family: "PingFang"; */
+  /* font-weight: 700; */
+  color: var(--lesson-card-number-color);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+ .day-lesson-wrapper .strip .item:not(:last-child){
+  margin-bottom: var(--indexer-margin-bottom);
+}
+
+/* 正在上课 */
+ .day-lesson-wrapper .strip .item[data-status="underway"]{
+  border-top: solid var(--lesson-item-highlight-height) var(--highlight-color);
+  padding-top: calc(var(--lesson-item-tile) - var(--lesson-item-highlight-height));
+}
+
+ .day-lesson-wrapper .strip .item[data-connect="false"]{
+  /* 保持和左侧一样的高度 */
+  height: var(--indexer-height);
+}
+
+ .day-lesson-wrapper .strip .item[data-connect="true"]{
+  /* 保持和左侧一样的高度 */
+  height: calc(var(--indexer-height) * 2 + var(--indexer-margin-bottom));
+}
+
+/* 用户点下课程卡片时显示按下效果，但禁止在弹出窗口的时候显示效果 */
+[data-blur-filter="false"] .day-lesson-wrapper .strip .item:active{
+  animation: pressIn 0.2s forwards;
+}
+
+ .day-lesson-wrapper .strip .item .name{
+  padding-left: 8rpx;
+  box-sizing: border-box;
+  font-weight: 500;
+  font-size: 23rpx;
+  color: var(--font-color);
+  letter-spacing: 0.2px;
+  line-height: 25.5rpx;
+  /* height: 122rpx; */
+  flex: 1;
+
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+  text-overflow: -o-ellipsis-lastline;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+ .day-lesson-wrapper .strip .item[data-connect="false"] .name{
+  -webkit-line-clamp: 4;
+  height: 97rpx;
+  margin-bottom: 15rpx;
+}
+
+ .day-lesson-wrapper .strip .item[data-connect="true"] .name{
+  height: calc(122rpx + 196rpx);
+}
+
+ .day-lesson-wrapper .strip .item .bottom{
+  background-color: #F293A2;
+  border-radius: 0px 0px 6rpx 6rpx;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+
+  height: 73rpx;
+  /* padding-bottom: 6rpx; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 教室号 */
+ .day-lesson-wrapper .strip .item .number{
+  font-family: "Avenir";
+  font-weight: 900;
+  font-size: 23rpx;
+  line-height: 23rpx;
+  text-align: center;
+  padding-bottom: 3rpx;
+}
+
+ .day-lesson-wrapper .strip .item .location{
+  font-size: 18rpx;
+  text-align: center;
+  font-weight: 500;
+  line-height: 20rpx;
+}
+
+ .day-lesson-wrapper .strip .empty-item{
+  height: var(--indexer-height);
+}
+
+ .day-lesson-wrapper .strip .empty-item:not(:last-child){
+  margin-bottom: var(--indexer-margin-bottom);
+}

@@ -1,0 +1,5 @@
+<swiper class="virtual-swiper" current="{{ currentIndex }}" duration="{{ duration }}" bindanimationfinish="onAnimationFinish">
+  <swiper-item wx:for="{{ list }}" wx:for-item="item" wx:key="item">
+    <item item="{{item}}"/>
+  </swiper-item>
+</swiper>

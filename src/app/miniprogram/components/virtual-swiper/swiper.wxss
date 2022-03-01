@@ -1,0 +1,4 @@
+/* components/virtual-swiper/swiper.wxss */
+.virtual-swiper {
+  height: 100%;
+}

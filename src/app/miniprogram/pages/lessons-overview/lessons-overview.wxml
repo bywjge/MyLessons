@@ -37,21 +37,23 @@
     <view class="lesson-container">
       <!-- 显示当天有多少节课 -->
       <view 
-        wx:if="{{lessons && lessons.length > 0}}"
+        wx:if="{{dates[nowSelected].lessons.length > 0}}"
         class="lesson-counter"
       >
-      今天有{{lessons.length}}节课
+      当日有 {{dates[nowSelected].lessons.length}} 节课
       </view>
+
       <!-- 如果当天没有课程 -->
       <view 
-        wx:if="{{!lessons || lessons.length === 0}}"
+        wx:else
         class="empty-lesson"
       >
         当日无课程
       </view>
+      
       <!-- 这里的wx:key直接指代i里面的key，不需要画蛇添足加上i. -->
       <lesson-card 
-        wx:for="{{lessons}}"
+        wx:for="{{dates[nowSelected].lessons}}"
         wx:for-item="i"
         wx:key="keyid"
         info="{{i}}"

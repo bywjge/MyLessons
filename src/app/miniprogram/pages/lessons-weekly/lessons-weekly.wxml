@@ -1,13 +1,47 @@
-<view class="container" data-color-scheme="light">
-  <view class="lesson-viewer" wx:if="{{showViewer}}">
-    <view class="viewer-title">课程预览</view>
-    <view>
-      balabal
+<view class="container" data-color-scheme="light" catchtap="handleTapMask" data-blur-filter="{{showDetail}}">
+
+  <!-- 课程详情卡片 -->
+  <view class="lesson-detail {{!showDetail?'hidden':''}}">
+    <view class="viewer-title">{{detailLesson['课程名称']}}</view>
+    <view class="item">
+      <span>任课老师</span>
+      <span>{{detailLesson['教师姓名']}}</span>
+    </view>
+
+    <view class="item">
+      <span>上课班级</span>
+      <view 
+        class="class-item"
+        wx:for="{{detailLesson['教学地点']}}"
+        wx:for-item="e"
+        wx:key="e"
+      >{{e}}</view>
+    </view>
+
+    <view class="item">
+      <span>上课地点</span>
+      <view 
+        class="class-item"
+        wx:for="{{detailLesson['教学地点']}}"
+        wx:for-item="e"
+        wx:key="e"
+      >{{e}}</view>
+    </view>
+
+    <view class="item">
+      <span>上课周次</span>
+      <span>{{detailLesson['上课周次']}}周</span>
+    </view>
+
+    <view class="item">
+      <span>课程已进行</span>
+      <span>{{detailLesson['课程进度']}}%</span>
     </view>
   </view>
-  <!-- <navigation /> -->
+
+
   <!-- 日期选择器 -->
-  <view class="selector-wrapper"  data-blur-filter="{{showViewer}}">
+  <view class="selector-wrapper">
     <!-- 周次选择按钮 -->
     <picker 
       class="week-selector" 
@@ -40,7 +74,7 @@
     style="height: calc(100% - 130rpx)"
     scroll-top="{{scrollTop}}"
   >
-    <view class="lesson-wrapper" data-blur-filter="{{showViewer}}">
+    <view class="lesson-wrapper">
       <!-- 课程节数指示器 -->
       <view class="indexer-wrapper">
         <view 
@@ -67,29 +101,20 @@
       </view>
 
       <!-- 课程区域 -->
-      <view class="day-lesson-wrapper">
-        <view 
-          class="strip"
-          wx:for="{{lessons}}"
-          wx:for-item="day"
-          wx:key="day"
-        >
-          <view 
-            class="{{e === null? 'empty-item': 'item'}}"
-            data-connect="{{e !== null && ((~~e['节次'][1] - ~~e['节次'][0]) > 1)}}"
-            data-status="{{e !== null && e['日期'] === nowDate && ~~e['节次'][0] == nowIndex ? 'underway' : 'normal'}}"
-            wx:for="{{day}}"
-            wx:for-item="e"
-            wx:key="e"
-          >
-            <view class="name">{{e['课程名称']}}</view>
-            <view wx:if="{{e !== null}}" class="bottom" style="background-color: {{e['卡片颜色']}}">
-              <view wx:if="{{e['编号'] !== ''}} "class="number">{{e['编号']}}</view>
-              <view class="location">{{e['地点']}}</view>
-            </view>
-          </view>
-        </view>
+      <view style="flex: 1">
+        <swiper style="height: 100%;" bindchange="handlePageChange" current="{{currentPage}}">
+          <swiper-item wx:for="{{lessons}}" wx:for-item="lesson" wx:key="lesson">
+            <lesson-board style="flex: 1" item="{{ lesson }}" bind:tapLesson="handleLessonTap"/>
+          </swiper-item>
+        </swiper>
       </view>
+      
+      <!-- 虚拟列表暂时先不用 -->
+      <!-- <virtual-swiper 
+        style="flex: 1"
+        list="{{lessons}}"
+        generic:item="lesson-board" 
+      /> -->
     </view>
   </scroll-view>
 

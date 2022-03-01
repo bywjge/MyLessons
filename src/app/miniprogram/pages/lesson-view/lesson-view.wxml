@@ -1,11 +1,16 @@
-<view class="container">
+<view class="view-container">
   <navigation>
     <view slot="left" class="operation-btn" bindtap="handleClick">
       {{indexMode === 'day'?'周视图':'日视图'}}
     </view>
   </navigation>
-  <view class="container">
-    <lessons-overview style="display: {{indexMode === 'day'?'block':'none'}}" class="item"></lessons-overview>
-    <lessons-weekly style="display: {{indexMode === 'week'?'block':'none'}}" class="item"></lessons-weekly>
-  </view>
+
+  <lessons-overview 
+    style="display: {{indexMode === 'day'?'block':'none'}}; height: calc(100% - {{navBarHeight}}px)" 
+    class="item" 
+  />
+  <lessons-weekly 
+    style="display: {{indexMode === 'week'?'block':'none'}}; height: calc(100% - {{navBarHeight}}px)" 
+    class="item"
+  />
 </view>

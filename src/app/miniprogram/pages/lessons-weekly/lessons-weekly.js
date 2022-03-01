@@ -1,4 +1,4 @@
-const lessons = require('../../apis/lessons')
+import lessonApi from '../../apis/lessons'
 const { navBarHeight } = getApp().globalData
 
 Component({
@@ -19,10 +19,11 @@ Component({
       { date: 17, week: "周六" },
       { date: 17, week: "周日" },
     ],
+
     indexer: [
     ],
 
-    showViewer: false,
+    showDetail: true,
 
     pickerArray: [],
 
@@ -37,36 +38,38 @@ Component({
     lessons: [],
 
     nowDate: "",
-    nowMonth: new Date().getMonth() + 1
+    nowMonth: new Date().getMonth() + 1,
+
+    currentPage: 0,
+    detailLesson: {}
   },
-  /**
-   * 生命周期函数--监听页面加载完成
-   */
   async ready() {
     let indexer = [];
     [1, 3, 5, 7, 9, 11, 13].forEach(i => {
       let item = {
-        from: [i.prefixZero(2), lessons.convertIndexToTime(i)[0]],
-        to: [(i + 1).prefixZero(2), lessons.convertIndexToTime(i + 1, true)[0]]
+        from: [i.prefixZero(2), lessonApi.convertIndexToTime(i)[0]],
+        to: [(i + 1).prefixZero(2), lessonApi.convertIndexToTime(i + 1, true)[0]]
       }
       indexer.push(item)
     })
-    const week = lessons.convertDateToWeek(new Date())
+    const week = lessonApi.convertDateToWeek(new Date())
     // 初始化周次选择器数组
     const pickerArray = Array.from({ length: 22 }, (e, i) => {
       if (i === week - 1)
         return `(当前周) ${i + 1} 周`
       return `${i + 1} 周`
     })
+    this.getLesson()
     this.setData({
       indexer,
       pickerArray,
       selectWeek: week
     })
-    // lessons.colorizeLesson()
+
     this.refreshStatus()
-    this.getLesson()
+    this.selectWeek(week - 1)
   },
+
   pageLifetimes: {
     show() {
       if (this.data.timer){
@@ -87,14 +90,15 @@ Component({
       const index = [1, 3, 5, 7, 9, 11, 13]
       const now = new Date()
       let nowIndex = index.find(e => {
-        const t1 = lessons.convertIndexToTime(e)[1]
-        const t2 = lessons.convertIndexToTime(e + 1, true)[1]
+        const t1 = lessonApi.convertIndexToTime(e)[1]
+        const t2 = lessonApi.convertIndexToTime(e + 1, true)[1]
         return (t1 <= now && t2 >= now)
       })
 
       if (typeof nowIndex === 'undefined'){
         nowIndex = null
       }
+
       this.setData({
         nowIndex
       })
@@ -103,90 +107,76 @@ Component({
     // 刷新各种状态（indexer和卡片）
     refreshStatus(){
       this.refreshIndexer()
-
-      // console.log(this.data.lessons, this.data.nowIndex, this.data.nowDate);
       const date = new Date().format("YYYY-mm-dd")
-      const month = new Date().format("m")
       this.setData({
         nowDate: date
       })
     },
 
     selectWeek(e){
-      const index = Math.floor(e.detail.value)
-      const month = lessons.convertWeekToDate(index + 1).getMonth() + 1
-      this.setData({
-        nowMonth: month,
-        selectWeek: index + 1
+      const index = (typeof e === 'number')? e: Math.floor(e.detail.value)
+      const month = lessonApi.convertWeekToDate(index + 1).getMonth() + 1
+      const firstDayInWeek = lessonApi.convertWeekToDate(index + 1)
+  
+      /** 初始化上方的日期条，如果日期是当天，就加上标识 */
+      const calendar = this.data.days.map((e, i) => {
+        const d = firstDayInWeek.nDaysLater(i)
+        e.date = d.getDate()
+        e.status = (d.equals(new Date()))? 'selected': 'normal'
+        return e
       })
-      this.getLesson()
+
+      // this.getLesson(index + 1)
   
       // 获取完之后回到顶部
       this.setData({
-        scrollTop: 0
+        scrollTop: 0,
+        nowMonth: month,
+        selectWeek: index + 1,
+        currentPage: index,
+        days: calendar
       })
     },
 
-    getLesson(){
-      // const today = new Date().getDay()
-      const firstDayInWeek = lessons.convertWeekToDate(this.data.selectWeek)
-      // console.log(firstDayInWeek);
-  
-      // 初始化上方的日期条
-      const days = this.data.days.map((e, i) => {
-        const d = firstDayInWeek.nDaysLater(i)
-        e.date = d.getDate()
-        // console.log(d, new Date(),d.equals(new Date()));
-        e.status = (d.equals(new Date()))?'selected':'normal'
-        return e
-      })
-      
-      const currentWeek = Math.max(1, this.data.selectWeek)
-      const lesson = wx.getStorageSync('lessons')[currentWeek - 1]
-      let lessonSort = Array.from({ length: 7 }, () => {
-        return new Array(7).fill(null)
-      })
-      lesson.forEach(e => {
-        const w = (e['星期'] * 1) - 1
-        const i = (e['节次'][0] * 1) - 1
-
-        // console.log(e);
-        const num = /\w+/.exec(e['教学地点'])
-
-        e['编号'] = num? num[0]: ""
-        e['地点'] = e['教学地点'].replace(/\w/g,"")
-        if (e['地点'].length > 7){
-          e['地点'] = e['地点'].substr(0, 6) + "..."
-        }
-        lessonSort[w][i / 2] = e
-      })
-  
-      // 修复课程不能跨节的bug
-      lessonSort = lessonSort.map(dailyLesson => {
-        let newDaily = []
-        // 遍历每日的课程，如果这一节课的与上一节课的事件重叠，那就不处理
-        // 否则把元素放到新数组
-        // 再用新数组替换旧数组
-        for (let dailyIndex = 0; dailyIndex < dailyLesson.length; dailyIndex++) {
-          if (dailyIndex === 0 || !dailyLesson[dailyIndex - 1]){
-            newDaily.push(dailyLesson[dailyIndex])
-            continue ;
-          }
-          const nowIndex = dailyIndex * 2 + 1
-          const [from, to] = dailyLesson[dailyIndex - 1]['节次']
-          if (~~from <= nowIndex && ~~nowIndex <= to){
-            continue ;
-          }
-          newDaily.push(dailyLesson[dailyIndex])
-        }
-
-        return newDaily;
-      })
-
+    getLesson(week = 1) {
+      const lessons = wx.getStorageSync('lessonsByWeek')/* [week - 1] || [] */
       this.setData({
-        days,
-        lessons: lessonSort,
+        lessons
       })
     },
+
+    handlePageChange({ detail }) {
+      if (detail.source !== "touch")
+        return ;
+
+      this.selectWeek(detail.current)
+    },
+
+    handleTapMask(e) {
+      if (this.data.showDetail)
+        this.setData({ showDetail: false })
+    },
+
+    handleLessonTap({ detail }) {
+      const name = detail['课程名称']
+      const lesson = wx.getStorageSync('lessonsMap')[name]
+      lesson['上课周次'] = lesson['上课周次'].join('-')
+      const now = new Date()
+      const 已经上过的课程节数 = lesson['上课时间']
+        .map(e => new Date(e))
+        .findIndex(e => e > now)
+
+      lesson['课程进度'] = 100
+      // 还没上完课
+      if (已经上过的课程节数 !== -1) {
+        lesson['课程进度'] = Math.round(已经上过的课程节数 / lesson['课程节数'] * 100)
+      }
+
+      this.setData({ 
+        showDetail: true,
+        detailLesson: lesson
+      })
+      console.log(name, lesson, lesson['上课周次'])
+    }
   }
 })

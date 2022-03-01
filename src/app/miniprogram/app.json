@@ -1,11 +1,12 @@
 {
   "pages": [
-    "pages/welcome/index",
+    "pages/welcome/welcome",
     "pages/login/login",
     "pages/lesson-view/lesson-view",
     "pages/profile/profile",
     "pages/more/more",
-    "pages/about-test/about-test"
+    "pages/about-test/about-test",
+    "pages/swiper/swiper"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -19,7 +20,7 @@
     "navigation": "./components/navigation-bar/navigation-bar",
     "developHint": "./components/developHint/develop",
     "fa": "./components/includes/fa/index",
-    "towxml":"/towxml/towxml"
+    "towxml": "/towxml/towxml"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2"

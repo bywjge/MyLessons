@@ -1,8 +1,10 @@
 // miniprogram/pages/login/login.js
+import logger from '../../utils/log'
+import tools from '../../utils/tools'
+import accountApi from '../../apis/account'
+import lessonApi from '../../apis/lessons'
+import appApi from '../../apis/app'
 
-const { utils, exceptions, logger } = getApp().globalData
-const api = require('../../apis/account')
-const appApi = require('../../apis/app')
 const log = new logger()
 
 Page({
@@ -41,7 +43,7 @@ Page({
       return ;
 
     if (this.data.username.isEmpty() || this.data.password.isEmpty()){
-      utils.showModal({
+      tools.showModal({
         title: "登录信息不完整",
         content: "您需要正确填入账号和密码"
       });
@@ -58,12 +60,12 @@ Page({
 
     let ret = null
     try{
-      ret = await api.doLogin(that.data.username, that.data.password)
-    } catch ({error: {msg}}){
-      console.log("error", msg);
-      switch(msg){
+      ret = await accountApi.doLogin(that.data.username, that.data.password)
+    } catch (e){
+      const msg = e?.error?.msg || ''
+      switch(msg) {
         case "密码错误":
-          utils.showModal({
+          tools.showModal({
             title: "好像不对...",
             content: "账号或密码不正确，再检查一遍哦"
           });
@@ -79,20 +81,20 @@ Page({
         busy: false
       })
     }
-    const { cookie } = ret
+    // const { cookie } = ret
     
     // 储存访问令牌
-    wx.setStorageSync('cookie', cookie)
+    wx.setStorageSync('cookie', ret)
     
     wx.showLoading({
       title: '绑定账号中',
     });
 
     await appApi.bindAccount(that.data.username, that.data.password)
-    utils.showToast({
+    tools.showToast({
       title: '绑定成功'
     }).then(async () => {
-      await utils.sleep(1000)
+      await tools.sleep(1000)
       that.bindFinished()
     })
   },
@@ -101,7 +103,6 @@ Page({
    * 在绑定完成后做的事情
    */
   async bindFinished(){
-    const lessonApi = require('../../apis/lessons')
     wx.setStorageSync('username', this.data.username)
     wx.setStorageSync('password', this.data.password)
 
@@ -110,17 +111,10 @@ Page({
       title: "同步数据中..."
     });
 
-    // 先指定学期初
     await lessonApi.syncLessons()
     wx.hideLoading()
-    const nowWeek = await lessonApi.convertDateToWeek(new Date())
 
-    utils.showModal({
-      title: "导入数据中..."
-    })
-    log.info("当前周：", nowWeek)
-    log.info("本周课程:", wx.getStorageSync('lessons')[nowWeek - 1])
-    await utils.showToast({
+    await tools.showToast({
       title: '同步成功'
     })
     wx.redirectTo({

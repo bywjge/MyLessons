@@ -1,8 +1,6 @@
 // components/navigation-bar/navigation-bar.js
+import tools from '../../utils/tools'
 const { navBarHeight, windowWidth, statusBarHeight } = getApp().globalData
-const app = getApp();
-const eventBus = app.globalData.eventBus;
-const utils = app.globalData.utils
 
 const { pages } = require('../../static/pages')
 
@@ -81,11 +79,11 @@ Component({
           that.setData({ hiddenLayer: true })
         }, animationTime)
         // 不加延时微信有bug
-        await utils.sleep(100)
+        await tools.sleep(100)
         this.setData({ showMenu: true, busy: false })
       } else {
         this.setData({ showMenu: false, hiddenLayer: false, hiddenOther: false })
-        await utils.sleep(animationTime)
+        await tools.sleep(animationTime)
         this.setData({ showMenuLayer: false, busy: false })
       }
     },
@@ -96,7 +94,7 @@ Component({
         return ;
       }
       this.handleMenuClick()
-      await utils.sleep(200)
+      await tools.sleep(200)
       wx.redirectTo({
         url: url,
       })

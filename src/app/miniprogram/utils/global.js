@@ -1,3 +1,5 @@
+import logger from '../utils/log'
+
 const registerFunctions = [
   stringFormat,
   stringIsEmpty,
@@ -94,7 +96,6 @@ function dateUtils(){
 }
 
 function proxyingWxObject(){
-  const { log: logger } = require('./log')
   const log = new logger()
   log.setKeyword("wxObject")
 
@@ -124,7 +125,7 @@ function proxyingWxObject(){
               title: '发生错误，请查看控制台',
               duration: 2000
             })
-            log.error(name, arguments.errMsg)
+            log.error(name, arguments[0].errMsg)
             originalFail();
           };
         }

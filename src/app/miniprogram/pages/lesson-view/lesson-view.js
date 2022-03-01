@@ -1,5 +1,6 @@
 // miniprogram/pages/lesson-view/lesson-view.js
 const app = getApp();
+const { navBarHeight } = getApp().globalData
 const eventBus = app.globalData.eventBus;
 
 Page({
@@ -8,7 +9,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    indexMode: "day"
+    indexMode: "day",
+    navBarHeight
   },
 
   handleClick(){

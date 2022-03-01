@@ -30,7 +30,7 @@ exports.main = async (event, context) => {
   } catch(e) {
     return {
       success: false,
-      error: e.message
+      error: e.message || e
     }
   }
 
@@ -75,35 +75,36 @@ async function getOpenid(e){
 }
 
 /**
- * 
+ *
  * @param {Boolean} forceNew 是否强制获取新cookie
  * @description 如果不指定需要强制获取新cookie，则从数据库中获取使用; 如果过期，则重新登录
  */
 async function getCookie({ forceNew = false }){
-  // let ret = await axios({
-  //   method: 'get',
-  //   url: "http://jxgl.wyu.edu.cn/"
-  // })
-  // return {d: ret.data}
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID
   let cookie = null
   let time = null
-  if (!forceNew){
-    let { cookie: _cookie, time: _time } = (await db.getRecord("cookies", openid))[0]
-    console.log(_cookie)
+
+  // 从数据库取出cookie记录
+  const ret = await db.getRecord("cookies", openid)
+
+  // 有cookie且不强制获取新cookie
+  if (ret.length > 0 && !forceNew) {
+    let { cookie: _cookie, time: _time } = ret[0]
+
+    console.log('数据库中读取到cookie', _cookie)
     const checkCookie = await wyu.checkCookie(_cookie)
-    if (!checkCookie){
+    if (!checkCookie) {
       forceNew = true
     }
     cookie = _cookie
     time = _time
   }
 
-  // 1.5h
-  if (forceNew || Date.now() - time > 1.5 * 3600 * 1000){
+  // 没有cookie / 强制获取新 / 过期
+  if (ret.length === 0 || forceNew || Date.now() - time > 1.5 * 3600 * 1000){
     // reLogin
-    console.log("reget cookie");
+    console.log("getCookie: 重新登录")
     const users = await db.getRecord("accounts", openid)
     console.log("users", users, openid)
     const { username, password } = users[0]

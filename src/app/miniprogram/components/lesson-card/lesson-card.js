@@ -1,5 +1,5 @@
 // components/lesson-card.js
-const lessonApi = require('../../apis/lessons')
+import lessonApi from '../../apis/lessons'
 
 Component({
   /**

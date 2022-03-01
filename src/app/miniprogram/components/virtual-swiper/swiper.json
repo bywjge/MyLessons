@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {},
+  "componentGenerics": {
+    "item": {
+      "default": "../lesson-board/lesson-board"
+    }
+  }
+}

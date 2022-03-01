@@ -1,6 +1,5 @@
 //创建EventBus对象
 let EventBus = function () {
-  console.log("eventbus init...");
 };
 var busMap = {};
 //添加方法
@@ -24,7 +23,7 @@ EventBus.prototype = {
     busMap[key].push(action)
   },
 
-  cancelBind: function(key){
+  off: function(key){
     if (!(key in busMap))
       return;
 
@@ -33,6 +32,7 @@ EventBus.prototype = {
 }
 var eventBus = new EventBus()
 
-module.exports = {
-  eventBus: eventBus
+export {
+  eventBus,
+  EventBus
 }

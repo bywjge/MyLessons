@@ -1,4 +1,7 @@
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "lesson-board": "../../components/lesson-board/lesson-board",
+    "virtual-swiper": "../../components/virtual-swiper/swiper"
+  }
 }

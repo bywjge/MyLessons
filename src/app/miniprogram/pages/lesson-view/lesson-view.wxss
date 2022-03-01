@@ -5,7 +5,7 @@ page{
   display: flex;
   flex-direction: column;
 }
-.container{
+.view-container{
   height: 100%;
   width: 100%;
   display: flex;
@@ -13,7 +13,7 @@ page{
   justify-content: flex-start;
 }
 
-.container > .item{
+.view-container > .item{
   height: 100%;
   width: 100%;
 }
