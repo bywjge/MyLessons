@@ -30,11 +30,26 @@ page{
   --indexer-item-index-background-underway: #ff7d8345;
 
   --lesson-strip-background: rgba(0, 0, 0, 0.05);
+  --lesson-strip-active: #ffd6e0;
 
   --lesson-card-background: white;
   --lesson-card-number-color: white;
 
+  --highlight-background: #FFF0F8;
   --highlight-color: #FF7D7D;
+
+  --color-white: white;
+
+  --color-black-05: rgba(0, 0, 0, .05);
+  --color-black-07: rgba(0, 0, 0, .07);
+  --color-black-10: rgba(0, 0, 0, .1);
+  --color-black-20: rgba(0, 0, 0, .2);
+  
+  --text-black-1: #2F2F2F;
+  --text-black-2: #424242;
+  --text-black-3: #727272;
+  --text-black-4: #B1B1B1;
+  /* --text-black-4: ; */
 }
 
 page {
@@ -227,13 +242,4 @@ text[class="bold"]{
 .hint{
   height: 100%;
   width: 100%;
-}
-
-@keyframes pressIn{
-  30%{
-    transform: scale(0.7);
-  }
-  100%{
-    transform: scale(0.9);
-  }
 }

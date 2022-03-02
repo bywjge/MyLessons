@@ -43,6 +43,7 @@ view[data-status="coming"] .card-info .status{
 /* 色条 */
 view[data-status="underway"] .card-info .status::after{
   content: '';
+  top: 0;
   right: 0;
   margin-top: 50rpx;
   position: absolute;

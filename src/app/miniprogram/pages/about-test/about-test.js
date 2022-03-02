@@ -22,17 +22,17 @@ Page({
     const md = (await request({
       url: 'https://meetinaxd.ltiex.com/static/about.md'
     })).data
-    let result = app.towxml(md,'markdown',{
-			events:{					// 为元素绑定的事件方法
-				tap:(e)=>{
-					console.log('tap',e);
-				}
-			}
-		});
+    // let result = app.towxml(md,'markdown',{
+		// 	events:{					// 为元素绑定的事件方法
+		// 		tap:(e)=>{
+		// 			console.log('tap',e);
+		// 		}
+		// 	}
+		// });
 
 		// 更新解析数据
 		this.setData({
-			article:result
+			// article:result
 		});
   },
 

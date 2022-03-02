@@ -23,7 +23,7 @@ Component({
     indexer: [
     ],
 
-    showDetail: true,
+    showDetail: false,
 
     pickerArray: [],
 
@@ -41,7 +41,8 @@ Component({
     nowMonth: new Date().getMonth() + 1,
 
     currentPage: 0,
-    detailLesson: {}
+    detailLesson: {},
+    activeDay: -1
   },
   async ready() {
     let indexer = [];
@@ -96,7 +97,7 @@ Component({
       })
 
       if (typeof nowIndex === 'undefined'){
-        nowIndex = null
+        nowIndex = -1
       }
 
       this.setData({
@@ -118,11 +119,17 @@ Component({
       const month = lessonApi.convertWeekToDate(index + 1).getMonth() + 1
       const firstDayInWeek = lessonApi.convertWeekToDate(index + 1)
   
+      let active = -1
       /** 初始化上方的日期条，如果日期是当天，就加上标识 */
       const calendar = this.data.days.map((e, i) => {
         const d = firstDayInWeek.nDaysLater(i)
         e.date = d.getDate()
-        e.status = (d.equals(new Date()))? 'selected': 'normal'
+        if (d.equals(new Date())) {
+          e.status = 'selected'
+          active = i
+        } else {
+          e.status = 'normal'
+        }
         return e
       })
 
@@ -134,7 +141,8 @@ Component({
         nowMonth: month,
         selectWeek: index + 1,
         currentPage: index,
-        days: calendar
+        days: calendar,
+        activeDay: active
       })
     },
 
@@ -160,13 +168,16 @@ Component({
     handleLessonTap({ detail }) {
       const name = detail['课程名称']
       const lesson = wx.getStorageSync('lessonsMap')[name]
+      lesson['课程名称'] = name
       lesson['上课周次'] = lesson['上课周次'].join('-')
+      lesson['教学地点'] = lesson['教学地点'].join('、')
+
       const now = new Date()
       const 已经上过的课程节数 = lesson['上课时间']
         .map(e => new Date(e))
         .findIndex(e => e > now)
-
       lesson['课程进度'] = 100
+      lesson['已上节数'] = 已经上过的课程节数
       // 还没上完课
       if (已经上过的课程节数 !== -1) {
         lesson['课程进度'] = Math.round(已经上过的课程节数 / lesson['课程节数'] * 100)

@@ -19,8 +19,7 @@
   "usingComponents": {
     "navigation": "./components/navigation-bar/navigation-bar",
     "developHint": "./components/developHint/develop",
-    "fa": "./components/includes/fa/index",
-    "towxml": "/towxml/towxml"
+    "fa": "./components/includes/fa/index"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2"

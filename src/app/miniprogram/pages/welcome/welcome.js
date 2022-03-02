@@ -27,7 +27,7 @@ Page({
     // lessonApi.colorizeLesson()
 
     // 测试强制清空数据
-    const version = "abcd1"
+    const version = "abcd2"
     if (wx.getStorageSync('version') !== version){
       wx.showLoading({
         title: '清空重载数据',

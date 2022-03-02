@@ -168,7 +168,10 @@ function convertDateToWeek(nowDate, convertToChinese = false){
     return convertToChinese? '一': 1
   }
 
-  const week = Math.floor((nowDate.nDaysAgo(1).getTime() - from.getTime()) / (1000 * 60 * 60 * 24 * 7)) + 1
+  let week = Math.floor((nowDate.nDaysAgo(1).getTime() - from.getTime()) / (1000 * 60 * 60 * 24 * 7)) + 1
+  // 最大到22周
+  week = Math.min(week, 22)
+
   if (convertToChinese){
     return chineseNumber[week - 1]
   }
@@ -284,7 +287,7 @@ function convertAndStorage(lessons) {
   for (const key in lessonsByDay) {
     const lessons = lessonsByDay[key]
     lessons.sort((a, b) => Number(a['节次'][0]) - Number(b['节次'][0]))
-    lessonsByDay[key] = lessons.filter((e, index, raw) => {
+    lessons = lessons.filter((e, index, raw) => {
       // 跳过第一节课
       if (index === 0)
         return true
@@ -299,9 +302,18 @@ function convertAndStorage(lessons) {
         pre['节次'][1] = now['节次'][1]
         return false
       }
-
       return true
     })
+
+    // 如果是大课，标识它
+    lessons.forEach(e => {
+      if (Number(e['节次'][1]) - Number(e['节次'][0]) > 1) {
+        e['long'] = true
+      } else {
+        e['long'] = false
+      }
+    })
+    lessonsByDay[key] = lessons
   }
 
   // 上色
@@ -326,6 +338,7 @@ function convertAndStorage(lessons) {
           '教师姓名': new Array(0),
           '教学地点': new Array(0),
           '排课人数': Number(lesson['排课人数']),
+          '上课班级': lesson['上课班级'],
           '卡片颜色': lesson['卡片颜色'],
           '上课时间': new Array(0),
           '上课周次': [9999, -1]

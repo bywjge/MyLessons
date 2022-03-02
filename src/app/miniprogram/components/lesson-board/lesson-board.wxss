@@ -17,6 +17,9 @@
   padding-top: 10rpx;
   /* height: 100%; */
 }
+.day-lesson-wrapper .strip[data-active=true]{
+  background-color: var(--lesson-strip-active);
+}
 
  .day-lesson-wrapper .strip:not(:last-child){
   margin-right: 10rpx;
@@ -59,9 +62,9 @@
   height: calc(var(--indexer-height) * 2 + var(--indexer-margin-bottom));
 }
 
-/* 用户点下课程卡片时显示按下效果，但禁止在弹出窗口的时候显示效果 */
-[data-blur-filter="false"] .day-lesson-wrapper .strip .item:active{
-  animation: pressIn 0.2s forwards;
+/* 用户点下课程卡片时显示按下效果 */
+.item-tap {
+  animation: pressIn 0.4s forwards;
 }
 
  .day-lesson-wrapper .strip .item .name{
@@ -129,4 +132,13 @@
 
  .day-lesson-wrapper .strip .empty-item:not(:last-child){
   margin-bottom: var(--indexer-margin-bottom);
+}
+
+@keyframes pressIn{
+  30%{
+    transform: scale(0.9);
+  }
+  100%{
+    transform: scale(1);
+  }
 }

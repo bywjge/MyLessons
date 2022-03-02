@@ -3,16 +3,22 @@
     class="strip"
     wx:for="{{item}}"
     wx:for-item="day"
+    wx:for-index="index"
     wx:key="day"
+    data-active="{{index === activeIndex}}"
   >
+    <!-- 下方的if用来去除一个占位元素 -->
     <view 
+      wx:if="{{day[index - 1]? !day[index - 1]['long']: true}}"
       class="{{e === null? 'empty-item': 'item'}}"
+      hover-class="item-tap"
       data-item="{{e}}"
       data-connect="{{e !== null && ((~~e['节次'][1] - ~~e['节次'][0]) > 1)}}"
       data-status="{{e !== null && e['日期'] === nowDate && ~~e['节次'][0] == nowIndex ? 'underway' : 'normal'}}"
       wx:for="{{day}}"
       wx:for-item="e"
       wx:key="e"
+
       catchtap="handleLessonTap"
     >
       <view class="name">{{e['课程名称']}}</view>

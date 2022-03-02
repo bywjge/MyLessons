@@ -77,3 +77,10 @@ async function checkCookie() {
   }
   return true
 }
+
+/**
+ * 从教务处获取学生信息
+ */
+async function getStudentInfo() {
+
+}

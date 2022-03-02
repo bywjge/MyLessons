@@ -17,6 +17,9 @@ page{
   --lesson-detail-blur-radius: 3px;
   --lesson-detail-blur-time: 0.4s;
 
+  --color-text: #4f4f4f;
+  --color-title: #828282;
+  --color-border: #868686;
 }
 
 .container{
@@ -248,25 +251,21 @@ page{
   pointer-events: none;
 }
 
-@keyframes fadeBlur {
-  from {
-    filter: blur(0);
-  }
-  to {
-    filter: blur(var(--lesson-detail-blur-radius));
-  }
-}
+/* 课程卡片 */
+.container .lesson-detail {
+  --color: white;
+  --shadow: rgba(151, 151, 151, 0.87);
 
-.lesson-detail{
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 560rpx;
-  height: 400rpx;
-  background-color: white;
+  min-width: 400rpx;
+  min-height: 400rpx;
+  padding: 50rpx;
+  background-color: var(--color);
   border-radius: 27rpx;
-  box-shadow: 0px 2px 15px 0px rgba(151, 151, 151, 0.87);
+  box-shadow: 0px 2px 15px 0px var(--shadow);
+  transform: translate(-50%, -50%);
 
   display: flex;
   flex-direction: column;
@@ -276,13 +275,101 @@ page{
   animation-name: windowPop;
   animation-fill-mode: forwards;
   animation-timing-function: ease;
-  animation-duration: var(--lesson-detail-blur-time);
+  animation-duration: .3s;
 }
 
+.container .lesson-detail .lesson-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: var(--color-text);
+  letter-spacing: 0.47px;
+  text-align: center;
+  line-height: 15px;
+  /* margin: 30rpx 0; */
+  }
+
+/* 分割线样式 */
+.container .lesson-detail .divider {
+  /* height: 1px; */
+  --width: 2rpx;
+  --color: #a0a0a0;
+  --line: 5px;
+  --gap: 3px;
+  height: var(--width);
+  width: 100%;
+  margin: 28rpx 0;
+
+  background: linear-gradient(to right, var(--color), var(--color) var(--line), transparent var(--gap), transparent);
+  background-size: calc(var(--line) + var(--gap)) 100%;
+}
+
+.container .lesson-detail .item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12rpx 0;
+}
+
+/* 标题 */
+.container .lesson-detail .item .title {
+  font-size: 12px;
+  font-weight: 450;
+  color: var(--color-title);
+  margin-right: 20rpx;
+}
+
+/* 项目 */
+.container .lesson-detail .item .text {
+  font-size: 14px;
+  color: var(--color-text);
+  text-align: right;
+  word-break: break-word;
+  flex: 1;
+}
+.container .lesson-detail .item .text.progress {
+  color: #F1006F;
+  font-weight: 900;
+}
+
+/* 卡片班级容器 */
+.container .lesson-detail .class-wrapper{
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* 每一个班级 */
+.container .lesson-detail .class-wrapper .class-item{
+  font-family: "Avenir" !important;
+  font-size: 22rpx !important;
+  font-weight: 500 !important;
+  margin-bottom: 6rpx !important;
+  background-color: rgba(0,0,0,0.10) !important;
+  color: black !important;
+  border-radius: 4px;
+  padding: 4rpx 12rpx;
+  margin-right: 11rpx !important;
+  word-break: keep-all;
+  letter-spacing: 0px !important;
+}
+
+/* 课程卡片隐藏样式 */
 .lesson-detail.hidden{
   opacity: 0;
   display: none;
   animation-name: none;
+}
+
+@keyframes fadeBlur {
+  from {
+    filter: blur(0);
+  }
+  to {
+    filter: blur(var(--lesson-detail-blur-radius));
+  }
 }
 
 @keyframes windowPop {
@@ -291,11 +378,8 @@ page{
     opacity: 0;
     transform: scale(0.8) translate(-50%, -50%);
   }
-  80% {
-    opacity: 1;
-    transform: scale(1.05) translate(-50%, -50%);
-  }
   to {
+    opacity: 1;
     transform: scale(1) translate(-50%, -50%);
   }
 }

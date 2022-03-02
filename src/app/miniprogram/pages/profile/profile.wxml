@@ -1,5 +1,53 @@
 <!--miniprogram/pages/profile/profile.wxml-->
 <view class="container">
   <navigation title="我的"/>
-  <developHint class="hint" />
+  <view class="content">
+    <!-- 个人信息入口 -->
+    <view class="profile-card" data-gender="female">
+      <view class="avator" />
+      <view class="info">
+        <view class="name">
+          <span>狗秀</span>
+          <view class="gender-icon" />
+          <view class="collage">智能制造学部</view>
+        </view>
+        <view class="description">3119000592</view>
+      </view>
+      <fa class="more-icon" icon="fa fa-angle-down fa-lg"></fa> 
+    </view>
+
+    <!-- 课程服务 -->
+    <view class="module">
+      <span class="title">课程服务</span>
+      <view class="content">
+        <!-- 第一列 -->
+        <view class="column">
+          <view class="icon-button normal" hover-class="icon-button-tap">所有课程</view>
+          <view class="icon-button normal" hover-class="icon-button-tap">学分情况</view>
+        </view>
+        <!-- 第二列 -->
+        <view class="column" style="margin-left: 32rpx;">
+          <view class="icon-button normal" hover-class="icon-button-tap">考试成绩</view>
+          <view class="icon-button normal" hover-class="icon-button-tap">考试安排</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 应用功能 -->
+    <view class="module app-functions">
+      <span class="title">课程服务</span>
+      <view class="content">
+        <view class="icon-button multiple icon icon-reload" hover-class="icon-button-tap">
+          <span class="title">重新获取课程</span>
+          <view class="description">手动从教务系统获取最新课表</view>
+        </view>
+
+        <view class="icon-button multiple icon icon-reload" hover-class="icon-button-tap">
+          <span class="title">重新获取课程</span>
+          <view class="description">手动从教务系统获取最新课表</view>
+        </view>
+      </view>
+    </view>
+
+  </view>
 </view>

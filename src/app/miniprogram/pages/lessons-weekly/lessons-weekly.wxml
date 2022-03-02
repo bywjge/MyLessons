@@ -2,41 +2,51 @@
 
   <!-- 课程详情卡片 -->
   <view class="lesson-detail {{!showDetail?'hidden':''}}">
-    <view class="viewer-title">{{detailLesson['课程名称']}}</view>
+    <view class="lesson-title">{{detailLesson['课程名称']}}</view>
+    <view class="divider" />
     <view class="item">
-      <span>任课老师</span>
-      <span>{{detailLesson['教师姓名']}}</span>
+      <span class="title">任课老师</span>
+      <span class="text">{{detailLesson['教师姓名']}}</span>
     </view>
 
     <view class="item">
-      <span>上课班级</span>
-      <view 
-        class="class-item"
-        wx:for="{{detailLesson['教学地点']}}"
-        wx:for-item="e"
-        wx:key="e"
-      >{{e}}</view>
+      <span class="title">上课班级</span>
+      <view class="class-wrapper">
+        <view 
+          class="class-item"
+          wx:for="{{detailLesson['上课班级']}}"
+          wx:for-item="e"
+          wx:key="e"
+        >{{e}}</view>
+      </view>
     </view>
 
     <view class="item">
-      <span>上课地点</span>
-      <view 
-        class="class-item"
-        wx:for="{{detailLesson['教学地点']}}"
-        wx:for-item="e"
-        wx:key="e"
-      >{{e}}</view>
+      <span class="title">上课地点</span>
+      <span class="text">{{detailLesson['教学地点']}}</span>
     </view>
 
     <view class="item">
-      <span>上课周次</span>
-      <span>{{detailLesson['上课周次']}}周</span>
+      <span class="title">上课周次</span>
+      <span class="text">{{detailLesson['上课周次']}}周</span>
     </view>
 
-    <view class="item">
-      <span>课程已进行</span>
-      <span>{{detailLesson['课程进度']}}%</span>
+    <view class="divider" />
+
+    <view class="item" style="margin: 0">
+      <span class="title">课程已进行</span>
+      <span class="text progress">{{detailLesson['已上节数']}}/{{detailLesson['课程节数']}}</span>
     </view>
+
+    <progress 
+      style="width: 100%; margin-top: 20rpx;" 
+      percent="{{detailLesson['课程进度']}}"
+      active-color="#FFAFCF" 
+      background-color="#FFF0F8"
+      stroke-width="32" 
+      border-radius="8"
+      active 
+    />
   </view>
 
 
@@ -103,8 +113,8 @@
       <!-- 课程区域 -->
       <view style="flex: 1">
         <swiper style="height: 100%;" bindchange="handlePageChange" current="{{currentPage}}">
-          <swiper-item wx:for="{{lessons}}" wx:for-item="lesson" wx:key="lesson">
-            <lesson-board style="flex: 1" item="{{ lesson }}" bind:tapLesson="handleLessonTap"/>
+          <swiper-item wx:for="{{lessons}}" wx:for-item="lesson" wx:for-index="index" wx:key="lesson">
+            <lesson-board style="flex: 1" item="{{ lesson }}" activeIndex="{{(index === selectWeek - 1)? activeDay: -1}}" bind:tapLesson="handleLessonTap"/>
           </swiper-item>
         </swiper>
       </view>

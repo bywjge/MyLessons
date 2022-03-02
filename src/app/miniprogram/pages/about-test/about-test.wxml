@@ -13,7 +13,7 @@
 
       </view>
 
-      <towxml nodes="{{article}}"/>
+      <!-- <towxml nodes="{{article}}"/> -->
     </view>
   </scroll-view>
 </view>
