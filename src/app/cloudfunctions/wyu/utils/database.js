@@ -11,16 +11,13 @@ module.exports = {
 }
 
 async function updateRecord(name, openid, data){
-  console.log("i am in");
   const records = await getRecord(name, openid)
   console.log("return record", records);
   // 如果没有记录，则新增
   if (records.length === 0){
-    console.log("新增记录_课程")
     return await newRecord(name, openid, data)
   }
   const _id = records[0]._id
-  console.log("更新记录_课程")
   return await _updateRecord(name, _id, openid, data)
 }
 

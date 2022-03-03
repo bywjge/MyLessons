@@ -1,219 +1,140 @@
 page {
-  --avator-size: 120rpx;
-  --gender-female: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzEiIGhlaWdodD0iMzEiIHZpZXdCb3g9IjAgMCAzMSAzMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48ZmlsdGVyIHg9Ii01LjIlIiB5PSItMjAuNiUiIHdpZHRoPSIxMTAuNCUiIGhlaWdodD0iMTQxLjIlIiBmaWx0ZXJVbml0cz0ib2JqZWN0Qm91bmRpbmdCb3giIGlkPSJhIj48ZmVPZmZzZXQgaW49IlNvdXJjZUFscGhhIiByZXN1bHQ9InNoYWRvd09mZnNldE91dGVyMSIvPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjQuNSIgaW49InNoYWRvd09mZnNldE91dGVyMSIgcmVzdWx0PSJzaGFkb3dCbHVyT3V0ZXIxIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAuODg3NzM3NzcyIDAgMCAwIDAgMC44ODc3Mzc3NzIgMCAwIDAgMCAwLjg4NzczNzc3MiAwIDAgMCAwLjUgMCIgaW49InNoYWRvd0JsdXJPdXRlcjEiIHJlc3VsdD0ic2hhZG93TWF0cml4T3V0ZXIxIi8+PGZlTWVyZ2U+PGZlTWVyZ2VOb2RlIGluPSJzaGFkb3dNYXRyaXhPdXRlcjEiLz48ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz48L2ZlTWVyZ2U+PC9maWx0ZXI+PC9kZWZzPjxwYXRoIGQ9Ik0xMy4zNyAyLjQ3NmE0LjkwNiA0LjkwNiAwIDAgMC0zLjQ1NC0xLjQxMiA0Ljg5NyA0Ljg5NyAwIDAgMC0zLjUyMiAxLjQ3OSA0LjkwMSA0LjkwMSAwIDAgMC0xLjQxMSAzLjUwMiA0Ljg5NSA0Ljg5NSAwIDAgMCAuOTU2IDIuODcybC0xLjE1IDEuMTcxTDIuMzk1IDcuNzRBLjc5Ljc5IDAgMSAwIDEuMjkgOC44NjhsMi4zOTMgMi4zNDktMS42MjkgMS42NmEuNzkuNzkgMCAwIDAgMS4xMjggMS4xMDdsMS42My0xLjY2IDIuMzkzIDIuMzQ4YS43OS43OSAwIDAgMCAxLjEwNy0xLjEyOGwtMi4zOTQtMi4zNDkgMS4xNDktMS4xN2E0LjkwMiA0LjkwMiAwIDAgMCAyLjg1LjkwNiA0Ljg5NiA0Ljg5NiAwIDAgMCAzLjUyMS0xLjQ3OEE0LjkwMiA0LjkwMiAwIDAgMCAxNC44NSA1Ljk1YTQuOSA0LjkgMCAwIDAtMS40NzgtMy40NzV6bS0xLjA2IDUuODdBMy4zMjggMy4zMjggMCAwIDEgOS45MTUgOS4zNWMtLjg4NCAwLTEuNzE4LS4zNDEtMi4zNDgtLjk2YTMuMzMgMy4zMyAwIDAgMS0xLjAwNS0yLjM2MiAzLjMzIDMuMzMgMCAwIDEgLjk2LTIuMzggMy4zMjggMy4zMjggMCAwIDEgMi4zOTMtMS4wMDRjLjg4MyAwIDEuNzE3LjM0IDIuMzQ4Ljk2LjY0LjYyNi45OTYgMS40NjUgMS4wMDQgMi4zNmEzLjMzIDMuMzMgMCAwIDEtLjk1OSAyLjM4eiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNi44OTEgNy41KSIgZmlsdGVyPSJ1cmwoI2EpIiBmaWxsPSIjRkY3QjdCIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48L3N2Zz4=');
-
-  --button-icon-size: 40rpx;
-  --button-column-gap: 32rpx;
-  --icon-reload: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNS4xNDMgMTMuMDdBNS44MTggNS44MTggMCAwIDAgMTMuODE4IDggMS4wOSAxLjA5IDAgMCAxIDE2IDhhOCA4IDAgMCAxLTEyLjQ0MiA2LjY1NWwtMS4yMzcgMS4yMzdhLjM5LjM5IDAgMCAxLS41NS0uMDEyLjQwOC40MDggMCAwIDEtLjEyLS4yNjhsLS4xOTYtNC4xMTlhLjU1Mi41NTIgMCAwIDEgLjU4NC0uNTgzbDQuMTE4LjE5NmEuNDEuNDEgMCAwIDEgLjM4OC40MDdjMCAuMS0uMDM4LjE5NC0uMTA3LjI2Mkw1LjE0MyAxMy4wN3ptNS43MTQtMTAuMTRBNS44MTggNS44MTggMCAwIDAgMi4xODIgOCAxLjA5IDEuMDkgMCAxIDEgMCA4YTggOCAwIDAgMSAxMi40NDItNi42NTVMMTMuNjc5LjEwOGEuMzkuMzkgMCAwIDEgLjU1LjAxMi40MS40MSAwIDAgMSAuMTIuMjY4bC4xOTYgNC4xMTlhLjU1Mi41NTIgMCAwIDEtLjU4NC41ODNsLTQuMTE4LS4xOTZhLjQxLjQxIDAgMCAxLS4zODgtLjQwN2MwLS4xLjAzOC0uMTk0LjEwNy0uMjYybDEuMjk1LTEuMjk1eiIgZmlsbD0iIzI2QUFDNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PC9zdmc+');
+  background: var(--color-white);
+  --avator-size: 200rpx;
+  overflow: hidden;
 }
 
-.container > .content {
-  width: 90%;
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
 }
 
-/* 个人信息卡片 */
-.profile-card {
-  margin-top: 40rpx;
-  margin-bottom: 80rpx;
-  position: relative;
-  /* width: 482rpx; */
+.container > .profile-content {
+  width: 80%;
+  padding-top: 80rpx;
+  padding-bottom: 40rpx;
+  overflow: scroll;
+}
+
+.profile-content .divider {
+  --color: var(--color-black-10);
   width: 100%;
-  background: #FFFFFF;
-  /* box-shadow: 2px 2px 13px 0 rgba(0,0,0,0.10); */
-  border-radius: 9px;
+  height: 1rpx;
+  background: var(--color);
 
-  padding-top: 36rpx;
-  padding-bottom: 36rpx;
-  padding-left: 53rpx;
-  padding-right: 30rpx;
-
-  box-sizing: border-box;
-  box-shadow: 0 0 20rpx 0 var(--color-black-10);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  transition: width height 0.3s;
+  margin: 50rpx 0;
 }
-
-/* -------- 卡片顶部装饰条 --------- */
-.profile-card:before {
-  content: '';
-  top: 0;
-  left: 0;
-  position: absolute;
-  width: 18rpx;
-  height: 100%;
-  border-radius: 9px 0px 0px 9px;
-}
-
-/* 女性卡片颜色 */
-.profile-card[data-gender="female"]:before {
-  background-color: #FF7D7D;
-}
-
-/* 男性卡片颜色 */
-.profile-card[data-gender="male"]:before {
-  background-color: #66BFFF;
-}
-/* ------------------------------- */
 
 /* 用户头像 */
-.profile-card .avator {
+.profile-content > .avator {
+  position: relative;
   height: var(--avator-size);
   width: var(--avator-size);
   border-radius: 100%;
   background: gray;
 }
 
-.profile-card .more-icon {
-  color: var(--text-black-4);
-  transform: rotate(-90deg);
-  margin-right: 10rpx;
-}
-
-/* 头像右边 */
-.profile-card .info {
-  flex: 1;
-  margin-left: 25rpx;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 右边第一行信息 */
-.profile-card .info .name {
-  display: flex;
-  align-items: center;
-}
-
-/* 用户姓名 */
-.profile-card .info .name span {
-  font-size: 38rpx;
-  /* line-height: 36rpx; */
-  font-weight: 450;
-  letter-spacing: 0.5rpx;
-  color: var(--text-black-1);
-}
-
-/* 性别icon */
-.profile-card .info .name .gender-icon {
-  width: 31px;
-  height: 31px;
-  background: var(--gender-female);
-  background-size: 31px 31px;
-}
-
-/* 学院 */
-.profile-card .info .name .collage {
-  font-size: 24rpx;
-  padding: 6rpx 16rpx;
-  border-radius: 7px;
-  color: var(--text-black-2);
-  background: var(--color-black-10);
-}
-
-/* 右边第二条信息 */
-.profile-card .info .description {
-  margin-top: 14rpx;
-  font-size: 25rpx;
-  line-height: 25rpx;
-  letter-spacing: 0.3rpx;
-  font-weight: 400;
-  color: var(--text-black-3);
-}
-
-/* 功能区域 */
-.module {
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-}
-
-/* 功能标题 */
-.module > .title {
-  margin-left: 30rpx;
-  font-size: 32rpx;
-  font-weight: 450;
-  color: var(--text-black-3);
-  letter-spacing: 0.5px;
-}
-
-.module > .content {
-  display: flex;
-  margin-top: 32rpx;
-  justify-content: space-between;
-}
-
-/* 功能的一列 */
-.module > .content .column {
-  width: 50%;
-  max-width: 1000rpx;
-}
-
-/* 所有按钮的间距 */
-.module > .content .icon-button:not(:first-child) {
-  margin-top: var(--button-column-gap);
-}
-
-.app-functions {
-  margin-top: 70rpx;
-}
-
-.app-functions > .content {
-  flex-direction: column;
-}
-
-/* 带图标的按钮 */
-.icon-button {
-  background: var(--color-white);
-  border-radius: 28rpx;
-  font-size: 32rpx;
-  font-weight: 500;
-  padding: 20rpx 40rpx;
-  line-height: 50rpx;
-  color: var(--text-black-2);
-  box-shadow: 0 0 14rpx 0 var(--color-black-05);
-  transition: box-shadow .2s ease;
-}
-
-.icon-button-tap {
-  box-shadow: 0 0 26rpx 0 var(--color-black-20);
-}
-
-/* 单行文字的按钮 */
-.icon-button.normal {
-  text-align: center;
-  min-height: 50rpx;
-}
-.icon-button.multiple {
-  /* padding-top: 20rpx;
-  padding-bottom: 30rpx; */
-}
-
-/* 带注释文字的按钮 */
-.icon-button.multiple .description {
-  margin-top: 5rpx;
-  font-size: 24rpx;
-  line-height: 40rpx;
-  color: var(--text-black-3);
-  letter-spacing: 0.4px;
-}
-.icon-button.multiple.icon {
-  position: relative;
-  padding-left: calc(40rpx * 2 + 10rpx + var(--button-icon-size));
-}
-.icon-button.multiple.icon:before {
-  top: 50%;
-  left: 50rpx;
-  transform: translateY(-50%);
-  margin-right: 50rpx;
-  content: '';
+/* 头像编辑按钮 */
+.profile-content > .avator .edit-button {
+  --size: 60rpx;
   position: absolute;
-  width: var(--button-icon-size);
-  height: var(--button-icon-size);
-  background-size: var(--button-icon-size) var(--button-icon-size);
+  height: var(--size);
+  width: var(--size);
+  right: 0;
+  bottom: 0;
+  background: var(--color-white);
+  box-shadow: 0 0 14rpx 0 var(--color-black-10);
+  border-radius: 50%;
+  transition: box-shadow .2s;
 }
 
-.icon-reload:before {
-  background: var(--icon-reload);
+/*  */
+.profile-content > .avator .edit-button:before {
+  --size: 28rpx;
+  content: '';
+  background: var(--highlight-font-color);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: var(--size);
+  width: var(--size);
+  transform: translate(-50%, -50%);
+  mask-image: var(--icon-edit);
+  -webkit-mask-image: var(--icon-edit);
+  mask-size: var(--size);
+  -webkit-mask-size: var(--size);
+}
+
+.button-tap {
+  box-shadow: 0 0 26rpx 0 var(--color-black-20) !important;
+}
+
+
+
+/* 性别图标 */
+.gender-icon {
+  /* 修正偏移 */
+  display: inline-block;
+  transform: translateY(4rpx);
+
+  --size: 40rpx;
+  margin-left: 10rpx;
+  width: var(--size);
+  height: var(--size);
+
+  mask-size: var(--size);
+  -webkit-mask-size: var(--size);
+  mask-position: 50% 50%;
+  -webkit-mask-position: 50% 50%;
+}
+
+.gender-icon.male {
+  background: var(--color-blue-1);
+  mask-image: var(--icon-gender-male);
+  -webkit-mask-image: var(--icon-gender-male);
+}
+
+.gender-icon.female {
+  background: var(--highlight-color);
+  mask-image: var(--icon-gender-female);
+  -webkit-mask-image: var(--icon-gender-female);
+}
+
+/* 标题 */
+.profile-content > .module > .title {
+  /* display: inline; */
+  font-size: 44rpx;
+  font-weight: 500;
+  color: var(--text-black-1);
+  margin-bottom: 30rpx;
+  max-width: 75%;
+}
+
+/* 个人信息 简略信息 */
+.profile-content > .module .brief {
+  font-size: 30rpx;
+  font-weight: 350;
+  color: var(--text-black-3);
+  letter-spacing: 2.2rpx;
+  margin-top: 10rpx;
+}
+
+.module.detail > .item:not(:first-child) {
+  margin-top: 25rpx;
+}
+
+/* 下方详细信息的标题 */
+.module.detail > .item > .title {
+  font-size: 28rpx;
+  color: var(--text-black-3);
+}
+
+/* 下方详细信息的值 */
+.module.detail > .item > .text {
+  font-size: 34rpx;
+  font-weight: 400;
+  margin-top: 10rpx;
+  color: var(--text-black-2);
 }

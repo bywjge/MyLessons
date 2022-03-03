@@ -9,12 +9,20 @@
     data-hidden="{{hiddenOther}}"
     data-hidden-layer="{{hiddenLayer}}"
   >
-    <slot name="left"></slot>
+    <slot name="left" />
+    <view 
+      class="back-button" 
+      hover-class="button-tap"
+      wx:if="{{!enableMenu && enableBackButton}}"
+      bindtap="goBack"
+    >
+      <fa icon="fa fa-angle-down fa-lg"></fa> 
+    </view>
   </view>
   
   <view class="title-btn" id="title" bindtap="handleMenuClick" data-status="{{showMenu?'show':'hidden'}}">
     {{title}}
-    <fa icon="fa fa-angle-down fa-lg"></fa> 
+    <fa wx:if="{{enableMenu}}" icon="fa fa-angle-down fa-lg"></fa> 
   </view>
   <view
     class="operation-bar"

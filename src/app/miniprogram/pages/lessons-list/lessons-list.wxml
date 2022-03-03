@@ -1,0 +1,80 @@
+<view class="container">
+  <navigation title="所有课程" enableMenu="{{false}}" />
+  <view class="content">
+    <view class="filters">
+      <view class="button undone" hover-class="button-tap" bindtap="switchVisible" data-name="undone" data-disabled="{{disableButton.undone}}">
+        <view>未结课</view>
+        <view class="number">{{undoneList.length}}</view>
+      </view>
+
+      <view class="button done" hover-class="button-tap" bindtap="switchVisible" data-name="done" data-disabled="{{disableButton.done}}">
+        <view>已结课</view>
+        <view class="number">{{doneList.length}}</view>
+      </view>
+    </view>
+    <!-- 未结课 -->
+    <view class="module" style="margin-top: 40rpx" wx:if="{{!disableButton['undone']}}">
+      <view class="title">未结课({{undoneList.length}})</view>
+      <view class="lesson-wrapper">
+        <view 
+          class="item"
+          wx:for="{{undoneList}}"
+          wx:for-item="e"
+          wx:for-index="index"
+          wx:key="课程名称"
+        >
+          <!-- 序号 -->
+          <view class="index">{{index + 1}}</view>
+          <view class="content">
+            <view class="text">
+              <!-- 课程名称 -->
+              <view class="name">{{e['课程名称']}}</view>
+              <!-- 下方文字 -->
+              <view class="description">{{e['教师姓名']}}</view>
+              <!-- 节次指示器 -->
+              <view class="progress-indexer">{{e['已上节数']}}/{{e['课程节数']}}</view>
+            </view>
+            <progress 
+              class="progress-bar" 
+              percent="{{e['进度']}}" 
+              color="#ff617c" 
+              active 
+              stroke-width="4" 
+              border-radius="10"
+            />
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 已结课 -->
+    <view class="module over" style="margin-top: 40rpx" wx:if="{{!disableButton['done']}}">
+      <view class="title">已结课({{doneList.length}})</view>
+      <view class="lesson-wrapper" wx:if="{{doneList.length > 0}}">
+        <view 
+          class="item"
+          wx:for="{{doneList}}"
+          wx:for-item="e"
+          wx:for-index="index"
+          wx:key="课程名称"
+        >
+          <!-- 序号 -->
+          <view class="index">1</view>
+          <view class="content">
+            <view class="text">
+              <!-- 课程名称 -->
+              <view class="name">{{e['课程名称']}}</view>
+              <!-- 下方文字 -->
+              <view class="description">
+                <!-- 教师名称 -->
+                <view>何国辉</view>
+                <!-- 结课时间 -->
+                <view>何国辉</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

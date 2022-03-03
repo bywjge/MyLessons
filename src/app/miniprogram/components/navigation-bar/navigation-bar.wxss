@@ -42,6 +42,26 @@
   display: none;
 }
 
+.slot > .back-button {
+  --size: 56rpx;
+  transform: rotate(90deg);
+  background: var(--color-black-10);
+  width: var(--size);
+  height: var(--size);
+  line-height: calc(var(--size) - 6rpx);
+  text-align: center;
+  border: solid 3.2rpx rgba(255, 255, 255, 0.8);
+  /* box-shadow: 0 0 0 2rpx rgba(255, 255, 255, 0.8) inset; */
+  border-radius: 50%;
+  box-sizing: border-box;
+  transition: background .1s;
+}
+
+.button-tap {
+  background: var(--color-black-20) !important;
+}
+
+
 .title-btn{
   /* color: black; */
   /* padding: 6rpx 20rpx; */

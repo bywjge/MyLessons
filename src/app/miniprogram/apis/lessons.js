@@ -6,7 +6,8 @@ export default {
   syncLessons,
   checkCloudLesson,
   colorizeLesson,
-  getFirstDayOfTerm
+  getFirstDayOfTerm,
+  resetLesson
 };
 
 import logger from '../utils/log'
@@ -501,4 +502,18 @@ function colorizeLesson(lessons){
   }
 
   return lessons
+}
+
+/**
+ * 重新获取课程
+ */
+async function resetLesson() {
+  wx.showLoading({ title: '登录系统中' })
+  // 先拿cookie
+  await accountApi.getCookie()
+
+  wx.showLoading({ title: '同步数据中' })
+  // 获取课表
+  await syncLessons(true)
+  wx.hideLoading()
 }

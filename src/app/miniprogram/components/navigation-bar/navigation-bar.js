@@ -1,8 +1,8 @@
 // components/navigation-bar/navigation-bar.js
 import tools from '../../utils/tools'
-const { navBarHeight, windowWidth, statusBarHeight } = getApp().globalData
+import pages from '../../static/pages'
+const { navBarHeight, windowWidth, statusBarHeight, statusBarButtonHeight } = getApp().globalData
 
-const { pages } = require('../../static/pages')
 
 Component({
   /**
@@ -23,12 +23,17 @@ Component({
     title: {
       type: String,
       value: "My Lesson"
+    },
+    // 是否可以点击中间的menu菜单
+    enableMenu: {
+      type: Boolean,
+      value: true
+    },
+    // 如果不显示menu，则显示back button
+    enableBackButton: {
+      type: Boolean,
+      value: true
     }
-
-    // isShowSwitch: {
-    //   type: Boolean,
-    //   value: true
-    // }
   },
   
   lifetimes: {
@@ -51,6 +56,7 @@ Component({
     navBarHeight,
     windowWidth,
     statusBarHeight,
+    statusBarButtonHeight,
 
     showMenu: false,
     showMenuLayer: false,
@@ -66,7 +72,8 @@ Component({
     // 控制动画和display none
     // 注意动画时长为0.3s
     async handleMenuClick(){
-      if (this.data.busy){
+      // 如果正在忙或者不允许展示menu
+      if (this.data.busy || !this.properties.enableMenu){
         return ;
       }
       const animationTime = 300 //ms
@@ -106,6 +113,12 @@ Component({
         return ;
       }
       this.handleMenuClick()
+    },
+
+    goBack() {
+      wx.navigateBack({
+        delta: 1
+      })   
     }
   }
 })

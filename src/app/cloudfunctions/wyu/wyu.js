@@ -1,5 +1,7 @@
 const axios = require("axios");
 const qs = require("qs");
+const jsdom = require("jsdom")
+const { JSDOM } = jsdom
 const crypto = require('crypto-js');
 const utils = require("./utils")
 const db = require("./utils/database");
@@ -229,10 +231,76 @@ async function checkCookie(cookie){
   return true
 }
 
+/**
+ * 获取个人学籍卡片
+ * @param {string}} cookie
+ * @returns 学生信息结果
+ */
+async function getStudentInfo(cookie) {
+  const ret = await axios.get("https://jxgl.wyu.edu.cn/xjkpxx!xjkpxx.action", {
+    headers: {
+      'Cookie': cookie
+    }
+  })
+
+  if (typeof ret.data !== 'string' || ret.data.indexOf('学生基本信息') === -1) {
+    return Promise.reject('获取信息失败')
+  }
+
+  const textMap = {
+    学号: '#p > table > tbody > tr:nth-child(1) > td:nth-child(2) > label',
+    姓名: '#p > table > tbody > tr:nth-child(1) > td:nth-child(4) > label',
+    入学年份: '#p > table > tbody > tr:nth-child(1) > td:nth-child(6) > label',
+    学院: '#p > table > tbody > tr:nth-child(2) > td:nth-child(2) > label',
+    专业: '#p > table > tbody > tr:nth-child(2) > td:nth-child(4) > label',
+    班级: '#p > table > tbody > tr:nth-child(3) > td:nth-child(2) > label',
+    年级: '#p > table > tbody > tr:nth-child(3) > td:nth-child(4) > label',
+  }
+
+  const inputMap = {
+    手机号码: '#dh',
+    身份证: '#sfzh',
+    性别: '#xbdm' // 1->male 2->female
+  }
+
+  const dom = new JSDOM(ret.data).window.document
+  const avator = dom.querySelector('#image').src || null
+
+  const info = {
+    avator
+  }
+
+  // 遍历path列表获取值
+  for (const key in textMap) {
+    const path = textMap[key]
+    const e = dom.querySelector(path)
+    if (!e) {
+      console.log(key, e)
+      continue
+    }
+    const value = e.innerHTML.trim() || e.innerText.trim()
+    info[key] = value
+  }
+
+  for (const key in inputMap) {
+    const path = inputMap[key]
+    const e = dom.querySelector(path)
+    if (!e) {
+      console.log(key, e)
+      continue
+    }
+    const value = e.value
+    info[key] = value
+  }
+
+  return info
+}
+
 module.exports = {
   getVerifyCode,
   doLogin,
   getWeek,
   getLesson,
-  checkCookie
+  checkCookie,
+  getStudentInfo
 }

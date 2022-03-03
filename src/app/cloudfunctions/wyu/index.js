@@ -12,7 +12,8 @@ let events = {
   login,
   getOpenid,
   getLesson,
-  getCookie
+  getCookie,
+  getInfo
 }
 /**
  * 这个示例将经自动鉴权过的小程序用户 openid 返回给小程序端
@@ -61,8 +62,41 @@ async function login({username, password}){
   return { result: cookie }
 }
 
+/**
+ * 获取学籍卡信息
+ * @param {Boolean} forceNew 是否强制获取新信息
+ * @description 假定cookie有效，请自行验证cookie
+ */
+async function getInfo({ forceNew = false }) {
+  const { cookie } = await getCookie({ forceNew })
+  const wxContext = cloud.getWXContext()
+  const openid = wxContext.OPENID
+
+  // 从数据库取出info记录
+  const ret = await db.getRecord("info", openid)
+
+  // 有记录且不强制获取新信息
+  if (ret.length > 0 && !forceNew) {
+    const { info } = ret[0]
+    return { info }
+  }
+
+  // 向教务处获取
+  const info = await wyu.getStudentInfo(cookie)
+
+  // 如果获取成功，则放入数据库
+  await db.updateRecord("info", wxContext.OPENID, {
+    info,
+    time: Date.now()
+  })
+
+  return { info }
+}
+
+
+
 async function getLesson({ week = null }){
-  const cookie = await getCookie()
+  const cookie = await getCookie({})
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID
   const lessons = await wyu.getLesson(openid, cookie, week)

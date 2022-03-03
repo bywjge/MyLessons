@@ -1,12 +1,12 @@
 export default {
   doLogin,
   checkCookie,
-  getCookie
+  getCookie,
+  getStudentInfo
 }
 import cloud from '../utils/cloud'
 import request from '../utils/request'
 import logger from '../utils/log'
-import tools from '../utils/tools'
 
 const log = new logger()
 
@@ -53,7 +53,7 @@ async function getCookie(forceNew = false){
   })
   // 需要主动将cookie放入储存
   wx.setStorageSync('cookie', ret.cookie)
-  return ret
+  return ret.cookie
 }
 
 
@@ -80,7 +80,27 @@ async function checkCookie() {
 
 /**
  * 从教务处获取学生信息
+ * @param {boolean} forceNew 是否强制获取新的信息
+ * @description 假定cookie已经有效，请自行验证cookie有效性
  */
-async function getStudentInfo() {
+async function getStudentInfo(forceNew = false) {
+  let ret = await cloud.callFunction({
+    name: 'wyu',
+    data: {
+      action: 'getInfo',
+      forceNew
+    }
+  })
 
+  const { info } = ret
+  if (Number(info['性别']) === 1) {
+    info['性别'] = '男'
+  } else {
+    info['性别'] = '女'
+  }
+
+  // 需要主动将学籍信息放入储存
+  wx.setStorageSync('profile', info)
+
+  return ret.info
 }

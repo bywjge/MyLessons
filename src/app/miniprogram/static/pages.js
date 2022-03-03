@@ -9,7 +9,7 @@ const pages = [
   },
   {
     title: '我的',
-    url: '/pages/profile/profile'
+    url: '/pages/me/me'
   },
   {
     icon: "rocket",
@@ -18,4 +18,4 @@ const pages = [
   },
 ]
 
-module.exports = { pages }
+export default pages

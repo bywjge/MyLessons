@@ -1,0 +1,294 @@
+page {
+  --avator-size: 120rpx;
+
+  --button-icon-size: 40rpx;
+  --button-column-gap: 32rpx;
+
+  overflow: hidden;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  /* width: 90%; */
+  /* 不然box-shadow会被截断 */
+  padding: 0 7%;
+  flex: 1;
+  overflow: scroll;
+}
+
+/* 个人信息卡片 */
+.profile-card {
+  margin-top: 40rpx;
+  margin-bottom: 80rpx;
+  position: relative;
+  /* width: 482rpx; */
+  width: 100%;
+  background: #FFFFFF;
+  /* box-shadow: 2px 2px 13px 0 rgba(0,0,0,0.10); */
+  border-radius: 9px;
+
+  padding-top: 36rpx;
+  padding-bottom: 36rpx;
+  padding-left: 53rpx;
+  padding-right: 30rpx;
+
+  box-sizing: border-box;
+  box-shadow: 0 0 20rpx 0 var(--color-black-10);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  transition: box-shadow 0.3s;
+}
+
+/* -------- 卡片顶部装饰条 --------- */
+.profile-card:before {
+  content: '';
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 18rpx;
+  height: 100%;
+  border-radius: 9px 0px 0px 9px;
+}
+
+/* 女性卡片颜色 */
+.profile-card[data-gender="female"]:before {
+  background-color: #FF7D7D;
+}
+
+/* 男性卡片颜色 */
+.profile-card[data-gender="male"]:before {
+  background-color: #66BFFF;
+}
+/* ------------------------------- */
+
+/* 用户头像 */
+.profile-card .avator {
+  height: var(--avator-size);
+  width: var(--avator-size);
+  border-radius: 100%;
+  background: gray;
+}
+
+.profile-card .more-icon {
+  color: var(--text-black-4);
+  transform: rotate(-90deg);
+  margin-right: 10rpx;
+}
+
+/* 头像右边 */
+.profile-card .info {
+  flex: 1;
+  margin-left: 25rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 右边第一行信息 用户姓名 */
+.profile-card .info .name {
+  /* display: inline; */
+  font-size: 38rpx;
+  line-height: 50rpx;
+  font-weight: 450;
+  letter-spacing: 0.5rpx;
+  color: var(--text-black-1);
+
+  max-width: 350rpx;
+}
+
+/* 性别icon */
+.profile-card .info .name .gender-icon {
+  /* 修正偏移 */
+  display: inline-block;
+  transform: translateY(2rpx);
+
+  --size: 34rpx;
+  margin-left: 10rpx;
+  width: var(--size);
+  height: var(--size);
+
+  mask-size: var(--size);
+  -webkit-mask-size: var(--size);
+  mask-position: 50% 50%;
+  -webkit-mask-position: 50% 50%;
+}
+
+.gender-icon.male {
+  background: var(--color-blue-1);
+  mask-image: var(--icon-gender-male);
+  -webkit-mask-image: var(--icon-gender-male);
+}
+
+.gender-icon.female {
+  background: var(--highlight-color);
+  mask-image: var(--icon-gender-female);
+  -webkit-mask-image: var(--icon-gender-female);
+}
+
+/* 右边第二条信息 */
+.profile-card .info .description {
+  margin-top: 20rpx;
+  font-size: 25rpx;
+  /* line-height: 25rpx; */
+  letter-spacing: 0.3rpx;
+  font-weight: 400;
+  color: var(--text-black-3);
+  display: flex;
+  align-items: center;
+}
+
+/* 学院 */
+.profile-card .info .description .collage {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 10rpx;
+  color: var(--text-black-2);
+  background: var(--color-black-10);
+  word-break: keep-all;
+
+  margin-right: 20rpx;
+}
+
+/* 功能区域 */
+.module {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+
+/* 功能标题 */
+.module > .title {
+  margin-left: 30rpx;
+  font-size: 32rpx;
+  font-weight: 450;
+  color: var(--text-black-3);
+  letter-spacing: 0.5px;
+}
+
+.module > .content {
+  display: flex;
+  margin-top: 32rpx;
+  justify-content: space-between;
+}
+
+/* 功能的一列 */
+.module > .content .column {
+  width: 50%;
+  max-width: 1000rpx;
+}
+
+/* 所有按钮的间距 */
+.module > .content .icon-button:not(:first-child) {
+  margin-top: var(--button-column-gap);
+}
+
+.app-functions {
+  margin-top: 70rpx;
+}
+
+.app-functions > .content {
+  flex-direction: column;
+}
+
+/* 带图标的按钮 */
+.icon-button {
+  background: var(--color-white);
+  border-radius: 28rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  padding: 20rpx 40rpx;
+  color: var(--text-black-2);
+  box-shadow: 0 0 14rpx 0 var(--color-black-05);
+  transition: box-shadow .2s ease;
+}
+
+.icon-button-tap {
+  box-shadow: 0 0 26rpx 0 var(--color-black-20);
+}
+
+/* 单行文字的按钮 */
+.icon-button.normal {
+  text-align: center;
+  min-height: 60rpx;
+  line-height: 60rpx;
+}
+.icon-button.multiple {
+  /* padding-top: 20rpx;
+  padding-bottom: 30rpx; */
+  line-height: 50rpx;
+}
+
+/* 带注释文字的按钮 */
+.icon-button.multiple .description {
+  margin-top: 5rpx;
+  font-size: 24rpx;
+  line-height: 40rpx;
+  color: var(--text-black-3);
+  letter-spacing: 0.4px;
+}
+.icon-button.icon {
+  position: relative;
+}
+
+.icon-button.icon:before {
+  top: 50%;
+  left: 50rpx;
+  transform: translateY(-50%);
+  margin-right: 50rpx;
+  content: '';
+  position: absolute;
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  mask-size: var(--button-icon-size) var(--button-icon-size);
+  -webkit-mask-size: var(--button-icon-size) var(--button-icon-size);
+}
+.icon-button.normal.icon {
+  padding-left: calc(10rpx * 2 + 20rpx + var(--button-icon-size));
+}
+
+.icon-button.multiple.icon {
+  padding-left: calc(40rpx * 2 + 10rpx + var(--button-icon-size));
+}
+
+.icon-reload:before {
+  background: #26AAC5;
+  mask-image: var(--icon-reload);
+  -webkit-mask-image: var(--icon-reload);
+}
+
+.icon-debug:before {
+  background: #FF3030;
+  mask-image: var(--icon-code);
+  -webkit-mask-image: var(--icon-code);
+}
+
+.icon-list:before {
+  background: #57C35A;
+  mask-image: var(--icon-list);
+  -webkit-mask-image: var(--icon-list);
+}
+
+.icon-target:before {
+  background: #A42FFF;
+  mask-image: var(--icon-target);
+  -webkit-mask-image: var(--icon-target);
+}
+
+.icon-rank:before {
+  background: #1fa0ea;
+  mask-image: var(--icon-rank);
+  -webkit-mask-image: var(--icon-rank);
+}
+
+.icon-exam:before {
+  background: #FF694C;
+  mask-image: var(--icon-exam);
+  -webkit-mask-image: var(--icon-exam);
+}

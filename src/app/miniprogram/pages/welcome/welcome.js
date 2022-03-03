@@ -23,11 +23,10 @@ Page({
    */
   onLoad: async function () {
     require('../../utils/debug')
-
     // lessonApi.colorizeLesson()
 
     // 测试强制清空数据
-    const version = "abcd2"
+    const version = "abcd1fuck"
     if (wx.getStorageSync('version') !== version){
       wx.showLoading({
         title: '清空重载数据',
@@ -65,15 +64,19 @@ Page({
       if (isBind) {
         // 先拿cookie
         await accountApi.getCookie()
+
+        // 获取个人信息
+        await accountApi.getStudentInfo()
+        
+        // 获取课表
+        await lessonApi.syncLessons()
+
         // 有绑定，重新设置值，并跳转到课程表页面
         wx.setStorageSync('binded', true)
         wx.setStorageSync('username', isBind.username)
         wx.setStorageSync('password', isBind.password)
-        // if (!await accountApi.checkCookie())
-        //   await accountApi.getCookie()
-        
-        // 获取课表
-        await lessonApi.syncLessons()
+
+
         wx.redirectTo({
           url: '../lesson-view/lesson-view',
         })
