@@ -1,5 +1,6 @@
 export default {
   getLessonFromSchool,
+  getScoreFromSchool,
   convertDateToWeek,
   convertWeekToDate,
   convertIndexToTime,
@@ -7,6 +8,7 @@ export default {
   checkCloudLesson,
   colorizeLesson,
   getFirstDayOfTerm,
+  getTerm,
   resetLesson
 };
 
@@ -160,6 +162,59 @@ async function getLessonFromSchool(year, term = 1) {
   return formattedRows
 }
 
+/**
+ * 从教务系统获取某个学期的课程成绩
+ * @param {number | string} year 年份，四位数
+ * @param {1 | 2} [term = 1] 学期，1代表第一学期，2代表第二学期
+ * @description 将自动替换storage的内容
+ */
+async function getScoreFromSchool() {
+  const ret = await request({
+    url: `https://jxgl.wyu.edu.cn/xskccjxx!getDataList.action`,
+    method: 'POST',
+    data: {
+      xnxqdm: '',
+      jhlxdm: '',
+      page: 1,
+      rows: 1000,
+      sort: 'xnxqdm',
+      order: 'asc'
+    }
+  } ,)
+  const keyMap = {
+    "kcflmc": "课程分类",
+    "kcdlmc": "课程类型",
+    "cjjd": "成绩绩点",
+    "kcdm": "课程编号",
+    "bz": "备注",
+    "kcmc": "课程名称",
+    "zcj": "成绩",
+    "ksxzmc": "考试性质",
+    "xf": "学分",
+    "zxs": "总学时",
+    "xdfsmc": "考试类型",
+    "cjfsmc": "成绩类型",
+    "xnxqdm": "学期"
+  }
+  const { total, rows } = ret.data
+  const scoreMap = {
+
+  }
+  const formattedRows = tools.keyMapConvert(rows, keyMap)
+  console.log(formattedRows.length)
+  formattedRows.forEach(e => {
+    const termId = e['学期']
+    if (!Array.isArray(scoreMap[termId]))
+      scoreMap[termId] = new Array()
+
+    scoreMap[termId].push(e)
+  })
+
+  // 写入storage
+  wx.setStorageSync('scores', scoreMap)
+  return scoreMap
+}
+
 function convertDateToWeek(nowDate, convertToChinese = false){
   const chineseNumber = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十", "二十一", "二十二", "二十三", "二十四", "二十五"]
   let from = wx.getStorageSync('firstWeekDate')
@@ -286,8 +341,24 @@ function convertAndStorage(lessons) {
 
   /** 合并大节的课 */
   for (const key in lessonsByDay) {
+    // 取出一天的课程
     const lessons = lessonsByDay[key]
+    // 对一天的课程按照顺序排序
     lessons.sort((a, b) => Number(a['节次'][0]) - Number(b['节次'][0]))
+
+    // 先进行课程冲突标识
+    lessons.forEach((now, index, raw) => {
+      if (index === 0)
+        return ;
+      const pre = raw[index - 1]
+      // 因为节次已按顺序排列，只需要判断这节课的开始节次是否相同
+      // 节次相同即可视为冲突
+      if (pre['节次'][0] === now['节次'][0]) {
+        pre['冲突'] = true
+        now['冲突'] = true
+      }
+    })
+
     lessons = lessons.filter((e, index, raw) => {
       // 跳过第一节课
       if (index === 0)
@@ -298,8 +369,11 @@ function convertAndStorage(lessons) {
       if (!pre || !now)
         return false;
 
-      // 如果前后两节课名字一样，合并
-      if (now['课程名称'] === pre['课程名称']) {
+      // 如果前后两节课名字一样，而且没有课程冲突，合并
+      if (
+        (now['课程名称'] === pre['课程名称']) &&
+        (!now['冲突'] && !pre['冲突'])
+      ) {
         pre['节次'][1] = now['节次'][1]
         return false
       }
@@ -402,7 +476,24 @@ function convertAndStorage(lessons) {
       const week = Number(lesson['上课周次'])
       const day = Number(lesson['星期'])
       const 课程开始节次 = Number(lesson['节次'][0]) - 1
-      lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = lesson
+
+
+      // 如果已经有课了（课程冲突） 没课的时候是null
+      if (lesson['冲突'] === true) {
+        let t = lessonsByWeek[week - 1][day - 1][课程开始节次 / 2]
+        if (!t) {
+          lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = Object.assign({}, lesson)
+        } else {
+          t['课程名称'] += `&${lesson['课程名称']}`
+        }
+        t = lessonsByWeek[week - 1][day - 1][课程开始节次 / 2]
+        t['lessons'] = t['lessons'] || new Array()
+        t['地点'] = '课程冲突'
+        t['编号'] = '⚠️'
+        t['lessons'].push(lesson)
+      } else {
+        lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = lesson
+      }
     })
   }
 
@@ -515,5 +606,6 @@ async function resetLesson() {
   wx.showLoading({ title: '同步数据中' })
   // 获取课表
   await syncLessons(true)
-  wx.hideLoading()
+
+  wx.hideLoading().catch(() => {})
 }

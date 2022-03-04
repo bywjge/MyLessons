@@ -310,6 +310,7 @@ page{
   justify-content: space-between;
   align-items: center;
   margin: 12rpx 0;
+  line-height: 40rpx;
 }
 
 /* 标题 */
@@ -356,11 +357,42 @@ page{
   letter-spacing: 0px !important;
 }
 
+/* 课程冲突警告 */
+.container .lesson-detail .conflict-hint {
+  margin-top: 30rpx;
+  font-size: 26rpx;
+  font-weight: 450;
+}
+
 /* 课程卡片隐藏样式 */
 .lesson-detail.hidden{
   opacity: 0;
   display: none;
   animation-name: none;
+}
+
+.lesson-detail .switch-lesson {
+  position: absolute;
+  display: flex;
+  top: calc(100% + 40rpx);
+  width: 100%;
+  justify-content: space-around;
+}
+
+/* 按钮 */
+.button {
+  background: var(--color-white);
+  border-radius: 28rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  padding: 20rpx 40rpx;
+  color: var(--text-black-2);
+  box-shadow: 0 0 14rpx 0 var(--color-black-05);
+  transition: box-shadow .2s ease;
+}
+
+.button-tap {
+  box-shadow: 0 0 26rpx 0 var(--color-black-20);
 }
 
 @keyframes fadeBlur {

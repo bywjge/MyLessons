@@ -29,7 +29,7 @@
         </view>
         <!-- 第二列 -->
         <view class="column" style="margin-left: 32rpx;">
-          <view bindtap="showModal" class="icon-button normal icon icon-rank" hover-class="icon-button-tap">考试成绩</view>
+          <view bindtap="jumpToScore" class="icon-button normal icon icon-rank" hover-class="icon-button-tap">考试成绩</view>
           <view bindtap="showModal" class="icon-button normal icon icon-exam" hover-class="icon-button-tap">考试安排</view>
         </view>
       </view>

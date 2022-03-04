@@ -5,15 +5,24 @@
   margin-bottom: 55rpx;
 }
 
-.card-info{
+.card-info {
   height: 174rpx;
   width: 164rpx;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  justify-content: center;
+  /* justify-content: center; */
   margin-top: 15rpx;
   margin-right: 32rpx;
+}
+
+/* 课程冲突警告 */
+.card-info .conflict-hint {
+  margin-top: 10rpx;
+  background: var(--color-black-10);
+  border-radius: 14rpx;
+  font-size: 24rpx;
+  padding: 5rpx 14rpx;
 }
 
 /* 正在上课 */
@@ -54,6 +63,7 @@ view[data-status="underway"] .card-info .status::after{
 /* 色条 */
 view[data-status="coming"] .card-info .status::after{
   content: '';
+  top: 0;
   right: 0;
   margin-top: 50rpx;
   position: absolute;

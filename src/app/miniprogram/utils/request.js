@@ -13,17 +13,18 @@ const log = new logger()
 /**
  * 微信请求的包装方法
  * @param {object} config
+ * @param {object} header
  */
-function request(config){
+function request(config, header = {}){
   const cookie = wx.getStorageSync('cookie') || ''
   return new Promise((resolve, reject) => {
     const _config = {
       counter: 0,
       header: {
-        'content-type': 'application/x-www-form-urlencggoded;charset=UTF-8',
+        'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
         'Cookie': cookie,
         // 'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
-
+        ...header
       },
       ...config,
       success(res) {

@@ -20,10 +20,11 @@
       <view class="text">{{to.str}}</view>
     </view>
     
+    <view class="conflict-hint" wx:if="{{isExtended && info['冲突']}}">⚠️ 课程冲突</view>
   </view>
 
   <view class="card" bindtap="handleClick">
-    <view class="lesson-title">{{info['课程名称']}}</view>
+    <view class="lesson-title">{{info['冲突']?'⚠️': ''}} {{info['课程名称']}}</view>
     
     <view class="lesson-item">
       <view>地点</view>

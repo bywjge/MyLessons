@@ -35,6 +35,13 @@ Page({
     })
   },
 
+  // 查看考试成绩
+  jumpToScore() {
+    wx.navigateTo({
+      url: '/pages/score/score',
+    })
+  },
+
   // 未开发功能的提示
   showModal() {
     tools.showModal({

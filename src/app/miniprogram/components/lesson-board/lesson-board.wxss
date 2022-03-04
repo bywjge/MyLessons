@@ -62,6 +62,11 @@
   height: calc(var(--indexer-height) * 2 + var(--indexer-margin-bottom));
 }
 
+/* 课程冲突 */
+.day-lesson-wrapper .strip .item[data-conflict=true] {
+  box-shadow: 0 0 0 4rpx var(--color-warning);
+}
+
 /* 用户点下课程卡片时显示按下效果 */
 .item-tap {
   animation: pressIn 0.4s forwards;

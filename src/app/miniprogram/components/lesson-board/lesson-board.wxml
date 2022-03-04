@@ -12,6 +12,7 @@
       wx:if="{{day[index - 1]? !day[index - 1]['long']: true}}"
       class="{{e === null? 'empty-item': 'item'}}"
       hover-class="item-tap"
+      data-conflict="{{!!e['冲突']}}"
       data-item="{{e}}"
       data-connect="{{e !== null && ((~~e['节次'][1] - ~~e['节次'][0]) > 1)}}"
       data-status="{{e !== null && e['日期'] === nowDate && ~~e['节次'][0] == nowIndex ? 'underway' : 'normal'}}"

@@ -21,7 +21,7 @@
           wx:for="{{undoneList}}"
           wx:for-item="e"
           wx:for-index="index"
-          wx:key="课程名称"
+          wx:key="e"
         >
           <!-- 序号 -->
           <view class="index">{{index + 1}}</view>
@@ -56,7 +56,7 @@
           wx:for="{{doneList}}"
           wx:for-item="e"
           wx:for-index="index"
-          wx:key="课程名称"
+          wx:key="e"
         >
           <!-- 序号 -->
           <view class="index">1</view>

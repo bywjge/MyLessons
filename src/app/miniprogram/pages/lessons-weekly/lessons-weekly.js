@@ -41,7 +41,9 @@ Component({
     nowMonth: new Date().getMonth() + 1,
 
     currentPage: 0,
-    detailLesson: {},
+    currentDetail: {},
+    detailLessons: [],
+    detailIndex: 0,
     activeDay: -1
   },
   async ready() {
@@ -148,6 +150,7 @@ Component({
 
     getLesson(week = 1) {
       const lessons = wx.getStorageSync('lessonsByWeek')/* [week - 1] || [] */
+
       this.setData({
         lessons
       })
@@ -165,10 +168,10 @@ Component({
         this.setData({ showDetail: false })
     },
 
-    handleLessonTap({ detail }) {
-      const name = detail['课程名称']
-      const lesson = wx.getStorageSync('lessonsMap')[name]
-      lesson['课程名称'] = name
+    convertLessonInDetail(e) {
+      const lesson = wx.getStorageSync('lessonsMap')[e['课程名称']]
+      lesson['课程名称'] = e['课程名称']
+      // lesson['课程名称'] = name
       lesson['上课周次'] = lesson['上课周次'].join('-')
       lesson['教学地点'] = lesson['教学地点'].join('、')
 
@@ -183,11 +186,46 @@ Component({
         lesson['课程进度'] = Math.round(已经上过的课程节数 / lesson['课程节数'] * 100)
       }
 
+      return lesson
+    },
+
+    handleLessonTap({ detail }) {
+      console.log(detail)
+      // 判断是否是冲突
+      let lesson = []
+      if (detail['冲突'] === true) {
+        lesson = detail['lessons'].map(e => this.convertLessonInDetail(e))
+      } else {
+        lesson = [this.convertLessonInDetail(detail)]
+      }
+
       this.setData({ 
         showDetail: true,
-        detailLesson: lesson
+        currentDetail: lesson[0],
+        detailLessons: lesson
       })
-      console.log(name, lesson, lesson['上课周次'])
+    },
+
+    // (课程冲突时)切换上一个卡片
+    handlePrevLesson() {
+      if (this.data.detailIndex === 0)
+        return ;
+        
+      this.setData({
+        currentDetail: this.data.detailLessons[this.data.detailIndex - 1],
+        detailIndex: this.data.detailIndex - 1
+      })
+    },
+
+    // (课程冲突时)切换下一个卡片
+    handleNextLesson() {
+      if (this.data.detailIndex === this.data.detailLessons.length - 1)
+        return ;
+        
+      this.setData({
+        currentDetail: this.data.detailLessons[this.data.detailIndex + 1],
+        detailIndex: this.data.detailIndex + 1
+      })
     }
   }
 })
