@@ -6,14 +6,15 @@ const app = getApp();
 const log = new logger()
 
 function printDebugInfo() {
-  const { SDKVersion, model, system, version, enableDebug, devicePixelRatio } = wx.getSystemInfoSync()
+  const enableDebug = wx.getStorageSync('enableDebug')
+  const { SDKVersion, model, system, version, devicePixelRatio } = wx.getSystemInfoSync()
   const str = `
     version: ${app.globalData.version},
     SDK Version = ${SDKVersion},
     model = ${model},
     system = ${system},
     version = ${version},
-    enableDebug = ${enableDebug},
+    enableDebug = ${!!enableDebug},
     devicePixelRatio = ${devicePixelRatio}
   `
   log.info(str)

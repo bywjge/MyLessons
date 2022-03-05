@@ -24,6 +24,7 @@ page {
   color: var(--text-black-2);
 }
 .container > .content .operations {
+  min-height: 50rpx;
   display: flex;
   position: absolute;
   top: 50%;
@@ -85,7 +86,7 @@ page {
   background: var(--color-black-20) !important;
 }
 
-/* 绩点 */
+/* 汇总 */
 .score-sum {
   display: flex;
   align-items: center;
@@ -119,21 +120,6 @@ page {
   margin-top: 5rpx;
   text-align: center;
   word-wrap:inherit;
-}
-
-/* 绩点警告 */
-.score-sum > .warning {
-  position: absolute;
-  top: calc(100% + 18rpx);
-  left: 36rpx;
-  font-size: 24rpx;
-  color: var(--text-black-4);
-}
-
-.score-sum > .warning > .more-icon i {
-  color: var(--text-black-4);
-  transform: rotate(-90deg);
-  margin-right: 10rpx;
 }
 
 .filters {
@@ -199,7 +185,6 @@ page {
   color: var(--text-black-1);
 }
 
-/* 及格的标题 */
 .module.over > .title {
   color: var(--text-black-3);
 }
@@ -221,7 +206,7 @@ page {
   margin-top: 50rpx;
 }
 
-/* 节数指示器 */
+/* 项目指示器 */
 .lesson-wrapper > .item > .index {
   font-size: 34rpx;
   font-weight: 500;
@@ -264,18 +249,7 @@ page {
   margin-left: 20rpx;
 }
 
-/* 课程类型 */
-.lesson-wrapper > .item > .content > .text > .description > .type {
-  width: 150rpx;
-}
-
 /* 学分 */
-.lesson-wrapper > .item > .content > .text > .description > .score {
-  width: 86rpx;
-  text-align: right;
-}
-
-/* 成绩 */
 .lesson-wrapper > .item > .content > .text > .score {
   position: absolute;
   right: 0;

@@ -1,31 +1,19 @@
 <view class="container">
-  <navigation title="考试成绩" enableMenu="{{false}}" />
+  <navigation title="创新学分" enableMenu="{{false}}" />
   <view class="content">
     <!-- 数据筛选器 -->
     <view class="filters">
       <view class="button undone" hover-class="icon-button-tap" bindtap="switchVisible" data-name="pass" data-disabled="{{disableButton.pass}}">
-        <view>及格</view>
+        <view>已认定</view>
         <view class="number">{{passList.length || 0}}</view>
       </view>
 
       <view class="button done" hover-class="icon-button-tap" bindtap="switchVisible" data-name="unpass" data-disabled="{{disableButton.unpass}}">
-        <view>挂科</view>
+        <view>未认定</view>
         <view class="number">{{unpassList.length || 0}}</view>
       </view>
 
       <view class="operations">
-        <picker 
-          mode="selector" 
-          range="{{pickerArray}}"
-          range-key="text"
-          value="{{selectedTerm}}" 
-          bindchange="selectTerm"
-          header-text="选择学期"
-        >
-          <view class="calendar" hover-class="button-tap">
-            {{pickerArray[selectedTerm]['text']}}
-          </view>
-        </picker>
         <view bindtap="reload" class="reload" hover-class="button-tap" />
       </view>
     </view>
@@ -33,25 +21,21 @@
     <!-- 绩点报告 -->
     <view class="score-sum" wx:if="{{!empty}}">
       <view class="item">
-        <view class="text">{{yearScore}}</view>
-        <view class="description">学年绩点</view>
+        <view class="text">{{passScore}}</view>
+        <view class="description">已认定学分</view>
       </view>
       <view class="divider" />
       <view class="item">
-        <view class="text">{{termScore}}</view>
-        <view class="description">学期绩点</view>
-      </view>
-      <view class="warning" bindtap="showScoreWarning">
-        ⚠️ 绩点数据仅供参考，应用不对其严谨性负责
-        <fa class="more-icon" icon="fa fa-angle-down fa-lg" />
+        <view class="text">{{unpassScore}}</view>
+        <view class="description">未认定学分</view>
       </view>
     </view>
     
     <view class="empty-hint" wx:if="{{empty}}">空空如也</view>
 
-    <!-- 及格 -->
+    <!-- 已认定 -->
     <view class="module" style="margin-top: 40rpx" wx:if="{{!empty && !disableButton['pass']}}">
-      <view class="title">及格({{passList.length || 0}})</view>
+      <view class="title">已认定({{passList.length || 0}})</view>
       <view class="lesson-wrapper" wx:if="{{passList.length > 0}}">
         <view 
           class="item"
@@ -65,26 +49,24 @@
           <view class="content">
             <view class="text">
               <!-- 课程名称 -->
-              <view class="name">{{e['课程名称']}}</view>
+              <view class="name">{{e['项目名称']}}</view>
               <!-- 下方文字 -->
               <view class="description">
-                <view>{{e['考试类型']}}</view>
+                <view>{{e['获得学期']}}</view>
                 <!-- 课程类型 -->
-                <view class="type">{{e['课程类型']}}</view>
-                <!-- 学分 -->
-                <view class="score">{{e['学分']}}学分</view>
+                <view>{{e['项目类型']}}</view>
               </view>
               <!-- 节次指示器 -->
-              <view class="score">{{e['成绩']}}</view>
+              <view class="score">{{e['学分']}}</view>
             </view>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 不及格 -->
+    <!-- 未通过 -->
     <view class="module" style="margin-top: 40rpx" wx:if="{{!empty && !disableButton['unpass']}}">
-      <view class="title">不及格({{unpassList.length || 0}})</view>
+      <view class="title">未认定({{unpassList.length || 0}})</view>
       <view class="lesson-wrapper" wx:if="{{unpassList.length > 0}}">
         <view 
           class="item"
@@ -98,17 +80,15 @@
           <view class="content">
             <view class="text">
               <!-- 课程名称 -->
-              <view class="name">{{e['课程名称']}}</view>
+              <view class="name">{{e['项目名称']}}</view>
               <!-- 下方文字 -->
               <view class="description">
-                <view>{{e['考试类型']}}</view>
+                <view>{{e['获得学期']}}</view>
                 <!-- 课程类型 -->
-                <view class="type">{{e['课程类型']}}</view>
-                <!-- 学分 -->
-                <view class="score">{{e['学分']}}学分</view>
+                <view>{{e['项目类型']}}</view>
               </view>
               <!-- 节次指示器 -->
-              <view class="score">{{e['成绩']}}</view>
+              <view class="score">{{e['学分']}}</view>
             </view>
           </view>
         </view>

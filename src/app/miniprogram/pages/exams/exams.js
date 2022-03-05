@@ -81,6 +81,10 @@ Page({
       this.setData({
         doneList: [],
         undoneList: [],
+        disableButton: {
+          done: true,
+          undone: true
+        },
         empty: true
       })
       return ;

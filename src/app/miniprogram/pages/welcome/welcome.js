@@ -73,6 +73,7 @@ Page({
 
         // 有绑定，重新设置值，并跳转到课程表页面
         wx.setStorageSync('binded', true)
+        wx.setStorageSync('enableDebug', false)
         wx.setStorageSync('username', isBind.username)
         wx.setStorageSync('password', isBind.password)
 

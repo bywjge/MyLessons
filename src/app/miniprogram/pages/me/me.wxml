@@ -25,11 +25,11 @@
         <!-- 第一列 -->
         <view class="column">
           <view bindtap="jumpToLessonList" class="icon-button icon normal icon-list" hover-class="icon-button-tap">所有课程</view>
-          <view bindtap="showModal" class="icon-button icon normal icon-target" hover-class="icon-button-tap">学分情况</view>
+          <view bindtap="jumpToCreativeScore" class="icon-button icon normal icon-target" hover-class="icon-button-tap">创新学分</view>
         </view>
         <!-- 第二列 -->
         <view class="column" style="margin-left: 32rpx;">
-          <view bindtap="jumpToScore" class="icon-button normal icon icon-rank" hover-class="icon-button-tap">考试成绩</view>
+          <view bindtap="jumpToScore" class="icon-button normal icon icon-rank" hover-class="icon-button-tap">绩点成绩</view>
           <view bindtap="jumpToExam" class="icon-button normal icon icon-exam" hover-class="icon-button-tap">考试安排</view>
         </view>
       </view>
@@ -44,12 +44,32 @@
           <view class="description">手动从教务系统获取最新课表</view>
         </view>
 
-        <view bindtap="showModal" class="icon-button multiple icon icon-debug delelop-mode" hover-class="icon-button-tap">
+        <view bindtap="switchDebugMode" class="icon-button multiple icon icon-debug delelop-mode" hover-class="icon-button-tap">
           <span class="title">开发者模式</span>
-          <view class="description">为开发和测试人员提供的一系列排错选项和工具，点击以启用</view>
+          <view class="description">为开发和测试人员提供的一系列排错选项和工具，点击以{{!enableDebug?'启用':'禁用'}}</view>
         </view>
       </view>
     </view>
 
+    <!-- 开发工具 -->
+    <view class="module app-functions" wx:if="{{enableDebug}}">
+      <span class="title">调试工具</span>
+      <view class="content">
+        <view bindtap="debugGetInfo" class="icon-button multiple icon icon-code" hover-class="icon-button-tap">
+          <span class="title">重新获取个人信息</span>
+          <view class="description">手动从教务系统获取个人信息，可能需要重新进入个人页面</view>
+        </view>
+
+        <view bindtap="debugClearStrage" class="icon-button multiple icon icon-code" hover-class="icon-button-tap">
+          <span class="title">强制刷新本地数据</span>
+          <view class="description">版本更新、数据结构发生变化时，app会自动清空本地数据重新向云端请求。点击以手动执行该过程</view>
+        </view>
+
+        <view bindtap="debugRecolorize" class="icon-button multiple icon icon-code" hover-class="icon-button-tap">
+          <span class="title">重新分配课程颜色</span>
+          <view class="description">如题。但所有课程的颜色仍然是随机分配</view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

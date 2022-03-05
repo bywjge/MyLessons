@@ -18,6 +18,7 @@ page {
   /* width: 90%; */
   /* 不然box-shadow会被截断 */
   padding: 0 7%;
+  padding-bottom: 50rpx;
   flex: 1;
   overflow: scroll;
 }
@@ -203,7 +204,7 @@ page {
   border-radius: 28rpx;
   font-size: 32rpx;
   font-weight: 500;
-  padding: 20rpx 40rpx;
+  padding: 22rpx 40rpx;
   color: var(--text-black-2);
   box-shadow: 0 0 14rpx 0 var(--color-black-05);
   transition: box-shadow .2s ease;
@@ -263,11 +264,18 @@ page {
   -webkit-mask-image: var(--icon-reload);
 }
 
-.icon-debug:before {
+.icon-code:before {
   background: #FF3030;
   mask-image: var(--icon-code);
   -webkit-mask-image: var(--icon-code);
 }
+
+.icon-debug:before {
+  background: #FF3030;
+  mask-image: var(--icon-code);
+  -webkit-mask-image: var(--icon-debug);
+}
+
 
 .icon-list:before {
   background: #57C35A;

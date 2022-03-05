@@ -1,5 +1,7 @@
 import tools from '../../utils/tools'
 import lessonApi from '../../apis/lessons'
+import accountApi from '../../apis/account'
+
 Page({
 
   /**
@@ -11,13 +13,19 @@ Page({
       学院: 'Unknown',
       学号: '',
       性别: '男'
-    }
+    },
+    enableDebug: false
   },
   onLoad() {
     const info = wx.getStorageSync('profile')
+    let enableDebug = wx.getStorageSync('enableDebug')
+    if (!enableDebug || enableDebug === '') {
+      enableDebug = false
+    }
 
     this.setData({
-      info
+      info,
+      enableDebug
     })
   },
 
@@ -49,11 +57,32 @@ Page({
     })
   },
 
+  // 查看创新学分
+  jumpToCreativeScore() {
+    wx.navigateTo({
+      url: '/pages/creative-score/creative-score',
+    })
+  },
+
   // 未开发功能的提示
   showModal() {
     tools.showModal({
       title: "提示",
       content: "功能在开发中～"
+    })
+  },
+
+  // 切换开发者模式 开关
+  switchDebugMode() {
+    const newStatus = !this.data.enableDebug
+    wx.setStorageSync('enableDebug', newStatus)
+    this.setData({
+      enableDebug: newStatus
+    })
+
+    tools.showModal({
+      title: '开发者模式',
+      content: `开发者模式已${newStatus? '打开': '关闭'}`
     })
   },
 
@@ -71,5 +100,32 @@ Page({
       tools.showToast({ title: '重置成功' })
     })
     .catch(() => {})
+  },
+
+  // 重新获取个人信息
+  async debugGetInfo() {
+    wx.showLoading({ title: '同步数据中' })
+    await accountApi.getStudentInfo()
+    wx.hideLoading().catch(() => {})
+  },
+
+  // 强制刷新本地数据
+  debugClearStrage() {
+    // 设置一个永远不可能出现的版本号来触发重新获取
+    wx.setStorageSync('version', 'never-gonna-give-you-up')
+    wx.redirectTo({
+      url: '/pages/welcome/welcome'
+    })
+  },
+
+  // 重新分配课程颜色
+  async debugRecolorize() {
+    wx.showLoading({ title: '重新着色中' })
+    const lessonsByDay = wx.getStorageSync('lessonsByDay')
+    lessonApi.convertAndStorage(lessonsByDay, true)
+    wx.hideLoading().catch(() => {})
+    tools.showToast({
+      title: '重分配成功',
+    })
   }
 })

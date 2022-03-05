@@ -3,7 +3,7 @@
   <view class="content">
     <view class="filters">
       <view class="button undone" hover-class="icon-button-tap" bindtap="switchVisible" data-name="undone" data-disabled="{{disableButton.undone}}">
-        <view>完成</view>
+        <view>待考</view>
         <view class="number">{{undoneList.length || 0}}</view>
       </view>
 
@@ -33,7 +33,7 @@
 
     <!-- 未完成 -->
     <view class="module" style="margin-top: 40rpx" wx:if="{{!empty && !disableButton['undone']}}">
-      <view class="title">未完成({{undoneList.length || 0}})</view>
+      <view class="title">待考试({{undoneList.length || 0}})</view>
       <view class="lesson-wrapper" wx:if="{{undoneList.length > 0}}">
         <view 
           class="item"

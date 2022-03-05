@@ -11,7 +11,11 @@ Page({
       unpass: false
     },
     pickerArray: [],
-    selectedTerm: 0
+    selectedTerm: 0,
+    // 学期绩点
+    termScore: '0.00',
+    // 学年绩点
+    yearScore: '0.00'
   },
 
   async onLoad() {
@@ -41,13 +45,17 @@ Page({
         if (i === year && j === term) {
           ret.push({
             text: `本学期`,
-            value: `${i}0${j}`
+            value: `${i}0${j}`,
+            year: i,
+            term: j
           })
           break ;
         } else {
           ret.push({
             text: `${i}${j === 1? '上': '下'}学期`,
-            value: `${i}0${j}`
+            value: `${i}0${j}`,
+            year: i,
+            term: j
           })
         }
       }
@@ -75,12 +83,18 @@ Page({
       selectedTerm: index
     })
 
-    const termId = this.data.pickerArray[index].value
-    let scores = wx.getStorageSync('scores')[termId]
+    const termId = this.data.pickerArray[index]
+
+    this.calcScore(termId.year, termId.term)
+    let scores = wx.getStorageSync('scores')[termId.value]
     if (!scores || scores === '') {
       this.setData({
         passList: [],
         unpassList: [],
+        disableButton: {
+          pass: true,
+          unpass: true
+        },
         empty: true
       })
       return ;
@@ -100,10 +114,62 @@ Page({
       }
     }
 
+    // 如果没数据则默认禁用
+    if (passList.length === 0) {
+      this.setData({ 'disableButton.pass': true })
+    } else {
+      this.setData({ 'disableButton.pass': false })
+    }
+
+    if (unpassList.length === 0) {
+      this.setData({ 'disableButton.unpass': true })
+    } else {
+      this.setData({ 'disableButton.unpass': false })
+    }
+
     this.setData({
       unpassList,
       passList,
       empty: false
+    })
+  },
+
+  /**
+   * 计算绩点
+   * @param {Number} year 当前选择学年
+   * @param {Number} term 当前选择学期
+   */
+  calcScore(year, term) {
+    // 传入课程成绩数组，计算该学期绩点
+    function _calc(scores) {
+      if (scores.length === 0)
+        return `0.00`
+      let 总绩点 = 0
+      let 总学分 = 0
+      for (let i = 0; i < scores.length; i++) {
+        const element = scores[i];
+        if (!element || element['课程类型'] === '通识课')
+          continue ;
+        const 学分 = Number(element['学分'])
+        const 绩点 = Number(element['成绩绩点'])
+        if (学分 === 0 || 绩点 === 0)
+          continue ;
+        总学分 += 学分
+        总绩点 += 学分 * 绩点
+      }
+      return (总绩点 / 总学分).toFixed(2)
+    }
+
+    const all = wx.getStorageSync('scores')
+    const termScores = all[`${year}0${term}`] || []
+    const yearScores = termScores.concat(all[`${year}0${term === 1? 2: 1}`])
+
+    const termScore = _calc(termScores)
+    const yearScore = _calc(yearScores)
+
+    this.setData({
+      termScore,
+      yearScore
     })
   },
 
@@ -115,5 +181,12 @@ Page({
     await lessonApi.getScoreFromSchool()
     wx.hideLoading()
     this.selectTerm(this.data.selectedTerm)
+  },
+
+  showScoreWarning() {
+    tools.showModal({
+      title: '免责声明',
+      content: '小程序的计算结果仅供个人参考，如需用于学校评优评先等事项，请咨询教务处自行计算'
+    })
   }
 })

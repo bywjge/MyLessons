@@ -30,6 +30,19 @@ Page({
         undoneList.push(element)
     }
 
+    // 如果没数据则默认禁用
+    if (doneList.length === 0) {
+      this.setData({ 'disableButton.done': true })
+    } else {
+      this.setData({ 'disableButton.done': false })
+    }
+
+    if (undoneList.length === 0) {
+      this.setData({ 'disableButton.undone': true })
+    } else {
+      this.setData({ 'disableButton.undone': false })
+    }
+
     this.setData({
       doneList,
       undoneList
