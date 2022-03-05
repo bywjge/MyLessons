@@ -5,7 +5,8 @@ export default {
   showToast,
   strToDate,
   decodeHTML,
-  randomString
+  randomString,
+  getDaysGap
 }
 
 import logger from './log'
@@ -113,4 +114,15 @@ function randomString (length = 32) {
   for (let i = 0; i < length; i++)
     str += t.charAt(Math.floor(Math.random() * seedLength));
   return str
+}
+
+/**
+ * 求两个日期的天数差
+ * @param {Date} a 时间
+ * @param {Date} b 时间
+ * @return {Number} 天数
+ */
+function getDaysGap(a, b) {
+  const t = (b.getTime() - a.getTime()) / (86400 * 1000)
+  return Math.round(t)
 }

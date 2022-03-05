@@ -1,0 +1,109 @@
+<view class="container">
+  <navigation title="考试安排" enableMenu="{{false}}" />
+  <view class="content">
+    <view class="filters">
+      <view class="button undone" hover-class="icon-button-tap" bindtap="switchVisible" data-name="undone" data-disabled="{{disableButton.undone}}">
+        <view>完成</view>
+        <view class="number">{{undoneList.length || 0}}</view>
+      </view>
+
+      <view class="button done" hover-class="icon-button-tap" bindtap="switchVisible" data-name="done" data-disabled="{{disableButton.done}}">
+        <view>结束</view>
+        <view class="number">{{doneList.length || 0}}</view>
+      </view>
+
+      <view class="operations">
+        <picker 
+          mode="selector" 
+          range="{{pickerArray}}"
+          range-key="text"
+          value="{{selectedTerm}}" 
+          bindchange="selectTerm"
+          header-text="选择学期"
+        >
+          <view class="calendar" hover-class="button-tap">
+            {{pickerArray[selectedTerm]['text']}}
+          </view>
+        </picker>
+        <view bindtap="reload" class="reload" hover-class="button-tap" />
+      </view>
+    </view>
+    
+    <view class="empty-hint" wx:if="{{empty}}">空空如也</view>
+
+    <!-- 未完成 -->
+    <view class="module" style="margin-top: 40rpx" wx:if="{{!empty && !disableButton['undone']}}">
+      <view class="title">未完成({{undoneList.length || 0}})</view>
+      <view class="lesson-wrapper" wx:if="{{undoneList.length > 0}}">
+        <view 
+          class="item"
+          wx:for="{{undoneList}}"
+          wx:for-item="e"
+          wx:for-index="index"
+          wx:key="e"
+        >
+          <!-- 序号 -->
+          <view class="index">{{index + 1}}</view>
+          <view class="content">
+            <view class="text">
+              <!-- 课程名称 -->
+              <view class="name">{{e['课程名称']}}</view>
+              <!-- 下方文字 -->
+              <view class="description">
+                <view>{{e['考试形式']}}</view>
+                <!-- 课程类型 -->
+                <view>{{e['考试场地']}}</view>
+              </view>
+              <view class="description">
+                <view>{{e['考试日期']}}</view>
+                <!-- 课程类型 -->
+                <view>{{e['考试时间']}}</view>
+              </view>
+              <!-- 节次指示器 -->
+              <view class="score">{{e['剩余天数']}}</view>
+            </view>
+            
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 已结束 -->
+    <view class="module done" style="margin-top: 40rpx" wx:if="{{!empty && !disableButton['done']}}">
+      <view class="title">已结束({{doneList.length || 0}})</view>
+      <view class="lesson-wrapper" wx:if="{{doneList.length > 0}}">
+        <view 
+          class="item"
+          wx:for="{{doneList}}"
+          wx:for-item="e"
+          wx:for-index="index"
+          wx:key="e"
+        >
+          <!-- 序号 -->
+          <view class="index">{{index + 1}}</view>
+          <view class="content">
+            <view class="text">
+              <!-- 课程名称 -->
+              <view class="name">{{e['课程名称']}}</view>
+              <!-- 下方文字 -->
+              <view class="description">
+                <view>{{e['考试形式']}}</view>
+                <!-- 课程类型 -->
+                <view>{{e['考试场地']}}</view>
+              </view>
+              <view class="description">
+                <view>{{e['考试日期']}}</view>
+                <!-- 课程类型 -->
+                <view>{{e['考试时间']}}</view>
+              </view>
+              <!-- 节次指示器 -->
+              <view class="score">{{e['剩余天数']}}</view>
+            </view>
+            
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+</view>

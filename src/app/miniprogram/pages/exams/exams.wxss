@@ -1,0 +1,234 @@
+page {
+  overflow: hidden;
+}
+
+.container > .content::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  padding: 50rpx 7%;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  box-sizing: border-box;
+}
+
+.container > .content > .empty-hint {
+  text-align: center;
+  margin-top: 100rpx;
+  font-size: 36rpx;
+  color: var(--text-black-2);
+}
+.container > .content .operations {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.container > .content .operations .calendar, .reload {
+  position: relative;
+  background: var(--color-black-10);
+  border-radius: 12rpx;
+  padding: 10rpx 20rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  color: var(--text-black-1);
+  text-align: center;
+  padding-left: 60rpx;
+  transition: background .2s;
+}
+
+.container > .content .operations .calendar:before {
+  --size: 30rpx;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 20rpx;
+  transform: translateY(-50%);
+  width: var(--size);
+  height: calc(var(--size) + 2rpx);
+  -webkit-mask-size: var(--size);
+  background: var(--text-black-1);
+  mask-image: var(--icon-calendar);
+  -webkit-mask-image: var(--icon-calendar);
+}
+
+.container > .content .operations > .reload {
+  margin-left: 8rpx;
+  width: 14rpx;
+  /* height: 50rpx; */
+  padding-left: 20rpx;
+}
+
+.container > .content .operations > .reload:before {
+  --size: 26rpx;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 14rpx;
+  transform: translateY(-50%);
+  width: var(--size);
+  height: var(--size);
+  -webkit-mask-size: var(--size);
+  background: var(--text-black-1);
+  mask-image: var(--icon-reload);
+  -webkit-mask-image: var(--icon-reload);
+}
+
+.button-tap {
+  background: var(--color-black-20) !important;
+}
+
+.filters {
+  display: flex;
+  position: relative;
+}
+.filters > .button {
+  position: relative;
+  display: flex;
+  background: var(--color-white);
+  border-radius: 16rpx;
+  box-shadow: 0 0 16rpx 0 var(--color-black-10);
+  padding: 14rpx 30rpx 14rpx 48rpx;
+
+  font-size: 28rpx;
+  font-weight: 450;
+  color: var(--text-black-2);
+  transition: box-shadow .2s;
+}
+
+.button.icon-button-tap {
+  box-shadow: 0 0 26rpx 0 var(--color-black-20) !important;
+}
+
+/* 按钮左侧装饰条 */
+.filters > .button:before {
+  content: '';
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 18rpx;
+  height: 100%;
+  border-radius: 9px 0px 0px 9px;
+  transition: background-color .2s;
+}
+.filters > .button[data-disabled=true]::before {
+  background-color: var(--color-black-20) !important;
+  color: var(--text-black-4) !important;
+}
+
+.filters > .button.undone:before {
+  background-color: #FF7D7D;
+}
+
+.filters > .button.done:before {
+  background-color: #6BB1D7;
+}
+
+.filters > .button:not(:first-child) {
+  margin-left: 12rpx;
+}
+
+.filters > .button > .number {
+  margin-left: 22rpx;
+  font-weight: 900;
+}
+
+.module > .title {
+  font-size: 38rpx;
+  font-weight: 450;
+  margin-left: 36rpx;
+  margin-bottom: 28rpx;
+  color: var(--text-black-1);
+}
+
+/* 及格的标题 */
+.module.done > .title {
+  color: var(--text-black-3);
+}
+
+/* 已结束的天数 */
+.module.done .score {
+  color: var(--text-black-4) !important;
+}
+
+.lesson-wrapper {
+  background: var(--color-white);
+  box-shadow: 0 0 16rpx 0 var(--color-black-10);
+  border-radius: 16rpx;
+  min-width: 400rpx;
+  padding: 40rpx 40rpx;
+}
+
+.lesson-wrapper > .item {
+  display: flex;
+  align-items: center;
+}
+
+.lesson-wrapper > .item:not(:first-child) {
+  margin-top: 50rpx;
+}
+
+/* 节数指示器 */
+.lesson-wrapper > .item > .index {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: var(--text-black-4);
+  width: 40rpx;
+  text-align: center;
+  margin-right: 40rpx;
+}
+
+/* 右侧部分 */
+.lesson-wrapper > .item > .content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.lesson-wrapper > .item > .content > .text {
+  position: relative;
+}
+
+/* 课程名称 */
+.lesson-wrapper > .item > .content > .text > .name {
+  font-size: 32rpx;
+  font-weight: 450;
+  color: var(--text-black-2);
+  max-width: 80%;
+}
+
+/* 下方文字 */
+.lesson-wrapper > .item > .content > .text > .description {
+  display: flex;
+  /* justify-content: space-between; */
+  font-size: 24rpx;
+  font-weight: 400;
+  margin-top: 4rpx;
+  color: var(--text-black-3);
+}
+
+.lesson-wrapper > .item > .content > .text > .description > view:not(:first-child) {
+  margin-left: 20rpx;
+}
+
+/* 成绩 */
+.lesson-wrapper > .item > .content > .text > .score {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  /* width: 70rpx; */
+  /* text-align: center; */
+
+  font-size: 36rpx;
+  font-weight: 500;
+  color: var(--highlight-font-color);
+  text-align: right;
+}

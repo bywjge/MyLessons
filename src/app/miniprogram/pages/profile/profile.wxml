@@ -31,7 +31,7 @@
         <view class="text">{{info['专业']}}</view>
       </view>
 
-      <view class="item">
+      <view class="item" wx:if="{{info['手机号码'] && info['手机号码'] !== 'null'}}">
         <view class="title">联系电话</view>
         <view class="text">{{info['手机号码']}}</view>
       </view>

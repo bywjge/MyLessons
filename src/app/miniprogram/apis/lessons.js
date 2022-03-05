@@ -1,6 +1,7 @@
 export default {
   getLessonFromSchool,
   getScoreFromSchool,
+  getExamFromSchool,
   convertDateToWeek,
   convertWeekToDate,
   convertIndexToTime,
@@ -213,6 +214,64 @@ async function getScoreFromSchool() {
   // 写入storage
   wx.setStorageSync('scores', scoreMap)
   return scoreMap
+}
+
+/**
+ * 从教务系统获取某个学期的考试安排
+ * @param {number | string} year 年份，四位数
+ * @param {1 | 2} [term = 1] 学期，1代表第一学期，2代表第二学期
+ * @description 将自动替换storage的内容
+ */
+async function getExamFromSchool() {
+  const ret = await request({
+    url: `https://jxgl.wyu.edu.cn/xsksap!getDataList.action`,
+    method: 'POST',
+    data: {
+      xnxqdm: '',
+      jhlxdm: '',
+      page: 1,
+      rows: 1000,
+      sort: 'xnxqdm',
+      order: 'asc'
+    }
+  } ,)
+  const keyMap = {
+    "xnxqdm": "学期", 
+    "xs": "学时",
+    "jkteaxms": "监考老师",
+    "ksrq": "考试日期",
+    "zc": "周次",
+    "xq": "星期",
+    "kssj": "考试时间",
+    "kslbmc": "考试类别",
+    "ksaplxmc": "安排类型",
+    "ksxs": "考试形式", // 0闭卷 1开卷
+    "kcmc": "课程名称",
+    "sjbh": "试卷编号",
+    "kscdmc": "考试场地" 
+  }
+  const { total, rows } = ret.data
+  const examMap = { }
+  const formattedRows = tools.keyMapConvert(rows, keyMap)
+  console.log(formattedRows.length)
+  formattedRows.forEach(e => {
+    const termId = e['学期']
+    e['监考老师'] = e['监考老师'].split(',')
+    e['考试日期'] = e['考试日期'].replaceAll('-', '/')
+    const t = e['考试时间'].split('--').map(e => e.substring(0, 5))
+    e['开始时间'] = new Date(`${e['考试日期']} ${t[0]}`)
+    e['结束时间'] = new Date(`${e['考试日期']} ${t[1]}`)
+    e['考试形式'] = Number(e['考试形式']) === 0 ? '闭卷': '开卷'
+    e['考试时间'] = t.join('-')
+    if (!Array.isArray(examMap[termId]))
+      examMap[termId] = new Array()
+
+    examMap[termId].push(e)
+  })
+
+  // 写入storage
+  wx.setStorageSync('exams', examMap)
+  return examMap
 }
 
 function convertDateToWeek(nowDate, convertToChinese = false){
@@ -609,3 +668,4 @@ async function resetLesson() {
 
   wx.hideLoading().catch(() => {})
 }
+

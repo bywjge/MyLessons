@@ -42,6 +42,13 @@ Page({
     })
   },
 
+  // 查看考试安排
+  jumpToExam() {
+    wx.navigateTo({
+      url: '/pages/exams/exams',
+    })
+  },
+
   // 未开发功能的提示
   showModal() {
     tools.showModal({

@@ -27,7 +27,7 @@ App({
       // 首页显示的课程模式（日或周），即day/week
       indexMode: "day",
 
-      version: "0.3.9.8"
+      version: "0.3.9.9"
     }
   },
   onError(error) {
