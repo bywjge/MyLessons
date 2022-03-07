@@ -15,7 +15,7 @@
     <!-- 未结课 -->
     <view class="module" style="margin-top: 40rpx" wx:if="{{!disableButton['undone']}}">
       <view class="title">未结课({{undoneList.length}})</view>
-      <view class="lesson-wrapper">
+      <view class="lesson-wrapper" wx:if="{{undoneList.length > 0}}">
         <view 
           class="item"
           wx:for="{{undoneList}}"
@@ -38,7 +38,7 @@
               class="progress-bar" 
               percent="{{e['进度']}}" 
               color="#ff617c" 
-              backgroundColor="{{theme==='dark'?'rgba(255, 255, 255, .1)':''}}"
+              backgroundColor="{{theme==='dark'?'#d8d8d8':''}}"
               active 
               stroke-width="4" 
               border-radius="10"
@@ -49,7 +49,7 @@
     </view>
 
     <!-- 已结课 -->
-    <view class="module over" style="margin-top: 40rpx" wx:if="{{!disableButton['done']}}">
+    <view class="module" style="margin-top: 40rpx" wx:if="{{!disableButton['done']}}">
       <view class="title">已结课({{doneList.length}})</view>
       <view class="lesson-wrapper" wx:if="{{doneList.length > 0}}">
         <view 
@@ -60,22 +60,18 @@
           wx:key="e"
         >
           <!-- 序号 -->
-          <view class="index">1</view>
+          <view class="index">{{index + 1}}</view>
           <view class="content">
             <view class="text">
               <!-- 课程名称 -->
               <view class="name">{{e['课程名称']}}</view>
               <!-- 下方文字 -->
-              <view class="description">
-                <!-- 教师名称 -->
-                <view>何国辉</view>
-                <!-- 结课时间 -->
-                <view>何国辉</view>
-              </view>
+              <view class="description">{{e['教师姓名']}}</view>
             </view>
           </view>
         </view>
       </view>
     </view>
+
   </view>
 </view>
