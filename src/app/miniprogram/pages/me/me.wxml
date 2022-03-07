@@ -1,10 +1,10 @@
 <!--miniprogram/pages/profile/profile.wxml-->
-<view class="container">
-  <navigation title="我的"/>
+<view class="container" data-theme="{{theme}}">
+  <navigation title="我的" />
   <view class="content">
     <!-- 个人信息入口 -->
     <view class="profile-card" bindtap="jumpToProfile" hover-class="icon-button-tap" data-gender="female">
-      <view class="avator" />
+      <image class="avator" src="{{avatarUrl}}" mode="aspectFit" />
       <view class="info">
         <view class="name">
           {{info['姓名']}}

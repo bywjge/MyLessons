@@ -1,5 +1,15 @@
+import lessons from '../../apis/lessons';
 import lessonApi from '../../apis/lessons'
-const { navBarHeight } = getApp().globalData
+import tools from '../../utils/tools';
+import { bindTheme, unbindTheme } from '../../utils/theme'
+const { navBarHeight, eventBus } = getApp().globalData
+
+// 长按课程时弹出的菜单项目
+const editItems = [
+  '编辑课程',
+  '删除这节课程',
+  '删除整门课程'
+]
 
 Component({
   options: {
@@ -71,22 +81,17 @@ Component({
 
     this.refreshStatus()
     this.selectWeek(week - 1)
-  },
 
-  pageLifetimes: {
-    show() {
-      if (this.data.timer){
-        clearInterval(this.data.timer)
-      }
-  
-      // 每五秒刷新一次状态
-      const handler = setInterval(this.refreshStatus.bind(this), 5000)
-      this.setData({
-        timer: handler
-      })
-    }
+    // 添加/删除课程后会调用，重新获取数据
+    eventBus.on('refreshLesson', this.getLesson.bind(this))
   },
-  
+  attached() {
+    // data中自动添加一个theme
+    bindTheme(this)
+  },
+  detached() {
+    unbindTheme()
+  },
 
   methods: {
     refreshIndexer(){
@@ -148,9 +153,8 @@ Component({
       })
     },
 
-    getLesson(week = 1) {
+    getLesson() {
       const lessons = wx.getStorageSync('lessonsByWeek')/* [week - 1] || [] */
-
       this.setData({
         lessons
       })
@@ -204,6 +208,57 @@ Component({
         currentDetail: lesson[0],
         detailLessons: lesson
       })
+    },
+
+    // 处理课程添加
+    handleLessonAdd({ detail }) {
+      const { day, index } = detail
+    },
+
+    // 处理课程编辑
+    async handleLessonEdit({ detail: lesson }) {
+      if (lesson['冲突'] === true) {
+        try {
+          await wx.showActionSheet({
+            alertText: '选择需要的课程',
+            itemList: lesson.lessons.map(e => e['课程名称'])
+          })
+          .then(({ tapIndex: index }) => {
+            lesson = lesson.lessons[index]
+          })
+        } catch { return ; }
+      }
+
+      wx.showActionSheet({
+        alertText: '希望对课程进行什么操作呢',
+        itemList: editItems
+      })
+      .then(({ tapIndex: index }) => {
+        const item = editItems[index]
+        if (item === '编辑课程') {
+          tools.showModal({
+            title: '提示',
+            content: '功能正在开发中～'
+          })
+          return ;
+        }
+
+        tools.showModal({
+          title: '确认操作',
+          content: `即将删除《${lesson['课程名称']}》在${index === 1?'当前位置': '整个学期中'}的课程，操作不会被同步到云端，确认继续吗？`,
+          showCancel: true,
+          confirmText: "继续",
+          cancelText: "取消"
+        })
+        .then(() => {
+          lessons.deleteLesson(lesson, item === '删除整门课程')
+          wx.showToast({
+            title: '删除成功'
+          })
+        })
+        .catch(() => {})
+      })
+      .catch(() => {})
     },
 
     // (课程冲突时)切换上一个卡片

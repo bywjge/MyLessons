@@ -92,7 +92,7 @@ page {
   justify-content: space-around;
   position: relative;
   background: var(--color-white);
-  box-shadow: 0 0 16rpx 0 var(--color-black-10);
+  box-shadow: 0 0 16rpx 0 var(-shadow-10);
   border-radius: 16rpx;
   padding: 25rpx 40rpx;
   margin-top: 50rpx;
@@ -145,7 +145,7 @@ page {
   display: flex;
   background: var(--color-white);
   border-radius: 16rpx;
-  box-shadow: 0 0 16rpx 0 var(--color-black-10);
+  box-shadow: 0 0 16rpx 0 var(--shadow-10);
   padding: 14rpx 30rpx 14rpx 48rpx;
 
   font-size: 28rpx;
@@ -155,7 +155,7 @@ page {
 }
 
 .button.icon-button-tap {
-  box-shadow: 0 0 26rpx 0 var(--color-black-20) !important;
+  box-shadow: 0 0 26rpx 0 var(--shadow-20) !important;
 }
 
 /* 按钮左侧装饰条 */
@@ -206,7 +206,7 @@ page {
 
 .lesson-wrapper {
   background: var(--color-white);
-  box-shadow: 0 0 16rpx 0 var(--color-black-10);
+  box-shadow: 0 0 16rpx 0 var(--shadow-10);
   border-radius: 16rpx;
   min-width: 400rpx;
   padding: 40rpx 40rpx;

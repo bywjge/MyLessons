@@ -28,30 +28,31 @@ page {
 }
 
 /* 用户头像 */
-.profile-content > .avator {
+.profile-content .avator {
   position: relative;
   height: var(--avator-size);
   width: var(--avator-size);
   border-radius: 100%;
-  background: gray;
+  background: var(--color-black-20);
 }
 
 /* 头像编辑按钮 */
-.profile-content > .avator .edit-button {
+.profile-content .edit-button {
   --size: 60rpx;
   position: absolute;
   height: var(--size);
   width: var(--size);
-  right: 0;
-  bottom: 0;
+  left: calc(var(--avator-size) * .75);
+  /* right: 0; */
+  bottom: calc(var(--avator-size) * .05);
   background: var(--color-white);
-  box-shadow: 0 0 14rpx 0 var(--color-black-10);
+  box-shadow: 0 0 14rpx 0 var(--shadow-10);
   border-radius: 50%;
   transition: box-shadow .2s;
 }
 
 /*  */
-.profile-content > .avator .edit-button:before {
+.profile-content .edit-button:before {
   --size: 28rpx;
   content: '';
   background: var(--highlight-font-color);
@@ -68,7 +69,7 @@ page {
 }
 
 .button-tap {
-  box-shadow: 0 0 26rpx 0 var(--color-black-20) !important;
+  box-shadow: 0 0 26rpx 0 var(--shadow-20) !important;
 }
 
 

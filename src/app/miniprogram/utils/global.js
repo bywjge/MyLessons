@@ -111,25 +111,39 @@ function proxyingWxObject(){
       if (isSyncFunction || isNotFunction) 
         return target[name];
 
-      return function (obj) {
-        if (typeof obj === 'object') {
-          let originalFail = function () {};
-
-          if ('fail' in obj) {
-            originalFail = obj.fail;
-          }
-
-          obj.fail = function () {
-            // todo 上报数据到后端 [4]
-            wx.showToast({
-              title: '发生错误，请查看控制台',
-              duration: 2000
-            })
-            log.error(name, arguments[0].errMsg)
-            originalFail();
-          };
+      const failHandler = function (args, original) {
+        // todo 上报数据到后端 [4]
+        if (!original) {
+          wx.showToast({
+            title: '发生错误，请查看控制台',
+            duration: 2000
+          })
+          log.error(name, args.errMsg)
+        } else {
+          original(args);
         }
-        return target[name](obj);
+      }
+
+      return function (obj) {
+        let originalFail = null
+        if (obj && typeof obj === 'object' && typeof obj.fail === 'function') {
+          originalFail = obj.fail;
+        }
+
+        const ret = target[name](obj)
+
+        // promise默认不捕获异常，如需捕获，请加上showError字段
+        if (ret instanceof Promise) {
+          ret.catch(err => {
+            if (obj.showError)
+              failHandler(err, originalFail)
+            // return new Promise((res, rej) => rej(err))
+          })
+        } else if (obj && typeof obj === 'object') {
+          obj.fail = () => failHandler(arguments, originalFail)
+        }
+
+        return ret
       };
     }
   });

@@ -42,7 +42,7 @@
       style="width: 100%; margin-top: 20rpx;" 
       percent="{{currentDetail['课程进度']}}"
       active-color="#FFAFCF" 
-      background-color="#FFF0F8"
+      backgroundColor="{{theme==='dark'?'#d8d8d8':'#FFF0F8'}}"
       stroke-width="32" 
       border-radius="8"
       active 
@@ -121,7 +121,14 @@
       <view style="flex: 1">
         <swiper style="height: 100%;" bindchange="handlePageChange" current="{{currentPage}}">
           <swiper-item wx:for="{{lessons}}" wx:for-item="lesson" wx:for-index="index" wx:key="lesson">
-            <lesson-board style="flex: 1" item="{{ lesson }}" activeIndex="{{(index === selectWeek - 1)? activeDay: -1}}" bind:tapLesson="handleLessonTap"/>
+            <lesson-board 
+              style="flex: 1" 
+              item="{{ lesson }}" 
+              activeIndex="{{(index === selectWeek - 1)? activeDay: -1}}" 
+              bind:tapLesson="handleLessonTap"
+              bind:addLesson="handleLessonAdd"
+              bind:editLesson="handleLessonEdit"
+            />
           </swiper-item>
         </swiper>
       </view>

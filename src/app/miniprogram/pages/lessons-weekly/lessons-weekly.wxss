@@ -11,15 +11,9 @@ page{
   width: 100%;
   display: flex;
   flex-direction: column;
-
-  --lesson-item-tile: 13rpx;
-  --lesson-item-highlight-height: 8rpx;
+  
   --lesson-detail-blur-radius: 3px;
   --lesson-detail-blur-time: 0.4s;
-
-  --color-text: #4f4f4f;
-  --color-title: #828282;
-  --color-border: #868686;
 }
 
 .container{
@@ -36,8 +30,7 @@ page{
   padding: 30rpx 0rpx 0rpx 16rpx;
   box-sizing: border-box;
 
-  background-color: var(--date-selector-color);
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+  box-shadow: 0 2px 4px 0 var(--shadow-10);
 
   z-index: 5;
 }
@@ -51,7 +44,7 @@ page{
   width: 80rpx;
   /* padding: 5.5rpx 6rpx; */
 
-  border: 2rpx dashed var(--week-selector-border-color);
+  border: 2rpx dashed var(--color-black-20);
   box-sizing: border-box;
   border-radius: 6rpx;
   margin-bottom: 6rpx;
@@ -60,14 +53,14 @@ page{
 }
 
 .selector-wrapper .week-selector:active{
-  background-color: var(--week-selector-active-color);
+  background-color: var(--color-black-10);
 }
 
 .selector-wrapper .week-selector .month{
   font-family: "Avenir";
   font-weight: 700;
   font-size: 39rpx;
-  color: var(--font-color);
+  color: var(--text-black-1);
   letter-spacing: -0.21px;
 
   display: flex;  
@@ -80,8 +73,7 @@ page{
   font-weight: 550;
   font-size: 20rpx;
   margin-left: 4rpx;
-  color: var(--font-accessible-color);
-  letter-spacing: -0.1px;
+  color: var(--text-black-2);
 }
 
 .selector-wrapper .week-selector .week{
@@ -89,9 +81,9 @@ page{
   font-weight: 700;
   font-size: 19rpx;
   padding: 4rpx 6rpx;
-  color: var(--font-color);
+  color: var(--text-black-1);
   letter-spacing: 0.61px;
-  background-color: var(--font-background-color);
+  background-color: var(--color-black-10);
   border-radius: 6rpx;
 }
 
@@ -103,18 +95,18 @@ page{
   flex: 1;
   justify-content: center;
   align-items: center;
+  border-bottom: solid 1px var(--color-black-20);
 }
 
 /* 日期选择器中的每一个元素 */
-
 .container[data-color-scheme="light"] .selector-wrapper .day-viewer .item[data-status="selected"]{
-  background-color: var(--day-selected-item-color);
-  color: var(--day-selected-font-color);
+  background-color: var(--color-pink-2);
+  color: var(--color-white);
 }
 
 .container[data-color-scheme="light"] .selector-wrapper .day-viewer .item[data-status="normal"]{
-  background-color: var(--day-normal-item-color);
-  color: var(--day-normal-font-color);
+  background-color: var(--color-black-05);
+  color: var(--text-black-1);
 }
 
 .selector-wrapper .day-viewer .item{
@@ -171,19 +163,31 @@ page{
   padding: 10rpx 11rpx;
   /* box-sizing: border-box; */
 
-  background-color: var(--indexer-background);
-  border-right: 0 solid var(--indexer-border-color);
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+  border-right: 0 solid var(--color-black-10);
+  box-shadow: 0 2px 4px 0 var(--shadow-10);
 }
 
 .lesson-wrapper .indexer-wrapper .item{
+  position: relative;
   width: 75rpx;
   max-height: var(--indexer-height);
   height: var(--indexer-height);
-  background-color: var(--indexer-item-background);
+  background-color: var(--color-black-05);
   border-radius: 6rpx;
   padding-bottom: 6rpx;
   box-sizing: border-box;
+}
+
+/* 课程对齐线 */
+.lesson-wrapper .indexer-wrapper .item:not(:last-child):after{
+  content: '';
+  position: absolute;
+  width: 1000%;
+  height: 2rpx;
+  top: 100%;
+  background: var(--color-black-10);
+  transform: translate(89rpx, calc(21rpx / 2));
+  z-index: -1;
 }
 
 .lesson-wrapper .indexer-wrapper .item:not(:last-child){
@@ -199,17 +203,17 @@ page{
   font-size: 30rpx;
   font-weight: 700;
   line-height: 32rpx;
-  color: var(--font-color);
+  color: var(--text-black-1);
   letter-spacing: 1.07px;
   border-radius: 6rpx 6rpx 0rpx 0rpx;
 }
 
 .lesson-wrapper .indexer-wrapper .item .index[data-underway="true"]{
-  background-color: var(--indexer-item-index-background-underway);
+  background-color: var(--highlight-background);
 }
 
 .lesson-wrapper .indexer-wrapper .item .index[data-underway="false"]{
-  background-color: var(--indexer-item-index-background-normal);
+  background-color: var(--color-black-10);
 }
 
 .lesson-wrapper .indexer-wrapper .item .from, .to{
@@ -217,7 +221,7 @@ page{
   font-family: "Avenir";
   font-weight: 700;
   font-size: 23rpx;
-  color: var(--font-color);
+  color: var(--text-black-1);
   line-height: 28rpx;
   /* letter-spacing: -0.2rpx; */
 }
@@ -253,8 +257,8 @@ page{
 
 /* 课程卡片 */
 .container .lesson-detail {
-  --color: white;
-  --shadow: rgba(151, 151, 151, 0.87);
+  --color: var(--card-background);
+  --shadow: var(--shadow-40);
 
   position: absolute;
   top: 50%;
@@ -282,18 +286,17 @@ page{
   font-size: 36rpx;
   font-weight: 500;
   margin-bottom: 5px;
-  color: var(--color-text);
+  color: var(--text-black-2);
   letter-spacing: 0.47px;
   text-align: center;
-  line-height: 15px;
-  /* margin: 30rpx 0; */
+  /* line-height: 15px; */
   }
 
 /* 分割线样式 */
 .container .lesson-detail .divider {
   /* height: 1px; */
   --width: 2rpx;
-  --color: #a0a0a0;
+  --color: var(--color-black-20);
   --line: 5px;
   --gap: 3px;
   height: var(--width);
@@ -304,6 +307,7 @@ page{
   background-size: calc(var(--line) + var(--gap)) 100%;
 }
 
+/* 详细信息每一行 */
 .container .lesson-detail .item {
   display: flex;
   width: 100%;
@@ -313,24 +317,24 @@ page{
   line-height: 40rpx;
 }
 
-/* 标题 */
+/* 详细信息标题 */
 .container .lesson-detail .item .title {
   font-size: 12px;
   font-weight: 450;
-  color: var(--color-title);
+  color: var(--text-black-3);
   margin-right: 20rpx;
 }
 
-/* 项目 */
+/* 详细信息每一行 的值 */
 .container .lesson-detail .item .text {
   font-size: 14px;
-  color: var(--color-text);
+  color: var(--text-black-2);
   text-align: right;
   word-break: break-word;
   flex: 1;
 }
 .container .lesson-detail .item .text.progress {
-  color: #F1006F;
+  color: var(--color-pink-1);
   font-weight: 900;
 }
 
@@ -348,8 +352,8 @@ page{
   font-size: 22rpx !important;
   font-weight: 500 !important;
   margin-bottom: 6rpx !important;
-  background-color: rgba(0,0,0,0.10) !important;
-  color: black !important;
+  background-color: var(--color-black-10) !important;
+  color: var(--text-black-1) !important;
   border-radius: 4px;
   padding: 4rpx 12rpx;
   margin-right: 11rpx !important;
@@ -381,18 +385,18 @@ page{
 
 /* 按钮 */
 .button {
-  background: var(--color-white);
+  background: var(--card-background);
   border-radius: 28rpx;
   font-size: 32rpx;
   font-weight: 500;
   padding: 20rpx 40rpx;
   color: var(--text-black-2);
-  box-shadow: 0 0 14rpx 0 var(--color-black-05);
+  box-shadow: 0 0 14rpx 0 var(--shadow-05);
   transition: box-shadow .2s ease;
 }
 
 .button-tap {
-  box-shadow: 0 0 26rpx 0 var(--color-black-20);
+  box-shadow: 0 0 26rpx 0 var(--shadow-20);
 }
 
 @keyframes fadeBlur {

@@ -1,5 +1,5 @@
 import lessonApi from '../../apis/lessons'
-import tools from '../../utils/tools'
+import { bindTheme, unbindTheme } from '../../utils/theme'
 Page({
   data: {
     passList: [],
@@ -19,6 +19,9 @@ Page({
   },
 
   async onLoad() {
+    // data中自动添加一个theme
+    bindTheme(this)
+
     let scores = wx.getStorageSync('creativeScores')
     if (!scores || scores === "") {
       wx.showLoading({
@@ -37,6 +40,9 @@ Page({
     this.setData({
       [`disableButton.${key}`]: !this.data.disableButton[key]
     })
+  },
+  onUnload() {
+    unbindTheme()
   },
 
   // 选择学期

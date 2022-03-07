@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" data-theme="{{theme}}">
   <navigation title="创新学分" enableMenu="{{false}}" />
   <view class="content">
     <!-- 数据筛选器 -->

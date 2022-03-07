@@ -12,14 +12,14 @@ Component({
     multipleSlots: true
   },
   properties: {
-    background: {
-      type: String,
-      value: "#FFB8C5"
-    },
-    color: {
-      type: String,
-      value: "white"
-    },
+    // background: {
+    //   type: String,
+    //   value: "#FFB8C5"
+    // },
+    // color: {
+    //   type: String,
+    //   value: "white"
+    // },
     title: {
       type: String,
       value: "My Lesson"
@@ -95,8 +95,10 @@ Component({
       }
     },
 
-    async handleItemClick(e){
-      const { name, url, selected } = e.target.dataset
+    async handleItemClick({ currentTarget, type }){
+      if (type !== 'tap')
+        return 
+      const { name, url, selected } = currentTarget.dataset
       if (selected){
         return ;
       }

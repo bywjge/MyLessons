@@ -1,3 +1,4 @@
+import { bindTheme, unbindTheme } from '../../utils/theme'
 Page({
   data: {
     doneList: [],
@@ -9,6 +10,9 @@ Page({
     }
   },
   onLoad() {
+    // data中自动添加一个theme
+    bindTheme(this)
+
     const lesson = wx.getStorageSync('lessonsMap')
     const doneList = []
     const undoneList = []
@@ -47,6 +51,9 @@ Page({
       doneList,
       undoneList
     })
+  },
+  onUnload() {
+    unbindTheme()
   },
   switchVisible({ currentTarget }) {
     const { dataset } = currentTarget

@@ -140,7 +140,7 @@ Page({
    * @param {Number} term 当前选择学期
    */
   calcScore(year, term) {
-    // 传入课程成绩数组，计算该学期绩点
+  // 传入课程成绩数组，计算该学期绩点
     function _calc(scores) {
       if (scores.length === 0)
         return `0.00`
@@ -148,12 +148,10 @@ Page({
       let 总学分 = 0
       for (let i = 0; i < scores.length; i++) {
         const element = scores[i];
-        if (!element || element['课程类型'] === '通识课')
+        if (!element || element['课程类型'].indexOf('通识课') !== -1)
           continue ;
         const 学分 = Number(element['学分'])
         const 绩点 = Number(element['成绩绩点'])
-        if (学分 === 0 || 绩点 === 0)
-          continue ;
         总学分 += 学分
         总绩点 += 学分 * 绩点
       }

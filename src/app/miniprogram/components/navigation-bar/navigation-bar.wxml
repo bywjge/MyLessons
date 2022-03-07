@@ -2,7 +2,7 @@
   bindtap="handleBarClick"
   data-show-mask="{{showMenu}}"
   data-show-layer="{{showMenuLayer}}"
-  style="min-height: {{navBarHeight }}px; width: {{windowWidth}}px; padding-top: {{statusBarHeight}}px; background-color: {{background}}; color: {{color}};"
+  style="min-height: {{navBarHeight }}px; width: {{windowWidth}}px; padding-top: {{statusBarHeight}}px"
 >
   <view 
     class="slot" 
@@ -28,7 +28,6 @@
     class="operation-bar"
     data-status="{{showMenu?'show':'hidden'}}"
     data-show-layer="{{showMenuLayer}}"
-    bindtap="handleItemClick"
   >
     <view 
       class="item {{(item.url === nowPage)?'selected':''}}" 
@@ -38,6 +37,7 @@
       data-name="{{item.title}}"
       data-url="{{item.url}}"
       data-selected="{{item.url === nowPage}}"
+      bindtap="handleItemClick"
     >
       <fa 
         class="icon"

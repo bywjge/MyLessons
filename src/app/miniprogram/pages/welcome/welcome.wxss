@@ -1,7 +1,7 @@
 /* miniprogram/index/index.wxss */
 
 page{
-  background-color: #FFC0CB
+  background-color: var(--page-welcome-background);
 }
 
 .logo{

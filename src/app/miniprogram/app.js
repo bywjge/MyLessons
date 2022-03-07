@@ -1,3 +1,6 @@
+// import { promisifyAll } from 'wx-promise-pro'
+// promisifyAll()
+
 import { log } from './utils/log'
 import './utils/global.js'
 
@@ -26,6 +29,7 @@ App({
 
       // 首页显示的课程模式（日或周），即day/week
       indexMode: "day",
+      theme: 'dark',
 
       version: "0.4.0.0"
     }

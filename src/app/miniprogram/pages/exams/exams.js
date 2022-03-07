@@ -1,5 +1,7 @@
 import lessonApi from '../../apis/lessons'
 import tools from '../../utils/tools'
+import { bindTheme, unbindTheme } from '../../utils/theme'
+
 Page({
   data: {
     doneList: [],
@@ -15,6 +17,9 @@ Page({
   },
 
   async onLoad() {
+    // data中自动添加一个theme
+    bindTheme(this)
+
     this.generateTermList()
     let exams = wx.getStorageSync('exams')
     if (!exams || exams === "") {
@@ -26,6 +31,9 @@ Page({
     }
 
     this.selectTerm(this.data.selectedTerm)
+  },
+  onUnload() {
+    unbindTheme()
   },
 
   // 生成课表选择器

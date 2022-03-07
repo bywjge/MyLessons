@@ -30,7 +30,7 @@ page {
   position: relative;
   /* width: 482rpx; */
   width: 100%;
-  background: #FFFFFF;
+  background: var(--color-white);
   /* box-shadow: 2px 2px 13px 0 rgba(0,0,0,0.10); */
   border-radius: 9px;
 
@@ -40,7 +40,7 @@ page {
   padding-right: 30rpx;
 
   box-sizing: border-box;
-  box-shadow: 0 0 20rpx 0 var(--color-black-10);
+  box-shadow: 0 0 20rpx 0 var(--shadow-10);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -61,12 +61,12 @@ page {
 
 /* 女性卡片颜色 */
 .profile-card[data-gender="female"]:before {
-  background-color: #FF7D7D;
+  background-color: var(--color-pink-2);
 }
 
 /* 男性卡片颜色 */
 .profile-card[data-gender="male"]:before {
-  background-color: #66BFFF;
+  background-color: var(--color-blue-2);
 }
 /* ------------------------------- */
 
@@ -75,7 +75,7 @@ page {
   height: var(--avator-size);
   width: var(--avator-size);
   border-radius: 100%;
-  background: gray;
+  background: var(--color-black-20);
 }
 
 .profile-card .more-icon {
@@ -122,7 +122,7 @@ page {
 }
 
 .gender-icon.male {
-  background: var(--color-blue-1);
+  background: var(--color-blue-2);
   mask-image: var(--icon-gender-male);
   -webkit-mask-image: var(--icon-gender-male);
 }
@@ -206,12 +206,12 @@ page {
   font-weight: 500;
   padding: 22rpx 40rpx;
   color: var(--text-black-2);
-  box-shadow: 0 0 14rpx 0 var(--color-black-05);
+  box-shadow: 0 0 14rpx 0 var(--shadow-05);
   transition: box-shadow .2s ease;
 }
 
 .icon-button-tap {
-  box-shadow: 0 0 26rpx 0 var(--color-black-20);
+  box-shadow: 0 0 26rpx 0 var(--shadow-20);
 }
 
 /* 单行文字的按钮 */
@@ -259,44 +259,44 @@ page {
 }
 
 .icon-reload:before {
-  background: #26AAC5;
+  background: var(--color-blue-1);
   mask-image: var(--icon-reload);
   -webkit-mask-image: var(--icon-reload);
 }
 
 .icon-code:before {
-  background: #FF3030;
+  background: var(--color-red-1);
   mask-image: var(--icon-code);
   -webkit-mask-image: var(--icon-code);
 }
 
 .icon-debug:before {
-  background: #FF3030;
+  background: var(--color-red-1);
   mask-image: var(--icon-code);
   -webkit-mask-image: var(--icon-debug);
 }
 
 
 .icon-list:before {
-  background: #57C35A;
+  background: var(--color-green-1);
   mask-image: var(--icon-list);
   -webkit-mask-image: var(--icon-list);
 }
 
 .icon-target:before {
-  background: #A42FFF;
+  background: var(--color-purple-1);
   mask-image: var(--icon-target);
   -webkit-mask-image: var(--icon-target);
 }
 
 .icon-rank:before {
-  background: #1fa0ea;
+  background: var(--color-blue-1);
   mask-image: var(--icon-rank);
   -webkit-mask-image: var(--icon-rank);
 }
 
 .icon-exam:before {
-  background: #FF694C;
+  background: var(--color-orange-1);
   mask-image: var(--icon-exam);
   -webkit-mask-image: var(--icon-exam);
 }

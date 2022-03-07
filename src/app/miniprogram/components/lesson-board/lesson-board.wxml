@@ -7,26 +7,33 @@
     wx:key="day"
     data-active="{{index === activeIndex}}"
   >
-    <!-- 下方的if用来去除一个占位元素 -->
     <view 
-      wx:if="{{day[index - 1]? !day[index - 1]['long']: true}}"
+      wx:else-if="{{day[index - 1]? !day[index - 1]['long']: true}}"
       class="{{e === null? 'empty-item': 'item'}}"
       hover-class="item-tap"
       data-conflict="{{!!e['冲突']}}"
       data-item="{{e}}"
-      data-connect="{{e !== null && ((~~e['节次'][1] - ~~e['节次'][0]) > 1)}}"
+      data-connect="{{e['long']}}"
       data-status="{{e !== null && e['日期'] === nowDate && ~~e['节次'][0] == nowIndex ? 'underway' : 'normal'}}"
+      data-day="{{index}}"
+      data-empty="{{e === null}}"
+      data-index="{{indexInDay}}"
       wx:for="{{day}}"
       wx:for-item="e"
+      wx:for-index="indexInDay"
       wx:key="e"
-
+      catchlongpress="handleLessonLongPress"
       catchtap="handleLessonTap"
     >
-      <view class="name">{{e['课程名称']}}</view>
+      <view wx:if="{{e !== null}}" class="name">{{e['课程名称']}}</view>
       <view wx:if="{{e !== null}}" class="bottom" style="background-color: {{e['卡片颜色']}}">
         <view wx:if="{{e['编号'] !== ''}} "class="number">{{e['编号']}}</view>
         <view class="location">{{e['地点']}}</view>
       </view>
+      <fa 
+        icon="fa fa-plus fa-lg" 
+        wx:if="{{showAddButton['day'] === index && showAddButton['index'] === indexInDay}}"
+      />
     </view>
   </view>
 </view>

@@ -1,6 +1,10 @@
 import tools from '../../utils/tools'
 import lessonApi from '../../apis/lessons'
 import accountApi from '../../apis/account'
+import { bindTheme, unbindTheme } from '../../utils/theme'
+
+const app = getApp()
+const eventBus = app.globalData.eventBus
 
 Page({
 
@@ -14,18 +18,35 @@ Page({
       学号: '',
       性别: '男'
     },
-    enableDebug: false
+    enableDebug: false,
+    avatarUrl: ''
   },
   onLoad() {
+    // data中自动添加一个theme
+    bindTheme(this)
+    this.refreshAvator()
     const info = wx.getStorageSync('profile')
     let enableDebug = wx.getStorageSync('enableDebug')
     if (!enableDebug || enableDebug === '') {
       enableDebug = false
     }
 
+    eventBus.on('updateAvator', this.refreshAvator)
+    
     this.setData({
       info,
       enableDebug
+    })
+  },
+  onUnload() {
+    unbindTheme()
+  },
+
+  refreshAvator() {
+    console.log("刷新");
+    const { avatarUrl } = wx.getStorageSync('wxInfo')
+    this.setData({
+      avatarUrl
     })
   },
 

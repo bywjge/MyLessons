@@ -1,6 +1,6 @@
-<view class="view-container">
+<view class="view-container" data-theme="{{theme}}">
   <navigation>
-    <view slot="left" class="operation-btn" bindtap="handleClick">
+    <view slot="left" class="operation-btn" bindtap="handleClick" hover-class="operation-btn-tap">
       {{indexMode === 'day'?'周视图':'日视图'}}
     </view>
   </navigation>

@@ -1,9 +1,10 @@
 <!--miniprogram/pages/utils/utils.wxml-->
-<view class="container">
+<view class="container" data-theme="{{theme}}">
   <navigation title="个人信息" enableMenu="{{false}}"/>
   <view class="profile-content">
     <!-- 用户头像 -->
-    <view class="avator">
+    <view style="position: relative">
+      <image class="avator" src="{{avatarUrl}}" mode="aspectFit" bindtap="handlePreviewAvator" />
       <view class="edit-button" bindtap="handleChangeAvator" hover-class="button-tap" />
     </view>
 

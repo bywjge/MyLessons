@@ -12,7 +12,9 @@ export default {
   colorizeLesson,
   getFirstDayOfTerm,
   getTerm,
-  resetLesson
+  resetLesson,
+
+  deleteLesson
 };
 
 import logger from '../utils/log'
@@ -22,6 +24,8 @@ import accountApi from './account'
 import  * as database from '../static/js/database'
 const db = wx.cloud.database()
 const log = new logger()
+const { eventBus } = getApp().globalData
+
 log.setKeyword('apis/lessons.js')
 
 /**
@@ -416,7 +420,7 @@ async function syncLessons(forceFromSchool = false){
  * @param {array} lessons 全学期课程
  * @param {boolean} skipConvert 是否跳过前面的转换
  */
-function convertAndStorage(lessons, skipConvert = false) {
+function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
   // firstWeekDate 是课表里第一周的星期日
   // 课表的排序是：(日 一 二 三 四 五 六)
 
@@ -431,64 +435,69 @@ function convertAndStorage(lessons, skipConvert = false) {
 
       lessonsByDay[date].push(lesson)
     })
-
-    /** 合并大节的课 */
-    for (const key in lessonsByDay) {
-      // 取出一天的课程
-      const lessons = lessonsByDay[key]
-      // 对一天的课程按照顺序排序
-      lessons.sort((a, b) => Number(a['节次'][0]) - Number(b['节次'][0]))
-
-      // 先进行课程冲突标识
-      lessons.forEach((now, index, raw) => {
-        if (index === 0)
-          return ;
-        const pre = raw[index - 1]
-        // 因为节次已按顺序排列，只需要判断这节课的开始节次是否相同
-        // 节次相同即可视为冲突
-        if (pre['节次'][0] === now['节次'][0]) {
-          pre['冲突'] = true
-          now['冲突'] = true
-        }
-      })
-
-      lessons = lessons.filter((e, index, raw) => {
-        // 跳过第一节课
-        if (index === 0)
-          return true
-        
-        const pre = raw[index - 1]
-        const now = e
-        if (!pre || !now)
-          return false;
-
-        // 如果前后两节课名字一样，而且没有课程冲突，合并
-        if (
-          (now['课程名称'] === pre['课程名称']) &&
-          (!now['冲突'] && !pre['冲突'])
-        ) {
-          pre['节次'][1] = now['节次'][1]
-          return false
-        }
-        return true
-      })
-
-      // 如果是大课，标识它
-      lessons.forEach(e => {
-        if (Number(e['节次'][1]) - Number(e['节次'][0]) > 1) {
-          e['long'] = true
-        } else {
-          e['long'] = false
-        }
-      })
-      lessonsByDay[key] = lessons
-    }
   } else {
     lessonsByDay = lessons
   }
+  
+  /** 合并大节的课 */
+  for (const key in lessonsByDay) {
+    // 取出一天的课程
+    const lessons = lessonsByDay[key]
+    // 对一天的课程按照顺序排序
+    lessons.sort((a, b) => Number(a['节次'][0]) - Number(b['节次'][0]))
+
+    // 先进行课程冲突标识
+    lessons.forEach((now, index, raw) => {
+      if (index === 0) {
+        raw[index]['冲突'] = false
+        return ;
+      }
+      const pre = raw[index - 1]
+      // 因为节次已按顺序排列，只需要判断这节课的开始节次是否相同
+      // 节次相同即可视为冲突
+      if (pre['节次'][0] === now['节次'][0]) {
+        pre['冲突'] = true
+        now['冲突'] = true
+      } else {
+        now['冲突'] = false
+      }
+    })
+
+    lessons = lessons.filter((e, index, raw) => {
+      // 跳过第一节课
+      if (index === 0)
+        return true
+      
+      const pre = raw[index - 1]
+      const now = e
+      if (!pre || !now)
+        return false;
+
+      // 如果前后两节课名字一样，而且没有课程冲突，合并
+      if (
+        (now['课程名称'] === pre['课程名称']) &&
+        (!now['冲突'] && !pre['冲突'])
+      ) {
+        pre['节次'][1] = now['节次'][1]
+        return false
+      }
+      return true
+    })
+
+    // 如果是大课，标识它
+    lessons.forEach(e => {
+      if (Number(e['节次'][1]) - Number(e['节次'][0]) > 1) {
+        e['long'] = true
+      } else {
+        e['long'] = false
+      }
+    })
+    lessonsByDay[key] = lessons
+  }
 
   // 上色
-  colorizeLesson(lessonsByDay)
+  if (!skipColorize)
+    colorizeLesson(lessonsByDay)
 
   /** 
    * 生成课表映射
@@ -706,3 +715,51 @@ async function resetLesson() {
   wx.hideLoading().catch(() => {})
 }
 
+// 与业务关联
+
+/**
+ * 删除课程
+ * @param {object} lesson lesson对象，包含教师 课程名称 日期 节次等
+ * @param {boolean} [wholeLesson=false] 是否删除整个课程
+ */
+function deleteLesson(lesson, wholeLesson = false) {
+  /**
+   * 1.删除单节课，找到对应节次的课，删除
+   * 2.删除整个课程，找到名字相同，排课人数相同的课程，删除
+   * 3.调用convert&storage
+   * 4.通知课表组件刷新数据
+   */
+
+  const lessonsByDay = wx.getStorageSync('lessonsByDay')
+  
+  if (!wholeLesson) {
+    const date = lesson['日期']
+    _deleteByDate(lesson, lessonsByDay, date)
+  } else {
+    for (const date in lessonsByDay) {
+      _deleteByDate(lesson, lessonsByDay, date)
+    }
+  }
+
+  convertAndStorage(lessonsByDay, true, true)
+  eventBus.emit('refreshLesson')
+
+  function _deleteByDate(_lesson, _lessonsByDay, _date) {
+    const day = _lessonsByDay[_date]
+    if (!Array.isArray(day)) {
+      return _lessonsByDay
+    }
+    const ret = day.filter(e => {
+        if (
+          (e['课程名称'] === _lesson['课程名称']) &&
+          (e['排课人数'] === _lesson['排课人数'])
+        ) {
+          return false
+        } else {
+          return true
+        }
+    })
+    _lessonsByDay[_date] = ret
+    return _lessonsByDay
+  }
+}

@@ -50,28 +50,9 @@ Component({
 
   // 页面加载完毕
   ready(){
-    const lessons = this.data.dates.map((date, index) => {
-      const formatDate = new Date(date.time).format('YYYY-mm-dd')
-      let lessons = wx.getStorageSync('lessonsByDay')[formatDate]
-      if (!lessons)
-        lessons = []
-
-      // 添加需要的信息
-      lessons.forEach(e => {
-        e['keyid'] = Math.random()
-        // 班级需要为数组
-        if (!Array.isArray(e['上课班级'])){
-          e['上课班级'] = e['上课班级'].split(',')
-        }
-
-        e['节次'] = e['节次'].map(d => Math.floor(d)) 
-      })
-      lessons.sort((a, b) => a['节次'][0] - b['节次'][0] )
-      
-      return { ...date, lessons, index }
-    })
-
-    this.setData({ dates: lessons })
+    // 添加/删除课程后会调用，重新获取数据
+    eventBus.on('refreshLesson', this.getData.bind(this))
+    this.getData()
   },
 
   // 页面卸载
@@ -100,6 +81,30 @@ Component({
   },
 
   methods: {
+    getData() {
+      const lessons = this.data.dates.map((date, index) => {
+        const formatDate = new Date(date.time).format('YYYY-mm-dd')
+        let lessons = wx.getStorageSync('lessonsByDay')[formatDate]
+        if (!lessons)
+          lessons = []
+  
+        // 添加需要的信息
+        lessons.forEach(e => {
+          e['keyid'] = Math.random()
+          // 班级需要为数组
+          if (!Array.isArray(e['上课班级'])){
+            e['上课班级'] = e['上课班级'].split(',')
+          }
+  
+          e['节次'] = e['节次'].map(d => Math.floor(d)) 
+        })
+        lessons.sort((a, b) => a['节次'][0] - b['节次'][0] )
+        
+        return { ...date, lessons, index }
+      })
+  
+      this.setData({ dates: lessons })
+    },
     // 日历板初始化
     initCalendar() {
       /**

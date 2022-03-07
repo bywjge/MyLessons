@@ -8,6 +8,8 @@ export default {
 const db = wx.cloud.database()
 import logger from '../utils/log'
 import cloud from '../utils/cloud'
+import * as database from '../static/js/database'
+
 const log = new logger()
 log.setKeyword('apis/app.js')
 
@@ -17,65 +19,49 @@ log.setKeyword('apis/app.js')
  *   如果已经绑定，则返回对象，包含账号密码
  *   如果没有绑定，则返回null
  */
-function checkBind(){
-  const openid = wx.getStorageSync('openid')
-  return new Promise((resolve, reject) => {
-    db.collection('accounts').where({
-      _openid: openid
-    }).get({
-      success: res => {
-        // 如果存在记录，那么就返回账号密码
-        if (res.data.length === 0)
-          resolve(null)
+async function checkBind(){
+    let openid = wx.getStorageSync('openid')
+    if (!openid || openid === '')
+    openid = await getOpenId()
+    wx.setStorageSync('openid', openid)
 
-        resolve(res.data[0])
-      },
-      fail: err => reject(err)
-    })
-  })
+    const ret = await database.getRecord('accounts', openid)
+    if (ret.length === 0) {
+      return null
+    }
+    return ret[0]
 }
 
 /**
  * 绑定微信账号和教务系统账号
  * @description 
  *   会自动处理已经存在的绑定
- * @param {教务系统账号} username 
- * @param {教务系统密码} password 
+ * @param {string} username 教务系统账号
+ * @param {string} password 教务系统密码
  */
 async function bindAccount(username, password){
   const isBind = await checkBind()
-
+  const openid = wx.getStorageSync('openid')
+  const { userInfo } = await wx.getUserInfo()
   // 如果没有记录，则新增
   if (!isBind){
     log.info("新增记录")
-    return new Promise((resolve, reject) => {
-      const db = wx.cloud.database()
-      db.collection('accounts').add({
-        data: {
-          username,
-          password
-        },
-        success: res => resolve(res),
-        fail: err => reject(err)
-      })
-    });
+    return database.newRecord('accounts', {
+      username,
+      password,
+      userInfo
+    })
   }
+
   // 如果已经有记录，则更新
   log.info("更新记录")
   const { _id: id } = isBind
-  return new Promise((resolve, reject) => {
-    db.collection('accounts').doc(id).update({
-      data: {
-        username,
-        password
-      },
-      success(){
-        resolve()
-      },
-      fail(){
-        reject()
-      }
-    })
+  return db.collection('accounts').doc(id).update({
+    data: {
+      username,
+      password,
+      userInfo
+    }
   })
 }
 

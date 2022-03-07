@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  color: var(--text-black-1);
   /* justify-content: center; */
   margin-top: 15rpx;
   margin-right: 32rpx;
@@ -31,7 +32,6 @@ view[data-status="underway"] .card-info .status{
   font-family: "PingFang";
   font-size: 32rpx;
   font-weight: 550;
-  color: #000000;
   letter-spacing: -0.2px;
   text-align: right;
   margin-right: 9.24rpx;
@@ -42,7 +42,6 @@ view[data-status="coming"] .card-info .status{
   font-family: "PingFang";
   font-size: 32rpx;
   font-weight: 550;
-  color: #000000;
   letter-spacing: -0.2px;
   text-align: right;
   margin-right: 9.24rpx;
@@ -88,7 +87,7 @@ view[data-status="normal"] .card-info .status{
   height: 34rpx;
 
   padding: 10rpx 15rpx;
-  background: rgba(0,0,0,0.10);
+  background: var(--color-black-10);
   border-radius: 8px;
 
   margin-bottom: 12rpx;
@@ -97,7 +96,6 @@ view[data-status="normal"] .card-info .status{
 view[data-status="normal"] .card-info .status > span{
   font-weight: 700;
   font-size: 32rpx;
-  color: #000000;
   font-family: "Avenir";
   text-align: center;
 }
@@ -112,7 +110,7 @@ view[data-status="normal"] .card-info .status::after{
   font-family: "PingFang";
   font-weight: 500;
   font-size: 21rpx;
-  color: #464646;
+  color: var(--text-black-2);
   letter-spacing: -0.12px;
 }
 
@@ -129,7 +127,7 @@ view[data-status="normal"] .card-info .status::after{
   font-family: "PingFang";
   font-weight: bold;
   font-size: 22rpx;
-  color: #464646;
+  color: (--color-black-10);
   letter-spacing: -0.14px;
 }
 
@@ -137,7 +135,6 @@ view[data-status="normal"] .card-info .status::after{
   font-family: "Avenir";
   font-weight: 900;
   font-size: 34rpx;
-  color: #000000;
   letter-spacing: 0.35px;
   text-align: right;
 }
@@ -147,8 +144,8 @@ view[data-status="normal"] .card-info .status::after{
   position: relative;
   /* width: 482rpx; */
   width: 468rpx;
-  background: #FFFFFF;
-  box-shadow: 2px 2px 13px 0 rgba(0,0,0,0.10);
+  background: var(--color-white);
+  box-shadow: 2px 2px 13px 0 var(--shadow-10);
   border-radius: 9px;
 
   padding-top: 36rpx;
@@ -160,6 +157,7 @@ view[data-status="normal"] .card-info .status::after{
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  color: var(--text-black-1);
 
   transition: width height 0.3s;
 }
@@ -178,15 +176,15 @@ view[data-status="normal"] .card-info .status::after{
 /* 不同状态下卡片装饰条的颜色 */
 /* 正在上课 */
 view[data-status="underway"] .card:before{
-  background-color: #FF7D7D;
+  background-color: var(--card-underway);
 }
 /* 准备上课 */
 view[data-status="coming"] .card:before{
-  background-color: #FFAF66;
+  background-color: var(--card-coming);
 }
 /* 未上课 */
 view[data-status="normal"] .card:before{
-  background-color: #66BFFF;
+  background-color: var(--card-normal);
 }
 /* ------------------------------- */
 
@@ -194,7 +192,6 @@ view[data-status="normal"] .card:before{
   /* font-family: "PingFang"; */
   font-weight: bold;
   font-size: 34rpx;
-  color: #000000;
   letter-spacing: -0.21px;
   /* margin-bottom: 16rpx; */
   margin-bottom: 18rpx;
@@ -213,7 +210,7 @@ view[data-status="normal"] .card:before{
   font-family: "PingFang";
   font-weight: 700;
   font-size: 22rpx;
-  color: #464646;
+  color: var(--text-black-3);
   letter-spacing: -0.14px;
   margin-right: 15rpx;
 
@@ -223,7 +220,6 @@ view[data-status="normal"] .card:before{
 .card .lesson-item :last-child{
   /* font-family: PingFangSC; */
   font-size: 26rpx;
-  color: #000000;
   letter-spacing: -0.16px;
 }
 /* ------------------------------------- */
@@ -242,8 +238,8 @@ view[data-status="normal"] .card:before{
   font-size: 24rpx !important;
   font-weight: 500 !important;
   margin-bottom: 6rpx !important;
-  background-color: rgba(0,0,0,0.10) !important;
-  color: black !important;
+  background-color: var(--color-black-10) !important;
+  color: var(--text-black-2) !important;
   border-radius: 4px;
   padding: 4rpx 12rpx;
   margin-right: 11rpx !important;

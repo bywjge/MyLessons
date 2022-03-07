@@ -1,4 +1,10 @@
 /* 课程区域 */
+page {
+  --lesson-item-tile: 13rpx;
+  --lesson-item-highlight-height: 8rpx;
+  --indexer-height: 196rpx;
+  --indexer-margin-bottom: 21rpx;
+}
 
 .day-lesson-wrapper{
   box-sizing: border-box;
@@ -9,7 +15,7 @@
 
 /* 斑马条纹 */
  .day-lesson-wrapper .strip:nth-child(2n+1){
-  background-color: var(--lesson-strip-background);
+  background-color: var(--color-black-05);
 }
 
  .day-lesson-wrapper .strip{
@@ -18,24 +24,25 @@
   /* height: 100%; */
 }
 .day-lesson-wrapper .strip[data-active=true]{
-  background-color: var(--lesson-strip-active);
+  background-color: var(--highlight-background);
 }
 
- .day-lesson-wrapper .strip:not(:last-child){
+.day-lesson-wrapper .strip:not(:last-child){
   margin-right: 10rpx;
 }
 
- .day-lesson-wrapper .strip .item{
+/* 课程卡片 */
+.day-lesson-wrapper .strip .item{
   padding-top: var(--lesson-item-tile);
   box-sizing: border-box;
 
-  background-color: var(--lesson-card-background);
-  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.23);
+  background-color: var(--card-background);
+  box-shadow: 0 4px 6px 0 var(--shadow-20);
   border-radius: 6rpx;
 
   /* font-family: "PingFang"; */
   /* font-weight: 700; */
-  color: var(--lesson-card-number-color);
+  color: var(--color-white);
 
   display: flex;
   flex-direction: column;
@@ -62,13 +69,15 @@
   height: calc(var(--indexer-height) * 2 + var(--indexer-margin-bottom));
 }
 
-/* 课程冲突 */
+/* 课程冲突警告 */
 .day-lesson-wrapper .strip .item[data-conflict=true] {
-  box-shadow: 0 0 0 4rpx var(--color-warning);
+  box-shadow: 
+    0 0 0 4rpx var(--color-warning),
+    0 4px 7px 2px var(--shadow-20);
 }
 
 /* 用户点下课程卡片时显示按下效果 */
-.item-tap {
+.item.item-tap {
   animation: pressIn 0.4s forwards;
 }
 
@@ -77,7 +86,7 @@
   box-sizing: border-box;
   font-weight: 500;
   font-size: 23rpx;
-  color: var(--font-color);
+  color: var(--text-black-1);
   letter-spacing: 0.2px;
   line-height: 25.5rpx;
   /* height: 122rpx; */
@@ -94,7 +103,8 @@
  .day-lesson-wrapper .strip .item[data-connect="false"] .name{
   -webkit-line-clamp: 4;
   height: 97rpx;
-  margin-bottom: 15rpx;
+  /* 不知道有什么用 */
+  /* margin-bottom: 15rpx; */
 }
 
  .day-lesson-wrapper .strip .item[data-connect="true"] .name{
@@ -102,7 +112,6 @@
 }
 
  .day-lesson-wrapper .strip .item .bottom{
-  background-color: #F293A2;
   border-radius: 0px 0px 6rpx 6rpx;
   word-wrap: break-word;
   text-overflow: ellipsis;
@@ -132,10 +141,16 @@
 }
 
  .day-lesson-wrapper .strip .empty-item{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: var(--indexer-height);
+  color: var(--text-black-4);
+  font-size: 24rpx;
 }
 
- .day-lesson-wrapper .strip .empty-item:not(:last-child){
+.day-lesson-wrapper .strip .empty-item:not(:last-child){
   margin-bottom: var(--indexer-margin-bottom);
 }
 

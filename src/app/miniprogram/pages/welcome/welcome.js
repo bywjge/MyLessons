@@ -4,6 +4,7 @@ import api from '../../apis/app'
 import tools from '../../utils/tools'
 import lessonApi from '../../apis/lessons'
 import accountApi from '../../apis/account'
+import { changeTheme } from '../../utils/theme'
 
 const log = new logger()
 log.setKeyword('Page:index')
@@ -22,11 +23,13 @@ Page({
    * 进行一系列判断决定需要跳转到什么页面
    */
   onLoad: async function () {
+    // changeTheme('dark')
+
     require('../../utils/debug')
     // lessonApi.colorizeLesson()
 
     // 测试强制清空数据
-    const version = "abcd100"
+    const version = "abcd101"
     if (wx.getStorageSync('version') !== version){
       wx.showLoading({
         title: '清空重载数据',
@@ -76,8 +79,16 @@ Page({
         wx.setStorageSync('enableDebug', false)
         wx.setStorageSync('username', isBind.username)
         wx.setStorageSync('password', isBind.password)
-
-
+        // 如果没有个人信息
+        if (!isBind.userInfo || isBind.userInfo === '') {
+          log.warn('没有找到个人信息，重新绑定中')
+          await api.bindAccount(isBind.username, isBind.password)
+          const { userInfo } = await wx.getUserInfo()
+          wx.setStorageSync('wxInfo', userInfo)
+        } else {
+          wx.setStorageSync('wxInfo', isBind.userInfo)
+        }
+        
         wx.redirectTo({
           url: '../lesson-view/lesson-view',
         })

@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" data-theme="{{theme}}">
   <navigation title="所有课程" enableMenu="{{false}}" />
   <view class="content">
     <view class="filters">
@@ -38,6 +38,7 @@
               class="progress-bar" 
               percent="{{e['进度']}}" 
               color="#ff617c" 
+              backgroundColor="{{theme==='dark'?'rgba(255, 255, 255, .1)':''}}"
               active 
               stroke-width="4" 
               border-radius="10"

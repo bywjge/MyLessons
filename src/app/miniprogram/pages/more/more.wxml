@@ -1,5 +1,5 @@
 <!--miniprogram/pages/utils/utils.wxml-->
-<view class="container">
+<view class="container" data-theme="{{theme}}">
   <navigation title="更多功能"/>
   <developHint class="hint" />
 </view>
