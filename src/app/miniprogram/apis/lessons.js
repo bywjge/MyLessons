@@ -8,12 +8,10 @@ export default {
   convertIndexToTime,
   convertAndStorage,
   syncLessons,
-  checkCloudLesson,
   colorizeLesson,
   getFirstDayOfTerm,
   getTerm,
   resetLesson,
-
   deleteLesson
 };
 
@@ -22,6 +20,7 @@ import request from '../utils/request'
 import tools from '../utils/tools'
 import accountApi from './account'
 import  * as database from '../static/js/database'
+
 const db = wx.cloud.database()
 const log = new logger()
 const { eventBus } = getApp().globalData
@@ -43,7 +42,6 @@ async function initCheck() {
   /** 检查学期初是否为空 */
   const firstDate = wx.getStorageSync('firstWeekDate')
   if (!firstDate || firstDate === "") {
-    console.log('学期初需要初始化')
     // 计算现在的学期
     const { year, term } = getTerm()
     await getFirstDayOfTerm(year, term)
@@ -68,9 +66,7 @@ async function getFirstDayOfTerm(year, term) {
   }
 
   /** 如果后端没有, 从教务系统获取 */
-  const ret = await request({
-    url: `https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=${year}0${term}&zc=1`
-  })
+  const ret = await request.get(`https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=${year}0${term}&zc=1`)
   console.log(year, term, ret.data)
   try {
     date = ret.data[1][0]['rq']
@@ -145,9 +141,7 @@ async function getLessonFromSchool(year, term = 1) {
     sknrjj: ['上课内容', str => tools.decodeHTML(str)]
   }
 
-  const ret = await request({
-    url: `https://jxgl.wyu.edu.cn/xsgrkbcx!getDataList.action?page=1&rows=1000&xnxqdm=${year}0${term}`
-  })
+  const ret = await request.get(`https://jxgl.wyu.edu.cn/xsgrkbcx!getDataList.action?page=1&rows=1000&xnxqdm=${year}0${term}`)
 
   // 课程总数 课程内容
   const { total, rows } = ret.data
@@ -174,10 +168,9 @@ async function getLessonFromSchool(year, term = 1) {
  * @description 将自动替换storage的内容
  */
 async function getScoreFromSchool() {
-  const ret = await request({
-    url: `https://jxgl.wyu.edu.cn/xskccjxx!getDataList.action`,
-    method: 'POST',
-    data: {
+  const ret = await request.post(
+    `https://jxgl.wyu.edu.cn/xskccjxx!getDataList.action`,
+    {
       xnxqdm: '',
       jhlxdm: '',
       page: 1,
@@ -185,7 +178,7 @@ async function getScoreFromSchool() {
       sort: 'xnxqdm',
       order: 'asc'
     }
-  } ,)
+  )
   const keyMap = {
     "kcflmc": "课程分类",
     "kcdlmc": "课程类型",
@@ -225,10 +218,9 @@ async function getScoreFromSchool() {
  * @description 将自动替换storage的内容
  */
 async function getExamFromSchool() {
-  const ret = await request({
-    url: `https://jxgl.wyu.edu.cn/xsksap!getDataList.action`,
-    method: 'POST',
-    data: {
+  const ret = await request.post(
+    'https://jxgl.wyu.edu.cn/xsksap!getDataList.action',
+    {
       xnxqdm: '',
       jhlxdm: '',
       page: 1,
@@ -236,7 +228,7 @@ async function getExamFromSchool() {
       sort: 'xnxqdm',
       order: 'asc'
     }
-  } ,)
+  )
   const keyMap = {
     "xnxqdm": "学期", 
     "xs": "学时",
@@ -282,16 +274,16 @@ async function getExamFromSchool() {
  * @description 将自动替换storage的内容
  */
 async function getCreativeScoreFromSchool() {
-  const ret = await request({
-    url: `https://jxgl.wyu.edu.cn/xscxxfxx!getDataList.action`,
-    method: 'POST',
-    data: {
+  const ret = await request.post(
+    'https://jxgl.wyu.edu.cn/xscxxfxx!getDataList.action',
+    {
       page: 1,
       rows: 1000,
       sort: 'xsbh',
       order: 'asc'
     }
-  } ,)
+  )
+
   const keyMap = {
     "rdxf": ["学分", num => Number(num)],
     "sbxfdm": "代码",
@@ -386,33 +378,38 @@ function convertIndexToTime(index, endTime = false){
 /**
  * 同步课表
  * @param {boolean} [forceFromSchool = false] 是否强制更新，从教务系统获取
+ * 
  * @TODO 没有分学期储存，云端或者本地都只能储存一个学期
  * @description
- *   不需要手动获取cookie
- *   从教务处同步课表，如果课表不存在，从数据库同步;
  *   若数据库无数据，则从教务处同步;
- *   若已经同步，则一天内不得再次同步
  *   同步时还会检查学期初是否已经获取
  *
+ * @returns {Promise
  */
 async function syncLessons(forceFromSchool = false){
   await initCheck()
+  const { year, term } = getTerm()
+  log.info('调用syncLessons')
 
-  // 如果本地没有课程，则从云端检查
-  let lessons = wx.getStorageSync("lessonsByDay")
-  if (!forceFromSchool && (!lessons || lessons === "")){
-    const cloud = await checkCloudLesson()
-    if (cloud) {
-      convertAndStorage(cloud.lessons)
+  // 检查数据库
+  if (!forceFromSchool) {
+    try {
+      const { lessons, time } = await database.getLesson(year, term)
+      convertAndStorage(lessons)
+      wx.setStorageSync('lastSyncTime', time || new Date())
       return ;
+    } catch {
+      log.warn('数据库中不存在课程')
     }
   }
 
-  /** 从教务系统获取 */
-  const { year, term } = getTerm()
-  lessons = await getLessonFromSchool(year, term)
+  /** 如果数据库没有，则从教务系统获取 */
+  log.info('从教务系统获取课程')
+  const lessons = await getLessonFromSchool(year, term)
+  log.info('上传课程到数据库')
+  database.updateLesson(lessons)
   convertAndStorage(lessons)
-  updateCloudLesson(lessons)
+  wx.setStorageSync('lastSyncTime', new Date())
 }
 
 /**
@@ -604,60 +601,6 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
 
   wx.setStorageSync('lessonsByWeek', lessonsByWeek)
   log.info("课表存储成功");
-  wx.setStorageSync('lastSyncTime', new Date())
-}
-
-/**
- * 检查数据库是否有课程储存
- */
-function checkCloudLesson(){
-  const openid = wx.getStorageSync('openid')
-  return new Promise((resolve, reject) => {
-    db.collection('lessons').where({
-      _openid: openid
-    }).get({
-      success: res => {
-        if (res.data.length === 0)
-          resolve(null)
-        resolve(res.data[0])
-      },
-      fail: err => reject(err)
-    })
-  })
-}
-
-/**
- * 将课程表上传到云端
- * @param {array} lessons 全学期课程
- */
-async function updateCloudLesson(lessons){
-  const isBind = await checkCloudLesson()
-  /** 如果后端没有课程，则添加课程 */
-  if (!isBind) {
-    log.info("新增课程")
-    return new Promise((resolve, reject) => {
-      db.collection('lessons').add({
-        data: {
-          lessons: lessons
-        },
-        success: resolve,
-        fail: reject
-      })
-    });
-  }
-
-  /** 如果后端已经有课程，则更新课程 */
-  log.info("更新课程")
-  const { _id: id } = isBind
-  return new Promise((resolve, reject) => {
-    db.collection('lessons').doc(id).update({
-      data: {
-        lessons: lessons
-      },
-      success: resolve,
-      fail: reject
-    })
-  })
 }
 
 /**

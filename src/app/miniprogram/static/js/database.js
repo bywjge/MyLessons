@@ -1,4 +1,12 @@
 /**
+ * @typedef {Object} UserInfo
+ * @property {string} username 用户账号
+ * @property {string} password 用户密码
+ * @property {Object} userInfo 用户信息
+ * @property {Date} [time] 绑定时间
+ */
+
+/**
  * 数据库访问服务
  */
 
@@ -10,7 +18,13 @@ export {
   setUserAvator,
   updateRecord,
   getRecord,
-  newRecord
+  newRecord,
+  getCookie,
+  updateCookie,
+  getAccount,
+  updateAccount,
+  getLesson,
+  updateLesson
 }
 
 /**
@@ -78,6 +92,115 @@ async function setUserAvator(fileId) {
   wx.setStorageSync('wxInfo', userInfo)
   return Promise.resolve()
 }
+
+/**
+ * 从数据库获取cookie
+ */
+async function getCookie() {
+  let records = (await db.collection('cookies').get()).data
+  if (records.length > 0) {
+    return Promise.resolve(records[0])
+  }
+
+  return Promise.reject()
+}
+
+/**
+ * 更新cookie到数据库
+ * @param {string} cookie 要更新到数据库的cookie
+ */
+async function updateCookie(cookie) {
+  let records = (await db.collection('cookies').get()).data
+  const data = {
+    cookie,
+    time: new Date()
+  }
+
+  if (records.length > 0) {
+    console.log('update')
+    const id = records[0]._id
+    return db.collection('cookies').doc(id).update({ data })
+  }
+  return db.collection('cookies').add({ data })
+}
+
+/**
+ * 从数据库中读出已经绑定的账号
+ * 
+ * @return {Promise<UserInfo>} 绑定信息
+ */
+async function getAccount() {
+  let records = (await db.collection('accounts').get()).data
+  if (records.length > 0) {
+    return Promise.resolve(records[0])
+  }
+
+  return Promise.reject()
+}
+
+/**
+ * 更新用户账号/密码
+ * @param {string} username 用户账号
+ * @param {string} password 用户密码
+ * @param {Object} userInfo 用户信息
+ */
+async function updateAccount(username, password, userInfo) {
+  let records = (await db.collection('accounts').get()).data
+  const data = {
+    username,
+    password,
+    userInfo,
+    time: new Date()
+  }
+
+  if (records.length > 0) {
+    const id = records[0]._id
+    data.time = records[0].time || data.time
+    return db.collection('accounts').doc(id).update({ data })
+  }
+
+  return db.collection('accounts').add({ data })
+}
+
+/**
+ * 从数据库中获得课程储存
+ */
+async function getLesson(year, term){
+  const termid = `${year}0${term}`
+  // let records = (await db.collection('lessons').where({ termid }).get()).data
+
+  let records = (await db.collection('lessons').get()).data
+  if (records.length > 0) {
+    return Promise.resolve(records[0])
+  }
+
+  return Promise.reject()
+}
+
+/**
+ * 将课程表上传到云端
+ * @param {array} lessons 全学期课程（从
+ */
+async function updateLesson(lessons, year, term){
+  const termid = `${year}0${term}`
+  let records = (await db.collection('lessons').get()).data
+  const data = {
+    lessons,
+    time: new Date()
+  }
+
+  if (records.length > 0) {
+    const id = records[0]._id
+    // data.time = records[0].time || data.time
+    return db.collection('lessons').doc(id).update({ data })
+  }
+
+  return db.collection('lessons').add({ data })
+}
+
+
+
+
 
 async function updateRecord(name, openid, data){
   const records = await getRecord(name, openid)

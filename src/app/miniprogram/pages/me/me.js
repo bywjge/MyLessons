@@ -21,17 +21,25 @@ Page({
     enableDebug: false,
     avatarUrl: ''
   },
-  onLoad() {
+  async onLoad() {
     // data中自动添加一个theme
-    bindTheme(this)
+    // bindTheme(this)
     this.refreshAvator()
     const info = wx.getStorageSync('profile')
+    if (!info) {
+      wx.showLoading({ title: '获取数据中' })
+      await accountApi.getStudentInfo()
+      wx.hideLoading()
+      this.onLoad()
+      return ;
+    }
+
     let enableDebug = wx.getStorageSync('enableDebug')
     if (!enableDebug || enableDebug === '') {
       enableDebug = false
     }
 
-    eventBus.on('updateAvator', this.refreshAvator)
+    eventBus.on('updateAvator', this.refreshAvator.bind(this))
     
     this.setData({
       info,
@@ -39,9 +47,8 @@ Page({
     })
   },
   onUnload() {
-    unbindTheme()
+    // unbindTheme()
   },
-
   refreshAvator() {
     console.log("刷新");
     const { avatarUrl } = wx.getStorageSync('wxInfo')
@@ -128,6 +135,7 @@ Page({
     wx.showLoading({ title: '同步数据中' })
     await accountApi.getStudentInfo()
     wx.hideLoading().catch(() => {})
+    this.onLoad()
   },
 
   // 强制刷新本地数据

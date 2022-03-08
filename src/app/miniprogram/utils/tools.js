@@ -6,7 +6,8 @@ export default {
   strToDate,
   decodeHTML,
   randomString,
-  getDaysGap
+  getDaysGap,
+  mergeCookie
 }
 
 import logger from './log'
@@ -125,4 +126,29 @@ function randomString (length = 32) {
 function getDaysGap(a, b) {
   const t = (b.getTime() - a.getTime()) / (86400 * 1000)
   return Math.round(t)
+}
+
+/**
+ * cookie合并工具
+ * @description
+ *  按参数传入cookie字符串/字符串数组，合并cookie值。如果值已经存在，则覆盖
+ * @returns {string} 合并后的cookie字符串
+ */
+function mergeCookie(){
+  let ret = {};
+  [...arguments].filter(e => {
+    return (e instanceof Array) || (typeof e === 'string')
+  }).map(e => {
+    if (e instanceof Array){
+      return e.join("; ")
+    }
+    return e
+  }).join("; ").split(";").forEach(e => {
+    const kvp = e.split("=")
+    if (kvp.length !== 2) return ;
+    const key = kvp[0]
+    const value = kvp[1]
+    ret[key] = value
+  })
+  return Object.keys(ret).map(key => `${key}=${ret[key]}`).join("; ")
 }
