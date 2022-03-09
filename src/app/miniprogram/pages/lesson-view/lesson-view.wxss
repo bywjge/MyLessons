@@ -25,8 +25,7 @@ page{
   height: 32px;
   border: solid 1rpx var(--color-white-50);
   border-radius: 50px;
-  color: var(--text-black-1);
-  background-color: var(--color-white-70);
+  /* background-color: var(--item-background); */
   text-align: center;
   font-size: 29rpx;
   padding: 0rpx 25rpx;
@@ -34,8 +33,19 @@ page{
 
   transition: all 0.1s;
 }
+@media (prefers-color-scheme: light) {
+  .operation-btn {
+    color: var(--text-black-2);
+    background-color: var(--color-white-70);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .operation-btn {
+    color: var(--text-black-2);
+    background-color: var(--item-background) !important;
+  }
+}
 
 .operation-btn-tap{
-  background-color: var(--color-white-70);
   padding: 0rpx 32rpx;
 }

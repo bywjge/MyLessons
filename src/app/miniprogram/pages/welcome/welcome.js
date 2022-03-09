@@ -19,6 +19,12 @@ Page({
   },
 
   onLoad: async function () {
+    wx.redirectTo({
+      url: '/pages/social-bind/social-bind',
+    })
+
+    return ;
+
     require('../../utils/debug')
     // changeTheme('dark')
 

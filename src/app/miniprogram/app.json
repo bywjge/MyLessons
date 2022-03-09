@@ -11,6 +11,7 @@
     "pages/lessons-list/lessons-list",
     "pages/score/score",
     "pages/exams/exams",
+    "pages/social-bind/social-bind",
     "pages/creative-score/creative-score"
   ],
   "window": {

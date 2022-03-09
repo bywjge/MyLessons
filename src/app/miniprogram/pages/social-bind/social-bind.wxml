@@ -1,0 +1,65 @@
+<!--miniprogram/pages/login/login.wxml-->
+<!-- <text>miniprogram/pages/login/login.wxml</text> -->
+<view class="container">
+  <navigation enableMenu="{{false}}" title="设置公开名称"/>
+  <view class="content" wx:if="{{!isNextStep}}">
+    <view class="input-section header-text">
+      <view class="headline">设置公开名称
+        <view class="decoration-bar"></view>
+      </view>
+      <text style="line-height: 30rpx; font-size: 34rpx;">\n进入讨论区之前，请设置一个\n确保不会泄露个人信息的公开名称</text>
+    </view>
+    <view class="input-section">
+      <view class="cell-text">公开名称 </view>
+      <input class="cell-input" bindinput="handleNameInput" auto-focus placeholder="" />
+    </view>
+
+    <view class="input-section" style="margin-top: 300rpx;">
+      <view class="bind-button" bindtap="handleNextStep">下一步</view>
+    </view>
+  </view>
+
+  <view class="content" wx:if="{{isNextStep}}">
+    <view class="input-section header-text">
+      <view class="headline">设置公开权限
+        <view class="decoration-bar"></view>
+      </view>
+      <text style="line-height: 30rpx; font-size: 34rpx;">\n进入讨论区之前，请设置一个\n确保不会泄露个人信息的公开名称</text>
+    </view>
+
+    <view class="switch-section">
+      <view class="text">公开我的头像</view>
+      <view class="description">禁止后，个人头像将随机生成</view>
+      <switch checked="{{privacy.showAvator}}" bindchange="handleSwitch" data-name="showAvator" color="#FFA6B5" />
+    </view>
+
+    <view class="switch-section">
+      <view class="text">公开我的学籍信息</view>
+      <view class="description">禁止后，学院以及年级信息将被隐藏</view>
+      <switch checked="{{privacy.showProfile}}" bindchange="handleSwitch" data-name="showProfile" color="#FFA6B5" />
+    </view>
+
+    <view class="switch-section">
+      <view class="text">公开我的性别</view>
+      <view class="description">禁止后，性别信息将被隐藏</view>
+      <switch checked="{{privacy.showGender}}" bindchange="handleSwitch" data-name="showGender" color="#FFA6B5" />
+    </view>
+
+    <view class="switch-section">
+      <view class="text">允许查看我的个人空间</view>
+      <view class="description">禁止后，对方将无法打开你的个人空间</view>
+      <switch checked="{{privacy.showOwnSpace}}" bindchange="handleSwitch" data-name="showOwnSpace" color="#FFA6B5" />
+    </view>
+
+    <view class="switch-section">
+      <view class="text">允许私信</view>
+      <view class="description">禁止后，对方将无法对你进行私信</view>
+      <switch checked="{{privacy.allowMessage}}" bindchange="handleSwitch" data-name="allowMessage" color="#FFA6B5" />
+    </view>
+
+    <view class="input-section" >
+      <view class="bind-button" bindtap="finishBind">确定并进入讨论区</view>
+    </view>
+
+  </view>
+</view>

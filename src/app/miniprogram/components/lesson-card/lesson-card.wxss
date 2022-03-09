@@ -144,7 +144,7 @@ view[data-status="normal"] .card-info .status::after{
   position: relative;
   /* width: 482rpx; */
   width: 468rpx;
-  background: var(--color-white);
+  background: var(--item-background);
   box-shadow: 2px 2px 13px 0 var(--shadow-10);
   border-radius: 9px;
 

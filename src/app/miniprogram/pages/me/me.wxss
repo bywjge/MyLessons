@@ -30,7 +30,7 @@ page {
   position: relative;
   /* width: 482rpx; */
   width: 100%;
-  background: var(--color-white);
+  background: var(--item-background);
   /* box-shadow: 2px 2px 13px 0 rgba(0,0,0,0.10); */
   border-radius: 9px;
 
@@ -200,13 +200,13 @@ page {
 
 /* 带图标的按钮 */
 .icon-button {
-  background: var(--color-white);
+  background: var(--item-background);
   border-radius: 28rpx;
   font-size: 32rpx;
   font-weight: 500;
   padding: 22rpx 40rpx;
   color: var(--text-black-2);
-  box-shadow: 0 0 14rpx 0 var(--shadow-05);
+  box-shadow: 0 0 14rpx 0 var(--shadow-10);
   transition: box-shadow .2s ease;
 }
 

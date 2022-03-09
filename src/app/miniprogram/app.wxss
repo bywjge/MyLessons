@@ -48,6 +48,7 @@ page {
     --navigation-bar-background: #FFB8C5;
 
     --card-background: white;
+    --item-background: rgba(255, 255, 255, .05);
 
     --card-underway: #FF7D7D;
     --card-normal: #66BFFF;
@@ -99,8 +100,8 @@ page {
 /* 深色模式 */
 @media (prefers-color-scheme: dark) {
   page {
-    --page-welcome-background: #1d1d1d;
-    --page-background: #1d1d1d;
+    --page-welcome-background: #121212;
+    --page-background: #121212;
     background: var(--page-background);
 
     /* 文本高亮色 */
@@ -118,6 +119,7 @@ page {
     --navigation-bar-background: #252526;
 
     --card-background: #353535;
+    --item-background: rgba(255, 255, 255, .05);
 
     --card-underway: #ce7d89;
     --card-normal: #5e87a1;

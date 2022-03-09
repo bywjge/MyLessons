@@ -13,7 +13,7 @@ page{
 }
 
 .selector-wrapper{
-  background-color: var(--color-white);
+  background-color: var(--item-background);
   height: 176rpx;
   width: calc(100% - 46rpx * 2);
   display: flex;
