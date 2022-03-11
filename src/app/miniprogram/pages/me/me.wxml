@@ -4,7 +4,7 @@
   <view class="content">
     <!-- 个人信息入口 -->
     <view class="profile-card" bindtap="jumpToProfile" hover-class="icon-button-tap" data-gender="female">
-      <image class="avator" src="{{avatarUrl}}" mode="aspectFit" />
+      <image class="avatar" src="{{avatarUrl}}" mode="aspectFit" />
       <view class="info">
         <view class="name">
           {{info['姓名']}}

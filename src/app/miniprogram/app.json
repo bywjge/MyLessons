@@ -12,7 +12,9 @@
     "pages/score/score",
     "pages/exams/exams",
     "pages/social-bind/social-bind",
-    "pages/creative-score/creative-score"
+    "pages/creative-score/creative-score",
+    "pages/discuss/discuss",
+    "pages/feedback/feedback"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,0 +1,6 @@
+<view class="container">
+  <navigation enableMenu="{{false}}" title="反馈&建议" />
+  <view class="content">
+
+  </view>
+</view>

@@ -1,1 +1,155 @@
-/* miniprogram/pages/utils/utils.wxss */
+page {
+  --avator-size: 120rpx;
+
+  --button-icon-size: 40rpx;
+  --button-column-gap: 32rpx;
+
+  overflow: hidden;
+
+  --border-radius: 28rpx;
+  --button-icon-size: 40rpx;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  /* width: 90%; */
+  /* 不然box-shadow会被截断 */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 9%;
+  padding-top: 60rpx;
+  padding-bottom: 50rpx;
+  flex: 1;
+  overflow: scroll;
+}
+
+.button-tap {
+  box-shadow: 0 4rpx 26rpx 0 var(--shadow-20) !important;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 入口按钮 */
+.huge-entry {
+  display: flex;
+  width: 240rpx;
+  flex-direction: column;
+  background: var(--item-background);
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  padding: 22rpx;
+  box-shadow: 0 4rpx 14rpx 0 var(--shadow-10);
+  transition: box-shadow .2s ease;
+}
+
+.huge-entry .title {
+  font-size: 38rpx;
+}
+
+.huge-entry .subtitle {
+  font-size: 26rpx;
+  font-weight: 400;
+  color: var(--text-black-3);
+}
+
+.huge-entry .counter {
+  margin-top: 16rpx;
+  font-size: 58rpx;
+  line-height: 60rpx;
+  color: var(--text-black-2);
+  text-align: right;
+}
+
+.discuss .title {
+  color: var(--color-pink-2);
+}
+
+.feedback .title {
+  color: var(--color-blue-2);
+}
+
+.item .more-icon i {
+  color: var(--text-black-4);
+  transform: rotate(-90deg);
+  margin-right: 10rpx;
+}
+
+/* 功能区域 */
+.module {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  background: var(--color-white);
+  box-shadow: 0 0 16rpx 0 var(--shadow-10);
+  border-radius: var(--border-radius);
+  min-width: 400rpx;
+  padding: 40rpx 40rpx;
+}
+
+.icon-button.multiple {
+  /* padding-top: 20rpx;
+  padding-bottom: 30rpx; */
+  line-height: 50rpx;
+}
+
+/* 带注释文字的按钮 */
+.icon-button.multiple .description {
+  margin-top: 5rpx;
+  font-size: 24rpx;
+  line-height: 32rpx;
+  color: var(--text-black-3);
+  letter-spacing: 0.4px;
+
+  width: 90%;
+}
+
+.icon-button.icon {
+  position: relative;
+}
+
+.icon-button.icon:before {
+  top: 50%;
+  left: 10rpx;
+  transform: translateY(-50%);
+  margin-right: 50rpx;
+  content: '';
+  position: absolute;
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  mask-size: var(--button-icon-size) var(--button-icon-size);
+  -webkit-mask-size: var(--button-icon-size) var(--button-icon-size);
+}
+.icon-button.multiple.icon {
+  padding-left: calc(40rpx + var(--button-icon-size));
+}
+
+.icon-button .float-right {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.icon-target:before {
+  background: var(--color-purple-1);
+  mask-image: var(--icon-target);
+  -webkit-mask-image: var(--icon-target);
+}
+
+.more-icon i {
+  transform: rotate(-90deg);
+  color: var(--text-black-3);
+}
+
+.module .item:not(:first-child) {
+  margin-top: 34rpx;
+}

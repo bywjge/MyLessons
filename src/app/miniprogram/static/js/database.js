@@ -15,7 +15,7 @@ export default db
 export {
   getFirstDayOfTerm,
   setFirstDayOfTerm,
-  setUserAvator,
+  setUserAvatar,
   updateRecord,
   getRecord,
   newRecord,
@@ -76,7 +76,7 @@ async function setFirstDayOfTerm(year, term, date) {
  * 设置用户头像
  * @param {string} fileId 文件id
  */
-async function setUserAvator(fileId) {
+async function setUserAvatar(fileId) {
   const openid = wx.getStorageSync('openid')
   console.log(openid)
   // 假定一定有record

@@ -11,7 +11,7 @@ Page({
     isNextStep: false,
     privacy: {
       // 查看头像
-      showAvator: true,
+      showAvatar: true,
       // 查看学籍
       showProfile: true,
       // 查看性别
@@ -29,7 +29,7 @@ Page({
     })
   },
 
-  handleNextStep() {
+  async handleNextStep() {
     if (this.data.publicName.isEmpty()) {
       tools.showModal({
         title: "信息未完成",
@@ -39,6 +39,16 @@ Page({
     }
 
     // TODO 做姓名校验
+    try{
+      await tools.showModal({
+        title: "确认公开名称",
+        content: `名称可用，确定要使用"${this.data.publicName}"作为您的公开名称吗?`,
+        showCancel: true
+      })
+    } catch {
+      return ;
+    }
+    
     this.setData({
       isNextStep: true
     })

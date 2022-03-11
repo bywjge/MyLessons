@@ -1,5 +1,5 @@
 import tools from '../../utils/tools'
-import { setUserAvator } from '../../static/js/database'
+import { setUserAvatar } from '../../static/js/database'
 import { bindTheme, unbindTheme } from '../../utils/theme'
 
 const app = getApp()
@@ -21,7 +21,7 @@ Page({
     bindTheme(this)
 
     const info = wx.getStorageSync('profile')
-    this.refreshAvator()
+    this.refreshAvatar()
     this.setData({
       info
     })
@@ -30,7 +30,7 @@ Page({
     unbindTheme()
   },
 
-  refreshAvator() {
+  refreshAvatar() {
     const { avatarUrl } = wx.getStorageSync('wxInfo')
     this.setData({
       avatarUrl
@@ -40,7 +40,7 @@ Page({
   /**
    * 更改用户头像
    */
-  handleChangeAvator() {
+  handleChangeAvatar() {
     const openid = wx.getStorageSync('openid')
     wx.chooseImage({
       count: 1,
@@ -51,7 +51,7 @@ Page({
         const fileType = ret.tempFilePaths[0].split('.')[1]
         const fileName = `${openid}-${tools.randomString(16)}.${fileType}`
         try{
-          await this.deleteAvator()
+          await this.deleteAvatar()
         } catch (e) {
           wx.hideLoading()
           tools.showModal({
@@ -66,11 +66,11 @@ Page({
           filePath: ret.tempFilePaths[0],
           success: async res => {
             // wx.hideLoading()
-            await setUserAvator(res.fileID)
+            await setUserAvatar(res.fileID)
             tools.showToast({ title: '上传成功' })
-            this.refreshAvator()
+            this.refreshAvatar()
 
-            eventBus.emit('updateAvator')
+            eventBus.emit('updateAvatar')
           },
         })
         console.log(ret)
@@ -80,7 +80,7 @@ Page({
   },
 
   // 删除已经存在的头像
-  deleteAvator() {
+  deleteAvatar() {
     return new Promise((resolve, reject) => {
       // 要先删除掉已存在的头像
       wx.cloud.deleteFile({
@@ -91,7 +91,7 @@ Page({
     })
   },
 
-  handlePreviewAvator() {
+  handlePreviewAvatar() {
     wx.previewImage({
       urls: [this.data.avatarUrl],
       showmenu: true

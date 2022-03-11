@@ -1,5 +1,5 @@
 page {
-  --avator-size: 120rpx;
+  --avatar-size: 120rpx;
 
   --button-icon-size: 40rpx;
   --button-column-gap: 32rpx;
@@ -71,9 +71,9 @@ page {
 /* ------------------------------- */
 
 /* 用户头像 */
-.profile-card .avator {
-  height: var(--avator-size);
-  width: var(--avator-size);
+.profile-card .avatar {
+  height: var(--avatar-size);
+  width: var(--avatar-size);
   border-radius: 100%;
   background: var(--color-black-20);
 }

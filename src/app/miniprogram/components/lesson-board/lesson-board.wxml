@@ -7,8 +7,8 @@
     wx:key="day"
     data-active="{{index === activeIndex}}"
   >
-    <view 
-      wx:else-if="{{day[index - 1]? !day[index - 1]['long']: true}}"
+    <view
+      wx:if="{{!day[indexInDay - 1]? true: (day[indexInDay - 1]['long'] + day[indexInDay - 1]['课程名称']) !== (e['long'] + e['课程名称'])}}"
       class="{{e === null? 'empty-item': 'item'}}"
       hover-class="item-tap"
       data-conflict="{{!!e['冲突']}}"
@@ -25,6 +25,7 @@
       catchlongpress="handleLessonLongPress"
       catchtap="handleLessonTap"
     >
+      <!-- <text>{{(day[indexInDay - 1]['long'] + day[indexInDay - 1]['课程名称']) !== (e['long'] + e['课程名称'])}}</text> -->
       <view wx:if="{{e !== null}}" class="name">{{e['课程名称']}}</view>
       <view wx:if="{{e !== null}}" class="bottom" style="background-color: {{e['卡片颜色']}}">
         <view wx:if="{{e['编号'] !== ''}} "class="number">{{e['编号']}}</view>

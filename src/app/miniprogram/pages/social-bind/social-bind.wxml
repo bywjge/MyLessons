@@ -1,7 +1,7 @@
 <!--miniprogram/pages/login/login.wxml-->
 <!-- <text>miniprogram/pages/login/login.wxml</text> -->
 <view class="container">
-  <navigation enableMenu="{{false}}" title="设置公开名称"/>
+  <navigation enableMenu="{{false}}" enableBackButton="{{!isNextStep}}" title="设置公开名称" />
   <view class="content" wx:if="{{!isNextStep}}">
     <view class="input-section header-text">
       <view class="headline">设置公开名称
@@ -30,7 +30,7 @@
     <view class="switch-section">
       <view class="text">公开我的头像</view>
       <view class="description">禁止后，个人头像将随机生成</view>
-      <switch checked="{{privacy.showAvator}}" bindchange="handleSwitch" data-name="showAvator" color="#FFA6B5" />
+      <switch checked="{{privacy.showAvatar}}" bindchange="handleSwitch" data-name="showAvatar" color="#FFA6B5" />
     </view>
 
     <view class="switch-section">

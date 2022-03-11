@@ -595,6 +595,9 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
         t['lessons'].push(lesson)
       } else {
         lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = lesson
+        if (lesson['long'] === true) {
+          lessonsByWeek[week - 1][day - 1][课程开始节次 / 2 + 1] = lesson
+        }
       }
     })
   }

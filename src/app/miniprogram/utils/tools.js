@@ -7,7 +7,9 @@ export default {
   decodeHTML,
   randomString,
   getDaysGap,
-  mergeCookie
+  mergeCookie,
+  debounce,
+  throttle
 }
 
 import logger from './log'
@@ -152,3 +154,26 @@ function mergeCookie(){
   })
   return Object.keys(ret).map(key => `${key}=${ret[key]}`).join("; ")
 }
+
+function debounce(fn, wait) {
+  let timer;
+  return function () {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, arguments)   // 把参数传进去
+    }, wait);
+  }
+}
+
+function throttle(fn, wait) {
+  let timer;
+  return function() {
+    if (timer)
+      return ;
+    timer = setTimeout(() => {
+      fn.apply(this, arguments);
+      timer = null;
+    }, wait)
+  }
+}
+  

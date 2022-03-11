@@ -118,6 +118,7 @@ Component({
     },
 
     goBack() {
+      this.triggerEvent()
       wx.navigateBack({
         delta: 1
       })   

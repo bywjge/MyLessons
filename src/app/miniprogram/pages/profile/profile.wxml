@@ -4,8 +4,8 @@
   <view class="profile-content">
     <!-- 用户头像 -->
     <view style="position: relative">
-      <image class="avator" src="{{avatarUrl}}" mode="aspectFit" bindtap="handlePreviewAvator" />
-      <view class="edit-button" bindtap="handleChangeAvator" hover-class="button-tap" />
+      <image class="avator" src="{{avatarUrl}}" mode="aspectFit" bindtap="handlePreviewAvatar" />
+      <view class="edit-button" bindtap="handleChangeAvatar" hover-class="button-tap" />
     </view>
 
     <view class="module" style="margin-top: 40rpx">

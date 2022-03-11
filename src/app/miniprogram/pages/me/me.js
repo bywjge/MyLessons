@@ -1,7 +1,6 @@
 import tools from '../../utils/tools'
 import lessonApi from '../../apis/lessons'
 import accountApi from '../../apis/account'
-import { bindTheme, unbindTheme } from '../../utils/theme'
 
 const app = getApp()
 const eventBus = app.globalData.eventBus
@@ -24,7 +23,7 @@ Page({
   async onLoad() {
     // data中自动添加一个theme
     // bindTheme(this)
-    this.refreshAvator()
+    this.refreshAvatar()
     const info = wx.getStorageSync('profile')
     if (!info) {
       wx.showLoading({ title: '获取数据中' })
@@ -39,7 +38,7 @@ Page({
       enableDebug = false
     }
 
-    eventBus.on('updateAvator', this.refreshAvator.bind(this))
+    eventBus.on('updateAvatar', this.refreshAvatar.bind(this))
     
     this.setData({
       info,
@@ -49,7 +48,7 @@ Page({
   onUnload() {
     // unbindTheme()
   },
-  refreshAvator() {
+  refreshAvatar() {
     console.log("刷新");
     const { avatarUrl } = wx.getStorageSync('wxInfo')
     this.setData({
