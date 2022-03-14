@@ -122,6 +122,9 @@ Page({
    * 在绑定完成后做的事情
    */
   async bindFinished(){
+    wx.showLoading({ title: '获取身份' })
+    await accountApi.getPersonInfo()
+    
     // 同步课表
     wx.showLoading({ title: "同步课表中" })
     await lessonApi.syncLessons()

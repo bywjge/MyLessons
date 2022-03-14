@@ -18,16 +18,20 @@ Page({
       性别: '男'
     },
     enableDebug: false,
-    avatarUrl: ''
+    avatarUrl: '',
+    isTeacher: false
   },
   async onLoad() {
+    this.setData({
+      isTeacher: wx.getStorageSync('usertype') === 'teacher'
+    })
     // data中自动添加一个theme
     // bindTheme(this)
     this.refreshAvatar()
     const info = wx.getStorageSync('profile')
     if (!info) {
       wx.showLoading({ title: '获取数据中' })
-      await accountApi.getStudentInfo()
+      await accountApi.getPersonInfo()
       wx.hideLoading()
       this.onLoad()
       return ;
@@ -132,7 +136,7 @@ Page({
   // 重新获取个人信息
   async debugGetInfo() {
     wx.showLoading({ title: '同步数据中' })
-    await accountApi.getStudentInfo()
+    await accountApi.getPersonInfo()
     wx.hideLoading().catch(() => {})
     this.onLoad()
   },

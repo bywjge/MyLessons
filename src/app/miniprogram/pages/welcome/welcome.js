@@ -29,7 +29,7 @@ Page({
     // changeTheme('dark')
 
     // 测试强制清空数据
-    const version = "abcd101"
+    const version = "abcd102"
     if (wx.getStorageSync('version') !== version){
       wx.showLoading({ itle: '清空重载数据' })
       log.info("数据已经清空")
@@ -59,7 +59,7 @@ Page({
 
     // 已经授权未绑定，跳到绑定页面
     if (!binded || !lessons) {
-      wx.showLoading({ title: '检查云端中' })
+      wx.showLoading({ title: '检查云端' })
 
       // 同步个人信息
       try {
@@ -82,10 +82,11 @@ Page({
       // await accountApi.getCookie()
 
       // 获取个人信息
-      // await accountApi.getStudentInfo()
+      wx.showLoading({ title: '获取身份' })
+      await accountApi.getPersonInfo()
       
       // 获取课表
-      wx.showLoading({ title: '同步数据中' })
+      wx.showLoading({ title: '同步课表中' })
       await lessonApi.syncLessons()
 
       // 有绑定，重新设置值，并跳转到课程表页面

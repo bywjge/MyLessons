@@ -8,7 +8,7 @@
     data-active="{{index === activeIndex}}"
   >
     <view
-      wx:if="{{!day[indexInDay - 1]? true: (day[indexInDay - 1]['long'] + day[indexInDay - 1]['课程名称']) !== (e['long'] + e['课程名称'])}}"
+      wx:if="{{!e['ignore']}}"
       class="{{e === null? 'empty-item': 'item'}}"
       hover-class="item-tap"
       data-conflict="{{!!e['冲突']}}"

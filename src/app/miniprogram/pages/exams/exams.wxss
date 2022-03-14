@@ -92,7 +92,7 @@ page {
 .filters > .button {
   position: relative;
   display: flex;
-  background: var(--color-white);
+  background: var(--item-background);
   border-radius: 16rpx;
   box-shadow: 0 0 16rpx 0 var(--shadow-10);
   padding: 14rpx 30rpx 14rpx 48rpx;
@@ -159,7 +159,7 @@ page {
 }
 
 .lesson-wrapper {
-  background: var(--color-white);
+  background: var(--card-background);
   box-shadow: 0 0 16rpx 0 var(--shadow-10);
   border-radius: 16rpx;
   min-width: 400rpx;

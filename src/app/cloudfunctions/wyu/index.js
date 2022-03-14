@@ -6,7 +6,8 @@ cloud.init({
 require("./utils/tools")
 const wyu = require("./wyu")
 const db = require("./utils/database")
-const axios = require("axios");
+const _db = cloud.database()
+const _ = _db.command
 
 let events = {
   login,
@@ -67,30 +68,47 @@ async function login({username, password}){
  * @param {Boolean} forceNew 是否强制获取新信息
  * @description 假定cookie有效，请自行验证cookie
  */
-async function getInfo({ forceNew = false }) {
+async function getInfo({ username, forceNew = false }) {
   const { cookie } = await getCookie({ forceNew })
-  const wxContext = cloud.getWXContext()
-  const openid = wxContext.OPENID
 
   // 从数据库取出info记录
-  const ret = await db.getRecord("info", openid)
+  const records = (await _db.collection('info').where({ 
+    username: _.eq(username)
+  }).get()).data
 
   // 有记录且不强制获取新信息
-  if (ret.length > 0 && !forceNew) {
-    const { info } = ret[0]
-    return { info }
+  if (records.length > 0 && !forceNew) {
+    const info = records[0]
+    return Promise.resolve(info)
   }
 
   // 向教务处获取
-  const info = await wyu.getStudentInfo(cookie)
+  let info = null
+  let type = 'teacher'
 
-  // 如果获取成功，则放入数据库
-  await db.updateRecord("info", wxContext.OPENID, {
+  try {
+    info = await wyu.getTeacherInfo(username, cookie)
+  } catch {
+    info = await wyu.getStudentInfo(cookie)
+    type = 'student'
+  }
+
+  const data = {
+    type,
     info,
-    time: Date.now()
-  })
+    time: new Date()
+  }
+  if (records.length > 0) {
+    await _db.collection('info').doc(records[0]._id).update({
+      data
+    })
+  } else {
+    await _db.collection('info').add({
+      data
+    })
+  }
 
-  return { info }
+  return Promise.resolve({ info, type })
 }
 
 

@@ -13,10 +13,14 @@ Page({
       学号: '',
       性别: '男'
     },
-    avatarUrl: ''
+    avatarUrl: '',
+    isTeacher: false
   },
 
   onLoad() {
+    this.setData({
+      isTeacher: wx.getStorageSync('usertype') === 'teacher'
+    })
     // data中自动添加一个theme
     bindTheme(this)
 

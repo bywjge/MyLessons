@@ -1,0 +1,92 @@
+page {
+  overflow: hidden;
+
+  --border-radius: 28rpx;
+  --button-icon-size: 38rpx;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  /* width: 90%; */
+  /* 不然box-shadow会被截断 */
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 8%;
+  padding-top: 60rpx;
+  padding-bottom: 50rpx;
+  flex: 1;
+  overflow: scroll;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-background);
+  box-shadow: 0 1rpx 16rpx 0 var(--shadow-10);
+  border-radius: var(--border-radius);
+}
+
+.text-area {
+  padding: 30rpx 40rpx;
+}
+
+.bottom-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 50rpx;
+  padding: 20rpx 50rpx;
+}
+
+.operations {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+.bottom-bar .item {
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  margin-right: 40rpx;
+}
+
+.bottom-bar .item.active:before {
+  background: var(--highlight-font-color);
+}
+.bottom-bar .item:before {
+  top: 50%;
+  transform: translateY(-50%);
+  content: '';
+  position: absolute;
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  mask-size: var(--button-icon-size) var(--button-icon-size);
+  -webkit-mask-size: var(--button-icon-size) var(--button-icon-size);
+  background: var(--text-black-2);
+}
+
+.item.tag:before {
+  mask-image: var(--icon-tag);
+  -webkit-mask-image: var(--icon-tag);
+}
+
+.item.image:before {
+  mask-image: var(--icon-image);
+  -webkit-mask-image: var(--icon-image);
+}
+
+.item.privacy:before {
+  mask-image: var(--icon-eye);
+  -webkit-mask-image: var(--icon-eye);
+}
+
+.bottom-bar .post-button {
+  color: var(--highlight-font-color);
+}

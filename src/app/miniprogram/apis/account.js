@@ -1,13 +1,13 @@
 export default {
   getCookie,
   bindAccount,
-  getStudentInfo,
+  getPersonInfo,
   asyncAccountInfo
 }
 
 import cloud from '../utils/cloud'
 import logger from '../utils/log'
-import * as database from '../static/js/database'
+import db, * as database from '../static/js/database'
 import * as wyu from '../apis/wyu'
 const log = new logger()
 
@@ -16,11 +16,11 @@ log.setKeyword("apis/account.js")
 /**
  * 获取可用的cookie
  * @param {boolean} [forceNew = false] 是否强制获取新cookie，即忽略cookie有效性
- * 
+ *
  * @description
  *  如果不强制获取新cookie：
  *    如果本地没有cookie，则从数据库获取并存放到本地 -> 判断本地的cookie是否有效
- * 
+ *
  *  如果cookie无效/强制获取新cookie：
  *    用本地储存的账号做登录，然后储存cookie到本地和数据库
  * @returns {boolean} 获取结果
@@ -68,26 +68,27 @@ async function getCookie(forceNew = false) {
  * 绑定用户账号（储存到数据库）
  * @param {string} username 用户账号
  * @param {string} password 用户密码
- * 
+ * @param {'student' | 'teacher'} type 用户类型
+ *
  * @returns {Promise<any>} 数据库执行结果
  */
-async function bindAccount(username, password) {
+async function bindAccount(username, password, type) {
   let userInfo = null
   await wx.getUserInfo()
     .then(ret => {
       userInfo = ret.userInfo
     })
     .then(() => {})
-  
-  return database.updateAccount(username, password, userInfo)
+
+  return database.updateAccount(username, password, userInfo, type)
 }
 
 /**
  * 从数据库中同步账号信息到本地
- * 
+ *
  * @description
  *  如果数据库中没有记录（未绑定）则返回reject
- * 
+ *
  * @returns {Promise<UserInfo>}
  */
 async function asyncAccountInfo() {
@@ -96,7 +97,7 @@ async function asyncAccountInfo() {
   wx.setStorageSync('username', record.username)
   wx.setStorageSync('password', record.password)
   wx.setStorageSync('wxInfo', record.userInfo)
-  
+
   // 设置绑定值为true
   wx.setStorageSync('binded', true)
 
@@ -104,27 +105,32 @@ async function asyncAccountInfo() {
 }
 
 /**
- * 从教务处获取学生信息
- * @param {boolean} forceNew 是否强制获取新的信息
+ * 从教务处获取个人信息
+ * @param {boolean} [username] 用户名，如果不提供则从storage获取
+ * @param {boolean} [forceNew = false] 是否强制获取新的信息
+ *
  */
-async function getStudentInfo(forceNew = false) {
+async function getPersonInfo(username, forceNew = false) {
   await getCookie()
+  const _username = username || wx.getStorageSync('username')
+  
   let ret = await cloud.callFunction({
     name: 'wyu',
     data: {
       action: 'getInfo',
+      username: _username,
       forceNew
     }
   })
 
-  const { info } = ret
-  if (Number(info['性别']) === 1) {
-    info['性别'] = '男'
-  } else {
-    info['性别'] = '女'
-  }
+  // if (type === 'student' && Number(info['性别']) === 1) {
+  //   info['性别'] = '男'
+  // } else {
+  //   info['性别'] = '女'
+  // }
 
-  // 需要主动将学籍信息放入储存
-  wx.setStorageSync('profile', info)
-  return ret.info
+  // 需要主动将个人信息放入储存
+  wx.setStorageSync('usertype', ret.type)
+  wx.setStorageSync('profile', ret.info)
+  return ret
 }

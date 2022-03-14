@@ -95,19 +95,25 @@ page {
 /* 右边第一行信息 用户姓名 */
 .profile-card .info .name {
   /* display: inline; */
-  font-size: 38rpx;
-  line-height: 50rpx;
-  font-weight: 450;
-  letter-spacing: 0.5rpx;
+  display: flex;
+  position: relative;
+  align-items: center;
   color: var(--text-black-1);
 
   max-width: 350rpx;
 }
 
+.profile-card .info .name .text {
+  font-size: 38rpx;
+  line-height: 50rpx;
+  font-weight: 450;
+  letter-spacing: 0.5rpx;
+}
+
 /* 性别icon */
 .profile-card .info .name .gender-icon {
   /* 修正偏移 */
-  display: inline-block;
+  /* display: inline-block; */
   transform: translateY(2rpx);
 
   --size: 34rpx;
@@ -119,6 +125,17 @@ page {
   -webkit-mask-size: var(--size);
   mask-position: 50% 50%;
   -webkit-mask-position: 50% 50%;
+}
+
+.profile-card .info .name .usertype {
+  font-size: 20rpx;
+  padding: 6rpx 10rpx;
+  border-radius: 10rpx;
+  color: var(--text-black-3);
+  background: var(--color-black-10);
+  word-break: keep-all;
+
+  margin-left: 20rpx;
 }
 
 .gender-icon.male {

@@ -13,13 +13,16 @@ Page({
       undone: false
     },
     pickerArray: [],
-    selectedTerm: 0
+    selectedTerm: 0,
+    isTeacher: false
   },
 
   async onLoad() {
+    this.setData({
+      isTeacher: wx.getStorageSync('usertype') === 'teacher'
+    })
     // data中自动添加一个theme
     bindTheme(this)
-
     this.generateTermList()
     let exams = wx.getStorageSync('exams')
     if (!exams || exams === "") {
@@ -38,7 +41,8 @@ Page({
 
   // 生成课表选择器
   generateTermList() {
-    const from = Number(wx.getStorageSync('profile')['入学年份'])
+    // 老师没有入学年份，最早从2014年开始看
+    const from = Number(wx.getStorageSync('profile')['入学年份']) || 2014
     const { year, term } = lessonApi.getTerm()
     const to = year
     const ret = []

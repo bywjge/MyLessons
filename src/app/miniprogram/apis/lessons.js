@@ -15,6 +15,7 @@ export default {
   deleteLesson
 };
 
+import cloneDeep from 'lodash.clonedeep'
 import logger from '../utils/log'
 import request from '../utils/request'
 import tools from '../utils/tools'
@@ -67,7 +68,6 @@ async function getFirstDayOfTerm(year, term) {
 
   /** 如果后端没有, 从教务系统获取 */
   const ret = await request.get(`https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=${year}0${term}&zc=1`)
-  console.log(year, term, ret.data)
   try {
     date = ret.data[1][0]['rq']
   } catch(e) {
@@ -86,15 +86,15 @@ async function getFirstDayOfTerm(year, term) {
 }
 
 /**
- * 获取当前的学年和学期
+ * 获取日期所在的学年和学期
+ * @param [now] 如不指定，则使用现在的事件
  */
-function getTerm() {
-  const now = new Date()
-  let year = now.getFullYear() - 1
+function getTerm(now = new Date()) {
+  let year = now.getFullYear()
   // 大于七月就是下学期
   let term = ((now.getMonth() + 1) >= 8) ? 1: 2
   // 如果是第一学期，就是今年的年份，否则就是去年的年份
-  if (term === 1) {
+  if (term === 2) {
     year--
   }
   return { year, term }
@@ -105,7 +105,7 @@ function getTerm() {
  * @param {number | string} year 年份，四位数
  * @param {1 | 2} [term = 1] 学期，1代表第一学期，2代表第二学期
  */
-async function getLessonFromSchool(year, term = 1) {
+async function getLessonFromSchool(year, term = 1, isTeacher = false) {
   const keyMap = {
     kcbh: '课程编号',
     kcmc: '课程名称',
@@ -140,8 +140,20 @@ async function getLessonFromSchool(year, term = 1) {
     jxhjmc: '讲课',
     sknrjj: ['上课内容', str => tools.decodeHTML(str)]
   }
-
-  const ret = await request.get(`https://jxgl.wyu.edu.cn/xsgrkbcx!getDataList.action?page=1&rows=1000&xnxqdm=${year}0${term}`)
+  let ret = null
+  if (isTeacher) {
+    ret = await request.post('https://jxgl.wyu.edu.cn/teagrkbcx!getDataList.action', {
+      xnxqdm: `${year}0${term}`,
+      zc: '',
+      teadm: 200001483,
+      page: 1,
+      rows: 20,
+      sort: 'kxh',
+      order: 'asc',
+    })
+  } else {
+    ret = await request.get(`https://jxgl.wyu.edu.cn/xsgrkbcx!getDataList.action?page=1&rows=1000&xnxqdm=${year}0${term}`)
+  }
 
   // 课程总数 课程内容
   const { total, rows } = ret.data
@@ -218,30 +230,52 @@ async function getScoreFromSchool() {
  * @description 将自动替换storage的内容
  */
 async function getExamFromSchool() {
-  const ret = await request.post(
-    'https://jxgl.wyu.edu.cn/xsksap!getDataList.action',
-    {
-      xnxqdm: '',
-      jhlxdm: '',
-      page: 1,
-      rows: 1000,
-      sort: 'xnxqdm',
-      order: 'asc'
-    }
-  )
+  const isTeacher = wx.getStorageSync('usertype') === 'teacher'
+  let ret = null
+  if (isTeacher) {
+    // 教师获取数据
+    ret = await request.post(
+      'https://jxgl.wyu.edu.cn/teaksap!getDataList.action',
+      {
+        ksaplxdm: '',
+        kslbdm: '',
+        page: 1,
+        rows: 2000,
+        sort: 'ksrq',
+        order: 'asc'
+      }
+    )
+  } else {
+    // 学生获取数据
+    ret = await request.post(
+      'https://jxgl.wyu.edu.cn/xsksap!getDataList.action',
+      {
+        xnxqdm: '',
+        jhlxdm: '',
+        page: 1,
+        rows: 1000,
+        sort: 'xnxqdm',
+        order: 'asc'
+      }
+    )
+  }
   const keyMap = {
     "xnxqdm": "学期", 
     "xs": "学时",
-    "jkteaxms": "监考老师",
+    "rs": "考试人数",
+    "jkteaxms": ["监考老师", ret => ret.split(',')],
+    "zkteaxms": ["主考老师", ret => ret.split(',')],
     "ksrq": "考试日期",
     "zc": "周次",
     "xq": "星期",
     "kssj": "考试时间",
     "kslbmc": "考试类别",
     "ksaplxmc": "安排类型",
-    "ksxs": "考试形式", // 0闭卷 1开卷
+    "ksxs": ["考试形式", ret => Number(ret) === 0? '闭卷': '开卷'], // 0闭卷 1开卷
     "kcmc": "课程名称",
     "sjbh": "试卷编号",
+    "jxbmc": ["考试班级", ret => ret.split(',')],
+    "iszk": ["是否主考", ret => Number(ret) === 1],
     "kscdmc": "考试场地" 
   }
   const { total, rows } = ret.data
@@ -250,13 +284,18 @@ async function getExamFromSchool() {
 
   console.log("获取到考试安排数据量", formattedRows.length)
   formattedRows.forEach(e => {
-    const termId = e['学期']
-    e['监考老师'] = e['监考老师'].split(',')
+    let termId = e['学期']
+    // 老师看不到学期id
+    if (!termId) {
+      const { year, term } = getTerm(new Date(e['考试日期']))
+      termId = `${year}0${term}`
+    }
+    // e['监考老师'] = e['监考老师'].split(',')
     e['考试日期'] = e['考试日期'].replaceAll('-', '/')
     const t = e['考试时间'].split('--').map(e => e.substring(0, 5))
     e['开始时间'] = new Date(`${e['考试日期']} ${t[0]}`)
     e['结束时间'] = new Date(`${e['考试日期']} ${t[1]}`)
-    e['考试形式'] = Number(e['考试形式']) === 0 ? '闭卷': '开卷'
+    // e['考试形式'] = Number(e['考试形式']) === 0 ? '闭卷': '开卷'
     e['考试时间'] = t.join('-')
     if (!Array.isArray(examMap[termId]))
       examMap[termId] = new Array()
@@ -405,7 +444,8 @@ async function syncLessons(forceFromSchool = false){
 
   /** 如果数据库没有，则从教务系统获取 */
   log.info('从教务系统获取课程')
-  const lessons = await getLessonFromSchool(year, term)
+  const isTeacher = wx.getStorageSync('usertype') === 'teacher'
+  const lessons = await getLessonFromSchool(year, term, isTeacher)
   log.info('上传课程到数据库')
   database.updateLesson(lessons)
   convertAndStorage(lessons)
@@ -596,7 +636,10 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
       } else {
         lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = lesson
         if (lesson['long'] === true) {
-          lessonsByWeek[week - 1][day - 1][课程开始节次 / 2 + 1] = lesson
+          // 加上ignore标识，忽视该课的渲染
+          const newLesson = cloneDeep(lesson)
+          newLesson['ignore'] = true
+          lessonsByWeek[week - 1][day - 1][课程开始节次 / 2 + 1] = newLesson
         }
       }
     })

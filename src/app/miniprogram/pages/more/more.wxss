@@ -88,11 +88,12 @@ page {
   display: flex;
   flex-direction: column;
   /* align-items: center; */
-  background: var(--color-white);
+  background: var(--item-background);
   box-shadow: 0 0 16rpx 0 var(--shadow-10);
   border-radius: var(--border-radius);
   min-width: 400rpx;
   padding: 40rpx 40rpx;
+  color: var(--text-black-2);
 }
 
 .icon-button.multiple {
@@ -108,7 +109,6 @@ page {
   line-height: 32rpx;
   color: var(--text-black-3);
   letter-spacing: 0.4px;
-
   width: 90%;
 }
 
@@ -151,5 +151,5 @@ page {
 }
 
 .module .item:not(:first-child) {
-  margin-top: 34rpx;
+  margin-top: 50rpx;
 }

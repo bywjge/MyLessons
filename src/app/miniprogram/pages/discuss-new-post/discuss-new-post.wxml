@@ -1,0 +1,23 @@
+<view class="container">
+  <navigation enableMenu="{{false}}" title="发表动态" />
+  <view class="content" bindtouchmove="handleTouchMove">
+    <view class="card-container text-area">
+      <textarea 
+        maxlength="-1" 
+        placeholder="现在在想什么呢" 
+        placeholder-class=""
+        bindinput="handleInput"
+      />
+    </view>
+
+    <view class="card-container bottom-bar">
+      <view class="operations">
+        <view class="item tag" bindtap="handleEditTag" />
+        <view class="item image" bindtap="handleAddPhoto" />
+        <view class="item privacy {{info.privacy!=='all'? 'active': ''}}" bindtap="handleEditPrivacy" />
+      </view>
+
+      <view class="post-button" bindtap="post">发表</view>
+    </view>
+  </view>
+</view>

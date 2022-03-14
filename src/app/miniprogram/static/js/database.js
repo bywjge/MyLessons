@@ -40,7 +40,7 @@ async function getFirstDayOfTerm(year, term = 1) {
     .field({ value: true })
     .get()
   const days = ret.data[0].value
-  
+
   return days[key] || null
 }
 
@@ -77,20 +77,14 @@ async function setFirstDayOfTerm(year, term, date) {
  * @param {string} fileId 文件id
  */
 async function setUserAvatar(fileId) {
-  const openid = wx.getStorageSync('openid')
-  console.log(openid)
-  // 假定一定有record
+  let records = (await db.collection('accounts').get()).data
   const userInfo = wx.getStorageSync('wxInfo')
-  const username = wx.getStorageSync('username')
-  const password = wx.getStorageSync('password')
   userInfo['avatarUrl'] = fileId
-  await updateRecord('accounts', openid, {
-    username,
-    password,
-    userInfo
-  })
-  wx.setStorageSync('wxInfo', userInfo)
-  return Promise.resolve()
+  if (records.length > 0) {
+    wx.setStorageSync('wxInfo', userInfo)
+    return db.collection('accounts').doc(id).update({ data: { userInfo } })
+  }
+  return Promise.reject('数据库中无记录')
 }
 
 /**
@@ -126,7 +120,7 @@ async function updateCookie(cookie) {
 
 /**
  * 从数据库中读出已经绑定的账号
- * 
+ *
  * @return {Promise<UserInfo>} 绑定信息
  */
 async function getAccount() {
@@ -144,12 +138,13 @@ async function getAccount() {
  * @param {string} password 用户密码
  * @param {Object} userInfo 用户信息
  */
-async function updateAccount(username, password, userInfo) {
+async function updateAccount(username, password, userInfo, type = 'student') {
   let records = (await db.collection('accounts').get()).data
   const data = {
     username,
     password,
     userInfo,
+    type,
     time: new Date()
   }
 
@@ -197,8 +192,6 @@ async function updateLesson(lessons, year, term){
 
   return db.collection('lessons').add({ data })
 }
-
-
 
 
 

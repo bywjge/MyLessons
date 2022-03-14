@@ -44,6 +44,7 @@ page {
   width: var(--size);
   left: calc(var(--avator-size) * .75);
   /* right: 0; */
+  border: solid 2px var(--border-optional);
   bottom: calc(var(--avator-size) * .05);
   background: var(--color-white);
   box-shadow: 0 0 14rpx 0 var(--shadow-10);

@@ -7,8 +7,9 @@
       <image class="avatar" src="{{avatarUrl}}" mode="aspectFit" />
       <view class="info">
         <view class="name">
-          {{info['姓名']}}
+          <view class="text">{{info['姓名']}}</view>
           <view class="{{info['性别'] === '男'? 'male': 'female'}} gender-icon" />
+          <view class="usertype">{{isTeacher? '教师': '学生'}}</view>
         </view>
         <view class="description">
           <view class="collage">{{info['学院']}}</view>
@@ -25,11 +26,11 @@
         <!-- 第一列 -->
         <view class="column">
           <view bindtap="jumpToLessonList" class="icon-button icon normal icon-list" hover-class="icon-button-tap">所有课程</view>
-          <view bindtap="jumpToCreativeScore" class="icon-button icon normal icon-target" hover-class="icon-button-tap">创新学分</view>
+          <view wx:if="{{!isTeacher}}" bindtap="jumpToCreativeScore" class="icon-button icon normal icon-target" hover-class="icon-button-tap">创新学分</view>
         </view>
         <!-- 第二列 -->
         <view class="column" style="margin-left: 32rpx;">
-          <view bindtap="jumpToScore" class="icon-button normal icon icon-rank" hover-class="icon-button-tap">绩点成绩</view>
+          <view wx:if="{{!isTeacher}}" bindtap="jumpToScore" class="icon-button normal icon icon-rank" hover-class="icon-button-tap">绩点成绩</view>
           <view bindtap="jumpToExam" class="icon-button normal icon icon-exam" hover-class="icon-button-tap">考试安排</view>
         </view>
       </view>

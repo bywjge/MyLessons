@@ -45,11 +45,13 @@ Page({
     wx.showActionSheet({
       // alertText: '您需要...',
       itemList: [
-        '发起新的动态'
+        '发表新的动态'
       ]
     })
     .then(({ tapIndex: index }) => {
-      // 
+      wx.navigateTo({
+        url: '/pages/discuss-new-post/discuss-new-post',
+      })
     })
     .catch(() => {})
   }

@@ -2,6 +2,7 @@ import CryproJS from 'crypto-js'
 import Request from '../utils/request-promise'
 import tools from '../utils/tools'
 import * as database from '../static/js/database'
+import requestWithCookie from '../utils/request'
 
 const request = new Request()
 
@@ -16,6 +17,13 @@ const request = new Request()
  * @property {Promise} p promise对象
  * @property {Function} resolve resolve事件
  * @property {Function} reject reject事件
+ */
+
+/**
+ * @typedef {Object} TeacherInfo
+ * @property {string} id 教师id
+ * @property {string} 姓名 教师姓名
+ * @property {string} 学院 所在院校
  */
 
 /**
@@ -44,7 +52,7 @@ async function doLogin(username, password, cookie = null, skipStorage = false) {
     pwd: encryptedPassword,
     verifycode: vcode
   }, {
-    contentType: 'application/x-www-form-urlencoded', 
+    contentType: 'application/x-www-form-urlencoded',
     cookie: _cookie
   })
 
@@ -69,7 +77,7 @@ async function doLogin(username, password, cookie = null, skipStorage = false) {
     return doLogin(username, password, _cookie)
     return Promise.reject({ code: 404, msg: "验证码错误" })
   }
-  
+
   /** 登录成功，需要储存cookie到本地及后端 */
   if(message.indexOf("成功") !== -1) {
     // 储存课表到数据库以及本地
@@ -86,7 +94,7 @@ async function doLogin(username, password, cookie = null, skipStorage = false) {
 /**
  * 检查cookie是否有效
  * @param {string} cookie 需要检查的cookie
- * 
+ *
  * @returns {Promise<void>} 有效触发resolve，反则reject
  */
 async function checkCookie(cookie) {
@@ -96,48 +104,15 @@ async function checkCookie(cookie) {
   const data = ret.data
   if (typeof data === 'string') {
     return Promise.reject()
-  } 
+  }
 
   return Promise.resolve()
 }
 
 /**
- * 获取可用cookie
- * 
- * @description 
- *  如果storage cookie为空，则从云端获取
- *  验证cookie有效性 -> 获取cookie
- *  如果参数提供了账号密码，则使用账号密码来获取cookie
- *  否则使用storage内的账号密码进行获取
- * 
- * @returns {Promise<string>} 如果成功返回cookie
- */
-async function getCookie(username, password, cookie) {
-  /** 验证cookie有效性 */
-  const _cookie = cookie || wx.getStorageSync('cookie')
-  const _username = username || wx.getStorageSync('username')
-  const _password = password || wx.getStorageSync('password')
-
-  let ret = await request.get('https://jxgl.wyu.edu.cn/xsgrkbcx!getKbRq.action?xnxqdm=202102&zc=1', {
-    cookie: _cookie
-  })
-
-  const data = ret.data
-  if (
-    (typeof data === 'string') && 
-    (data.indexOf('cookie过期') !== -1 || data.indexOf('无法连接教务处') !== -1)
-  ) {
-    // 应该进行cookie的获取
-    return false
-  }
-
-  return Promise.resolve(_cookie)
-}
-
-/**
  * 获取可用的cookie和Code
  * @param {string} [cookie=null] 用于获取验证码的cookie
- * @description 
+ * @description
  *  向教务系统获取cookie -> 使用cookie请求验证码 -> 识别验证码
  *  如果提供了cookie参数，则跳过获取cookie的步骤，使用提供的cookie进行上述步骤
  *  ⚠️ 如果验证码识别错误，或者密码错误等其他原因，请循环使用cookie以减少请求时间
@@ -158,7 +133,7 @@ async function getCookieAndCode(cookie = null) {
 
   /** 识别验证码 */
   ret = await request.post(
-    'https://www.ltiex.com/recognizeVerifyCode/recognizeCaptcha2', 
+    'https://www.ltiex.com/recognizeVerifyCode/recognizeCaptcha2',
     { base64: base64String },
     {
       contentType: 'application/x-www-form-urlencoded'
@@ -169,6 +144,26 @@ async function getCookieAndCode(cookie = null) {
     code: ret.data,
     cookie: _cookie
   })
+}
+
+/**
+ * 获取教师的基本信息
+ * @param {string} username 教师的账号，以J开头
+ * @returns {TeacherInfo} 教师信息
+ */
+async function getTeacherInfo(username) {
+  const keyMap = {
+    dm: 'id',
+    mc: '姓名',
+    yxmc: '学院'
+  }
+  const ret = (await requestWithCookie.post('https://jxgl.wyu.edu.cn/comboboxservice!getTea.action', {
+    q: username
+  })).data
+  if (Array.isArray(ret) && ret.length > 0) {
+    return Promise.resolve(tools.keyMapConvert(ret[0], keyMap))
+  }
+  return Promise.reject('用户不是教师或教师不存在')
 }
 
 function btoa(r) {
@@ -183,5 +178,6 @@ function btoa(r) {
 
 export {
   doLogin,
-  checkCookie
+  checkCookie,
+  getTeacherInfo
 }

@@ -13,14 +13,14 @@
         你好，我叫{{info['姓名']}}
         <view class="{{info['性别'] === '男'? 'male': 'female'}} gender-icon" />
       </view>
-      <view class="brief">{{info['学号']}}</view>
+      <view class="brief" wx:if="{{!isTeacher}}">{{info['学号']}}</view>
       <view class="brief">{{info['学院']}}</view>
-      <view class="brief">{{info['年级']}} {{info['班级']}}班</view>
+      <view class="brief" wx:if="{{!isTeacher}}">{{info['年级']}} {{info['班级']}}班</view>
     </view>
 
     <view class="divider" /> 
 
-    <view class="module detail">
+    <view class="module detail" wx:if="{{!isTeacher}}">
       <view class="title">学籍卡片</view>
       <view class="item">
         <view class="title">姓名</view>
@@ -40,6 +40,30 @@
       <view class="item">
         <view class="title">入学年份</view>
         <view class="text">{{info['入学年份']}}</view>
+      </view>
+    </view>
+
+    <!-- 教师展示的卡片 -->
+    <view class="module detail" wx:else>
+      <view class="title">教师卡片</view>
+      <view class="item">
+        <view class="title">姓名</view>
+        <view class="text">{{info['姓名']}}</view>
+      </view>
+
+      <view class="item">
+        <view class="title">性别</view>
+        <view class="text">{{info['性别']}}</view>
+      </view>
+
+      <view class="item" wx:if="{{info['手机号码'] && info['手机号码'] !== 'null'}}">
+        <view class="title">联系电话</view>
+        <view class="text">{{info['手机号码']}}</view>
+      </view>
+
+      <view class="item">
+        <view class="title">职称</view>
+        <view class="text">{{info['职称']}}</view>
       </view>
     </view>
   </view>

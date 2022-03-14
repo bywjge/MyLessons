@@ -14,7 +14,8 @@
     "pages/social-bind/social-bind",
     "pages/creative-score/creative-score",
     "pages/discuss/discuss",
-    "pages/feedback/feedback"
+    "pages/feedback/feedback",
+    "pages/discuss-new-post/discuss-new-post"
   ],
   "window": {
     "backgroundTextStyle": "light",

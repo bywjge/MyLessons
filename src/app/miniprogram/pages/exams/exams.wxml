@@ -87,10 +87,15 @@
               <view class="name">{{e['课程名称']}}</view>
               <!-- 下方文字 -->
               <view class="description">
-                <view>{{e['考试形式']}}</view>
-                <!-- 课程类型 -->
+                <view wx:if="{{!isTeacher}}">{{e['考试形式']}}</view>
                 <view>{{e['考试场地']}}</view>
               </view>
+
+              <view class="description" wx:if="{{isTeacher}}">
+                <view>{{e['主考老师']}}主考</view>
+                <view>{{e['监考老师']}}监考</view>
+              </view>
+              
               <view class="description">
                 <view>{{e['考试日期']}}</view>
                 <!-- 课程类型 -->
