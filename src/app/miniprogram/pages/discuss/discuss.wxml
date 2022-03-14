@@ -1,5 +1,5 @@
-<view class="container">
-  <navigation enableMenu="{{false}}" title="讨论区" />
+<view class="container" style="--navigation-bar-height: {{navBarHeight}}px">
+  <navigation class="navigation-bar" enableMenu="{{false}}" title="讨论区" />
   <view class="content" bindtouchmove="handleTouchMove">
     <!-- 个人中心 -->
     <view class="head {{expandHead? 'expand': ''}} {{hideHead? 'hidden': ''}}">
@@ -49,15 +49,20 @@
       
       <!-- 正文 -->
       <view class="content">
-        <view class="tag-wrapper">
-          <view class="tag">#反社会主义文学</view>
-          <view class="tag">#反乌托邦文学</view>
-          <view class="tag">#吃刀子吧</view>
-          <view class="tag">#1984</view>
-          <view class="tag">#BE</view>
+        <view 
+          class="tag-wrapper"
+          wx:for="{{articles}}"
+          wx:for-item="post"
+          wx:key="_id"
+        >
+          <view 
+            class="tag"
+            wx:for="{{post['tags']}}"
+            wx:for-item="tag"
+          >#{{tag}}</view>
         </view>
         <view class="text">
-          测试文字
+          {{post['content']}}
         </view>
         <view class="image-wrapper tripple-column" wx:if="{{false}}">
           <image src="{{avatarUrl}}" mode="aspectFit" />

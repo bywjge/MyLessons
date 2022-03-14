@@ -1,4 +1,6 @@
 import tools from "../../utils/tools"
+import discussApi from '../../apis/discuss'
+const { navBarHeight, windowWidth, statusBarHeight, statusBarButtonHeight } = getApp().globalData
 
 Page({
   data: {
@@ -7,7 +9,9 @@ Page({
     // 个人卡片是否展开
     expandHead: false,
     hideHead: false,
-    lastY: 0
+    lastY: 0,
+    navBarHeight,
+    articles: []
   },
 
   onLoad() {
@@ -15,6 +19,7 @@ Page({
     this.setData({
       avatarUrl
     })
+    this.refreshArticle()
   },
 
   handleExpand() {
@@ -54,5 +59,18 @@ Page({
       })
     })
     .catch(() => {})
+  },
+
+  async refreshArticle() {
+    wx.showLoading({ title: '加载数据中' })
+    const data = await discussApi.getArticle(0)
+    this.setData({
+      articles: data
+    })
+    wx.hideLoading()
+  },
+
+  onPullDownRefresh() {
+    console.log("hide")
   }
 })

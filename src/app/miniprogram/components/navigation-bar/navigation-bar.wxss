@@ -25,6 +25,7 @@
   transition: opacity 0.3s;
   opacity: 0; 
 }
+
 .navigationBar[data-show-layer="true"]::after{
   display: block;
 }

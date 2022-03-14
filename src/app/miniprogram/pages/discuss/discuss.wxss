@@ -16,7 +16,13 @@ page {
   scroll-behavior: smooth;
 }
 
+.container .navigation-bar {
+  top: 0;
+  position: fixed;
+}
+
 .container > .content {
+  top: var(--navigation-bar-height);
   /* width: 90%; */
   /* 不然box-shadow会被截断 */
   position: relative;

@@ -76,17 +76,18 @@ async function addArticle(payload) {
 
 /**
  * 获取文章列表
- * @param {number} page 页数
+ * @param {number} page 页数,从0开始
  * @param {number} [limit = 20] 每页数量
  * @param {boolean} [showDeleted = false] 是否显示删除文章
  * @param {boolean} [showHidden = false] 是否显示隐藏文章
  */
 async function getArticle(page, limit = 20, showDeleted = false, showHidden = false) {
   const ret = await db.collection('discusses')
-    .where({
-      isDeleted: _.eq(showDeleted),
-      isHidden: _.eq(showHidden)
-    })
+    // .where({
+    //   isDeleted: _.eq(showDeleted),
+    //   isHidden: _.eq(showHidden)
+    // })
+    .aggregate()
     .orderBy('createTime', 'desc') /** 按创建时间降序排序 */
     .skip(page * limit) /** 按分页跳过前面的数据 */
     .limit(limit) /** 限制每页数据量 */
