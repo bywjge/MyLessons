@@ -72,7 +72,7 @@ async function getInfo({ username, forceNew = false }) {
   const { cookie } = await getCookie({ forceNew })
 
   // 从数据库取出info记录
-  const records = (await _db.collection('info').where({ 
+  const records = (await _db.collection('info').where({
     username: _.eq(username)
   }).get()).data
 
@@ -94,10 +94,12 @@ async function getInfo({ username, forceNew = false }) {
   }
 
   const data = {
+    username,
     type,
     info,
     time: new Date()
   }
+
   if (records.length > 0) {
     await _db.collection('info').doc(records[0]._id).update({
       data

@@ -19,7 +19,7 @@ Page({
 
     const username = wx.getStorageSync('username')
     const password = wx.getStorageSync('password')
-
+    
     this.setData({
       username,
       password
@@ -91,10 +91,12 @@ Page({
     } finally {
       this.setData({  busy: false })
     }
+
     
     // 登录成功，储存账号密码
     wx.setStorageSync('username', this.data.username)
     wx.setStorageSync('password', this.data.password)
+    wx.setStorageSync('passwordFailure', false)
 
     // 绑定账号到数据库
     wx.showLoading({ title: '绑定账号中' })
@@ -122,12 +124,16 @@ Page({
    * 在绑定完成后做的事情
    */
   async bindFinished(){
+
     wx.showLoading({ title: '获取身份' })
     await accountApi.getPersonInfo()
-    
-    // 同步课表
-    wx.showLoading({ title: "同步课表中" })
-    await lessonApi.syncLessons()
+
+    const lessons = wx.getStorageSync('lessonsByDay')
+    if (!lessons) {
+      // 同步课表
+      wx.showLoading({ title: "同步课表中" })
+      await lessonApi.syncLessons()
+    }
     wx.showToast({ title: '同步成功' })
 
     await tools.sleep(1000)

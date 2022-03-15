@@ -11,10 +11,10 @@ Page({
   },
 
   jumpToDiscuss() {
-    wx.navigateTo({ url: '/pages/discuss/discuss' })
+    // wx.navigateTo({ url: '/pages/discuss/discuss' })
   },
 
   jumpToFeedback() {
-    wx.navigateTo({ url: '/pages/feedback/feedback' })
+    // wx.navigateTo({ url: '/pages/feedback/feedback' })
   }
 })

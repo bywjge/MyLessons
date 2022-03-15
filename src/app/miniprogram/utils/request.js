@@ -91,7 +91,6 @@ async function _responseInterceptor(req, res) {
       return Promise.reject('无法连接教务处');
     }
   }
-
   return Promise.resolve(res)
 }
 

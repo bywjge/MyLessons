@@ -11,12 +11,12 @@
     </view>
     <view class="input-section">
       <view class="cell-text">账号 </view>
-      <input class="cell-input" bindinput="handleUserInput" auto-focus placeholder="" />
+      <input class="cell-input" value="{{username}}" bindinput="handleUserInput" auto-focus placeholder="" />
     </view>
 
     <view class="input-section">
       <view class="cell-text">密码 </view>
-      <input class="cell-input" bindinput="handlePassInput" password="true"/>
+      <input class="cell-input" value="{{password}}" bindinput="handlePassInput" password="true"/>
     </view>
 
     <view class="input-section">

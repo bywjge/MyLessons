@@ -29,7 +29,7 @@ Page({
     // changeTheme('dark')
 
     // 测试强制清空数据
-    const version = "abcd102"
+    const version = "abcd103"
     if (wx.getStorageSync('version') !== version){
       wx.showLoading({ itle: '清空重载数据' })
       log.info("数据已经清空")
@@ -105,6 +105,16 @@ Page({
         url: '../lesson-view/lesson-view',
       })
       return ;
+    }
+
+    if (wx.getStorageSync('passwordFailure')) {
+      await wx.showModal({
+        title: '密码失效',
+        content: '密码已失效，也许近期修改过密码。点击确定以重新输入密码',
+        showCancel: false
+      })
+
+      wx.redirectTo({ url: '/pages/login/login' })
     }
 
     wx.redirectTo({

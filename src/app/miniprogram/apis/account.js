@@ -56,8 +56,13 @@ async function getCookie(forceNew = false) {
     if (!username || !password) {
       return Promise.reject('storage中没有username或password')
     }
-
-    return wyu.doLogin(username, password, false)
+  
+    const _cookie = await wyu.doLogin(username, password, false).catch(err => {
+      if (err === '密码错误') {
+        passwordFailure()
+      }
+    })
+    return Promise.resolve(_cookie)
   }
 
   // 不需要手动放入storage，api会做这一件事情
@@ -72,7 +77,7 @@ async function getCookie(forceNew = false) {
  *
  * @returns {Promise<any>} 数据库执行结果
  */
-async function bindAccount(username, password, type) {
+async function bindAccount(username, password) {
   let userInfo = null
   await wx.getUserInfo()
     .then(ret => {
@@ -80,7 +85,7 @@ async function bindAccount(username, password, type) {
     })
     .then(() => {})
 
-  return database.updateAccount(username, password, userInfo, type)
+  return database.updateAccount(username, password, userInfo)
 }
 
 /**
@@ -96,6 +101,7 @@ async function asyncAccountInfo() {
 
   wx.setStorageSync('username', record.username)
   wx.setStorageSync('password', record.password)
+  wx.setStorageSync('admin', record.admin || false)
   wx.setStorageSync('wxInfo', record.userInfo)
 
   // 设置绑定值为true
@@ -133,4 +139,18 @@ async function getPersonInfo(username, forceNew = false) {
   wx.setStorageSync('usertype', ret.type)
   wx.setStorageSync('profile', ret.info)
   return ret
+}
+
+async function passwordFailure() {
+  // wx.setStorageSync('password', '')
+  wx.hideLoading().catch(() => {})
+  wx.setStorageSync('passwordFailure', true)
+  await wx.showModal({
+    title: '密码失效',
+    content: '密码已失效，也许近期修改过密码。点击确定以重新登录',
+    showCancel: false
+  })
+  wx.redirectTo({
+    url: '/pages/login/login',
+  })
 }

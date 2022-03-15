@@ -138,13 +138,13 @@ async function getAccount() {
  * @param {string} password 用户密码
  * @param {Object} userInfo 用户信息
  */
-async function updateAccount(username, password, userInfo, type = 'student') {
+async function updateAccount(username, password, userInfo) {
   let records = (await db.collection('accounts').get()).data
   const data = {
     username,
     password,
     userInfo,
-    type,
+    admin: false,
     time: new Date()
   }
 

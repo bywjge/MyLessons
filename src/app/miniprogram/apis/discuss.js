@@ -3,6 +3,7 @@ import logger from '../utils/log'
 const log = new logger()
 
 const _ = db.command
+const databaseName = 'discusses'
 
 log.setKeyword('apis/discuss.js')
 
@@ -20,9 +21,9 @@ export default {
  * @property {Array<string>} images 文章附带的图片数组
  * @property {Array<string>} tags 文章标签数组
  * @property {Array<string>} agreeList 点赞用户id数组
- * @property {number} agreeCounter 点赞用户数量
+ * @property {number} agreeCount 点赞用户数量
  * @property {Array<string>} disagreeList 反对用户id数组
- * @property {number} disagreeCounter 反对用户数量
+ * @property {number} disagreeCount 反对用户数量
  * @property {'agree'|'disagree'|'none'} stand 立场
  * @property {Array<Comment>} comments 评论数组
  * @property {Date} createTime 发表的时间
@@ -40,7 +41,9 @@ export default {
  * @property {Array<string>} images 文章附带的图片数组
  * @property {Array<string>} tags 文章标签数组
  * @property {Array<string>} agreeList 点赞用户id数组
+ * @property {number} agreeCount 点赞用户数量
  * @property {Array<string>} disagreeList 反对用户id数组
+ * @property {number} disagreeCount 反对用户数量
  * @property {Date} createTime 发表的时间
  * @property {Date} lastEditTime 上次修改的时间
  * @property {boolean} isDeleted 是否已经被删除
@@ -61,7 +64,9 @@ async function addArticle(payload) {
     images: [],
     tags: [],
     agreeList: [],
+    agreeCount: 0,
     disagreeList: [],
+    disagreeCount: 0,
     createTime: new Date(),
     lastEditTime: new Date(),
     isDeleted: false,
@@ -69,7 +74,7 @@ async function addArticle(payload) {
   }
 
   const article = Object.assign({}, emptyArticle, payload)
-  return db.collection('discusses').add({
+  return db.collection(databaseName).add({
     data: article
   })
 }
@@ -82,12 +87,11 @@ async function addArticle(payload) {
  * @param {boolean} [showHidden = false] 是否显示隐藏文章
  */
 async function getArticle(page, limit = 20, showDeleted = false, showHidden = false) {
-  const ret = await db.collection('discusses')
-    // .where({
-    //   isDeleted: _.eq(showDeleted),
-    //   isHidden: _.eq(showHidden)
-    // })
-    .aggregate()
+  const ret = await db.collection(databaseName)
+    .where({
+      isDeleted: _.eq(showDeleted),
+      isHidden: _.eq(showHidden)
+    })
     .orderBy('createTime', 'desc') /** 按创建时间降序排序 */
     .skip(page * limit) /** 按分页跳过前面的数据 */
     .limit(limit) /** 限制每页数据量 */
@@ -106,4 +110,26 @@ async function deleteArticle(id) {
     .update({
       isDeleted: true
     })
+}
+
+/**
+ * 设置对文章的立场（点赞/点踩）
+ * @param {string} articleId 文章的id
+ * @param {'like' | 'unlike'} stand 立场名称
+ */
+async function setStandForArticle(articleId, stand = 'like') {
+  // 查询文章是否存在
+  // db.collection(databaseName).
+  // db.collection(databaseName).update({
+  //   _id: 
+  // })
+}
+
+/**
+ * 取消设置对文章的立场（点赞/点踩）
+ * @param {string} articleId 文章的id
+ * @param {'like' | 'unlike'} stand 立场名称
+ */
+async function unsetStandForArticle(articleId, stand = 'like') {
+
 }
