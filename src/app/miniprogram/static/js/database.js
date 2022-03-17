@@ -11,20 +11,20 @@
  */
 
 const db = wx.cloud.database()
+const _ = db.command
 export default db
 export {
   getFirstDayOfTerm,
   setFirstDayOfTerm,
   setUserAvatar,
-  updateRecord,
-  getRecord,
-  newRecord,
   getCookie,
   updateCookie,
   getAccount,
   updateAccount,
   getLesson,
-  updateLesson
+  updateLesson,
+  getSchoolLesson,
+  updateSchoolLesson
 }
 
 /**
@@ -193,52 +193,42 @@ async function updateLesson(lessons, year, term){
   return db.collection('lessons').add({ data })
 }
 
-
-
-async function updateRecord(name, openid, data){
-  const records = await getRecord(name, openid)
-  console.log("return record", records);
-  // 如果没有记录，则新增
-  if (records.length === 0){
-    return await newRecord(name, data)
+/**
+ * 从数据库中获得全校课表
+ * @param {Date} date 日期
+ */
+ async function getSchoolLesson(date){
+  let records = (await db.collection('all-lessons').where({
+    date: _.eq(date)
+  }).get()).data
+  if (records.length > 0) {
+    return Promise.resolve(records[0])
   }
-  const _id = records[0]._id
-  return await _updateRecord(name, _id, data)
+
+  return Promise.reject()
 }
 
 /**
- * 查询数据库中的记录
- * @param {String} name 数据库名称
- * @param {String} id 用户的openid
- * @returns {Array} 返回数据集合
+ * 将全校课表上传到云端
+ * @param {array} lessons 全校课程
+ * @param {array} date 课表的日期，格式为yyyy-mm-dd
  */
-async function getRecord(name, openid){
-  const ret = await db.collection(name).where({
-    _openid: openid
-  }).get()
-  return ret.data
-}
+async function updateSchoolLesson(lessons, date){
+  let records = (await db.collection('all-lessons').where({
+    date: _.eq(date)
+  }).get()).data
 
-/**
- * 新增一个记录，建议先查询是否存在记录
- * @param {String} name 数据库名称
- * @param {String} id 用户的openid
- * @param {String} data 要提交的数据
- */
-function newRecord(name, data){
-  return db.collection(name).add({
-    data
-  })
-}
+  const data = {
+    date,
+    lessons,
+    time: new Date()
+  }
 
-/**
- * 更新一个已存在的记录，注意先查询是否存在记录
- * @param {String} name 数据库名称
- * @param {String} id 用户的openid
- * @param {String} data 要提交的数据
- */
-function _updateRecord(name, id, data){
-  return db.collection(name).doc(id).update({
-    data
-  })
+  if (records.length > 0) {
+    const id = records[0]._id
+    // data.time = records[0].time || data.time
+    return db.collection('all-lessons').doc(id).update({ data })
+  }
+
+  return db.collection('all-lessons').add({ data })
 }

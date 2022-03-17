@@ -1,5 +1,6 @@
 // miniprogram/pages/utils/utils.js
 import { bindTheme, unbindTheme } from '../../utils/theme'
+import moreApi from '../../apis/more'
 Page({
   data: {
 
@@ -16,5 +17,15 @@ Page({
 
   jumpToFeedback() {
     // wx.navigateTo({ url: '/pages/feedback/feedback' })
+  },
+
+  // 查询空教室
+  async jumpToQueryOccupy() {
+    wx.navigateTo({ url: '/pages/query-occupy/query-occupy' })
+    // wx.showLoading({ title: '获取数据中' })
+    // await moreApi.getAllLessons('2022-03-17', true).then(ret => {
+    //   console.log(ret)
+    // })
+    // wx.hideLoading().catch(() => {})
   }
 })

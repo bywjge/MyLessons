@@ -103,7 +103,6 @@ class Request {
             resolve(response)
             return ;
           }
-
           // 使用了回应拦截器
           const p = that._responseInterceptorSuccess(config, response)
           p.then(resolve)

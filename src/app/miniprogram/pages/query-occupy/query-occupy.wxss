@@ -1,0 +1,120 @@
+/* pages/query-occupy/query-occupy.wxss */
+page {
+  --square-size: 34rpx;
+  --square-gap: 12rpx;
+  --button-icon-size: 40rpx;
+  --button-column-gap: 32rpx;
+
+  overflow: hidden;
+
+  --border-radius: 28rpx;
+  --button-icon-size: 40rpx;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  /* width: 90%; */
+  /* 不然box-shadow会被截断 */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  /* padding: 0 9%; */
+  padding-top: 60rpx;
+  padding-bottom: 50rpx;
+  flex: 1;
+  overflow: scroll;
+}
+
+.button-tap {
+  box-shadow: 0 4rpx 26rpx 0 var(--shadow-20) !important;
+}
+
+.move-area {
+  flex: 1;
+  width: 100%;
+}
+
+.move-area .building-wrapper {
+  /* display: flex; */
+  /* width: 250rpx; */
+  /* display: inline-flex; */
+  flex-direction: row;
+  margin: 100px;
+}
+
+.move-area .building-wrapper .building {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column-reverse;
+  background: var(--card-background);
+  border: 1px solid var(--color-black-10);
+  border-radius: 10px;
+  padding: 20rpx 14rpx;
+  margin: 0 20px;
+}
+
+.move-area .building-wrapper .building .name {
+  position: absolute;
+  top: calc(100% + 28rpx);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  font-size: 26rpx;
+  font-weight: 450;
+  color: var(--text-black-3);
+}
+
+.move-area .building-wrapper .building .row {
+  display: flex;
+  align-items: center;
+}
+
+.move-area .building-wrapper .building .row.hidden {
+  opacity: 0;
+}
+
+.move-area .building-wrapper .building .row .square {
+  width: var(--square-size);
+  height: var(--square-size);
+  border-radius: 10rpx;
+  box-shadow: inset 0 0 0px 1px var(--color-black-10);
+  margin: var(--square-gap);
+  background: var(--color-black-10);
+}
+
+.move-area .building-wrapper .building .row .square.occupied {
+  background: var(--color-pink-1);
+}
+
+
+
+.indexer {
+  font-size: 20rpx;
+  font-weight: 450;
+  width: 40rpx;
+  color: var(--text-black-4);
+  text-align: right;
+  margin-right: 10rpx;
+}
+
+/* 最上面的编号标识器 */
+.row.top-indexer {
+  align-self: flex-end;
+  margin-top: 10rpx;
+  /* margin-bottom: 10rpx; */
+}
+
+.row.top-indexer .indexer {
+  text-align: center;
+  width: var(--square-size);
+  margin: 0 var(--square-gap);
+}
+

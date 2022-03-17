@@ -17,7 +17,7 @@
     </view>
 
     <view class="module" style="margin-top: 70rpx">
-      <view class="item icon-button multiple icon icon-target">
+      <view class="item icon-button multiple icon icon-target" bindtap="jumpToQueryOccupy">
         <span class="title">空教室查询</span>
         <view class="description">需要空教室自习或者开班会吗～</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 

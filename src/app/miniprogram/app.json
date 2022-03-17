@@ -15,7 +15,8 @@
     "pages/creative-score/creative-score",
     "pages/discuss/discuss",
     "pages/feedback/feedback",
-    "pages/discuss-new-post/discuss-new-post"
+    "pages/discuss-new-post/discuss-new-post",
+    "pages/query-occupy/query-occupy"
   ],
   "window": {
     "backgroundTextStyle": "light",
