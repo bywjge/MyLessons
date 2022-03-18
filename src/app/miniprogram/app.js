@@ -31,7 +31,7 @@ App({
       indexMode: "day",
       theme: 'dark',
 
-      version: "0.4.0.3"
+      version: "0.4.0.6"
     }
   },
   onError(error) {

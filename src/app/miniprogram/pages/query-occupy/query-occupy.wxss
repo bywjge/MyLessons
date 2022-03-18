@@ -21,6 +21,7 @@ page {
 .container > .content {
   /* width: 90%; */
   /* 不然box-shadow会被截断 */
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -32,8 +33,34 @@ page {
   overflow: scroll;
 }
 
-.button-tap {
-  box-shadow: 0 4rpx 26rpx 0 var(--shadow-20) !important;
+.top-bar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20rpx 40rpx;
+  box-sizing: border-box;
+  background: var(--card-background);
+  border-radius: 0 0 16rpx 16rpx;
+  border-bottom: var(--border-optional) splid 1px;
+  box-shadow: 0 0 20rpx 0 var(--shadow-20);
+  z-index: 10;
+}
+
+.top-bar .time .title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--text-black-2);
+}
+
+.top-bar .time .subtitle {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  font-weight: 450;
+  color: var(--text-black-3);
 }
 
 .move-area {
@@ -65,7 +92,7 @@ page {
 .move-area .building-wrapper .building.south {
   --size: 600rpx;
   width: var(--size);
-  height: var(--size);
+  min-height: var(--size);
   position: absolute;
   top: calc(500px + 900rpx);
   left: calc(500px + (1260rpx - var(--size)) / 2);
@@ -74,7 +101,7 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-
+  padding: 50rpx 40rpx;
 }
 
 .move-area .building-wrapper .building.south .title {
@@ -87,6 +114,26 @@ page {
 .move-area .building-wrapper .building.south .subtitle {
   font-size: 28rpx;
   color: var(--text-black-3);
+}
+
+.move-area .building-wrapper .building.south .number-wrapper {
+  font-size: 23rpx;
+  color: var(--text-black-3);
+}
+
+.move-area .building-wrapper .building.south .number-wrapper .row {
+  display: flex;
+  margin-top: 10rpx;
+}
+.move-area .building-wrapper .building.south .number-wrapper .row .indexer {
+  min-width: 40rpx;
+}
+.move-area .building-wrapper .building.south .number-wrapper .row .text {
+  font-size: 27rpx;
+  line-height: 40rpx;
+  color: var(--text-black-2);
+  margin-left: 15rpx;
+  text-align: center;
 }
 
 .move-area .building-wrapper .building .name {
@@ -120,7 +167,7 @@ page {
 }
 
 .move-area .building-wrapper.show-occupy .building .square.occupied {
-  background: var(--color-pink-1);
+  background: var(--color-pink-2);
 }
 
 .move-area .building-wrapper.show-free .building .square.free {
@@ -149,3 +196,172 @@ page {
   margin: 0 var(--square-gap);
 }
 
+.container > .content .operations {
+  display: flex;
+}
+
+.container > .content .operations .calendar, .icon {
+  position: relative;
+  background: var(--color-black-10);
+  border-radius: 12rpx;
+  padding: 10rpx 20rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  color: var(--text-black-1);
+  text-align: center;
+  padding-left: 60rpx;
+  transition: background .2s;
+}
+
+.container > .content .operations .calendar:before {
+  --size: 30rpx;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 20rpx;
+  transform: translateY(-50%);
+  width: var(--size);
+  height: calc(var(--size) + 2rpx);
+  -webkit-mask-size: var(--size);
+  background: var(--text-black-1);
+  mask-image: var(--icon-calendar);
+  -webkit-mask-image: var(--icon-calendar);
+}
+
+.container > .content .operations > view, picker {
+  margin: 0 6rpx;
+}
+
+.container > .content .operations > .icon {
+  width: 14rpx;
+  padding-left: 20rpx;
+}
+
+.container > .content .operations > .icon:before {
+  --size: 26rpx;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 14rpx;
+  transform: translateY(-50%);
+  width: var(--size);
+  height: var(--size);
+  -webkit-mask-size: var(--size);
+  background: var(--text-black-1);
+  
+}
+
+.container > .content .operations > .icon.list:before {
+  mask-image: var(--icon-list);
+  -webkit-mask-image: var(--icon-list);
+  height: 24rpx;
+}
+.container > .content .operations > .icon.reload:before {
+  mask-image: var(--icon-reload);
+  -webkit-mask-image: var(--icon-reload);
+}
+
+.button-tap {
+  background: var(--color-black-20) !important;
+}
+
+/* 筛选器 */
+.filter-button-tap {
+  box-shadow: 0 0 26rpx 0 var(--shadow-20) !important;
+}
+
+.filter.button {
+  position: absolute;
+  top: calc(100% + 30rpx);
+  display: flex;
+  background: var(--card-background);
+  border-radius: 16rpx;
+  box-shadow: 
+    0 0 16rpx 0 var(--shadow-10),
+    0 0 0 2rpx var(--border-optional);
+  padding: 14rpx 30rpx 14rpx 48rpx;
+
+  font-size: 28rpx;
+  font-weight: 450;
+  color: var(--text-black-2);
+  transition: box-shadow .2s;
+}
+
+/* 按钮左侧装饰条 */
+.filter.button:before {
+  content: '';
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 18rpx;
+  height: 100%;
+  border-radius: 9px 0px 0px 9px;
+  transition: background-color .2s;
+}
+.filter.button[data-disabled=true]::before {
+  background-color: var(--color-black-20) !important;
+  color: var(--text-black-4) !important;
+}
+
+.filter.button.undone:before {
+  background-color: #FF7D7D;
+}
+
+.filter.button.done:before {
+  background-color: #6BB1D7;
+}
+
+.filter.button > .number {
+  margin-left: 10rpx;
+  font-weight: 900;
+}
+
+/* 切换课程 */
+.bottom-operations {
+  position: fixed;
+  right: 8%;
+  bottom: 5%;
+  display: flex;
+  align-items: center;
+}
+
+/** 切换课程节次按钮 */
+.change-index {
+  --size: 90rpx;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  border: solid 1px var(--border-optional);
+  background: var(--card-background);
+  box-shadow: 0 2px 7px 1px var(--shadow-20);
+  transition: box-shadow .2s, transform .1s .2s, opacity .1s .2s;
+}
+
+.change-index.reverse:before {
+  transform: translate(-50%, -50%) rotate(-180deg);
+}
+
+.change-index-tap {
+  box-shadow: 0 2px 12px 2px var(--shadow-30);
+}
+
+.change-index:before {
+  --size: 34rpx;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: '';
+  position: absolute;
+  background: var(--color-pink-1);
+  mask-image: var(--icon-plus);
+  -webkit-mask-image: var(--icon-arrow);
+  width: var(--size);
+  height: var(--size);
+  mask-size: var(--size) var(--size);
+  -webkit-mask-size: var(--size) var(--size);
+}
+
+.change-index.disable:before {
+  background: var(--text-black-4);
+}

@@ -1,5 +1,7 @@
 import moreApi from '../../apis/more'
 import lessonApi from '../../apis/lessons'
+import tools from '../../utils/tools'
+const 南主楼教室 = moreApi.allRooms['南主楼'].value.split(',')
 
 Page({
   data: {
@@ -8,14 +10,103 @@ Page({
     buildings: {
       "北主楼": [],
       "马兰芳": [],
-      "黄浩川": []
+      "黄浩川": [],
+      "南主楼": []
+    },
+    numbers: {
+      南主楼: [],
+      南主楼空教室: 南主楼教室
     },
     show: 'occupy',
-    lastIndex: 0
+    pickerArray: [],
+    selectedDateIndex: null,
+    /** 当前节次(1 - 13) */
+    lessonIndex: 1,
+    lessonIndexRaw: 1,
+    timeList: [
+      {
+        text: '上午第一节',
+        time: '08:14 - 09:50'
+      },
+      {
+        text: '上午第二节',
+        time: '10:10 - 11:45'
+      },
+      {
+        text: '下午第一节',
+        time: '14:45 - 16:20'
+      },
+      {
+        text: '下午第二节',
+        time: '16:30 - 18:05'
+      },
+      {
+        text: '晚上第一节',
+        time: '19:30 - 21:10'
+      },
+      {
+        text: '晚上第二节',
+        time: '21:20 - 23:00'
+      },
+      {
+        text: '中午课程',
+        time: '12:30 - 14:05'
+      },
+    ],
+
+    dayLessons: [],
+    onGoingCount: 0
   },
 
   onLoad() {
+    const index = this.getNowIndex()
+    this.setData({
+      lessonIndexRaw: index,
+      lessonIndex: Math.floor((index + 1) / 2)
+    })
+    this.generateDateList()
+    this.selectDate(0)
+    // this.refreshData()
+  },
+
+  /** 生成接下两周的选择器 */
+  generateDateList() {
+    const ret = []
+    const now = new Date()
+    for (let i = 0; i < 14; i++) {
+      const date = now.nDaysLater(i)
+      ret.push({
+        text: (i === 0)? '今天': date.format('YYYY/mm/dd'),
+        value: date.format('YYYY-mm-dd')
+      })
+    }
+
+    this.setData({
+      pickerArray: ret
+    })
+  },
+
+  /** 选择日期 */
+  async selectDate(e, force) {
+    const index = (typeof e === 'number')? e: Math.floor(e.detail.value)
+    if (!force && this.data.selectedDateIndex !== null && index === this.data.selectedDateIndex)
+      return ;
+    const date = this.data.pickerArray[index].value
+
+    wx.showLoading({ title: '加载数据中' })
+    const { time, lessons } = await moreApi.getAllLessons(date, force)
+    this.setData({
+      dayLessons: lessons,
+      selectedDateIndex: index
+    })
+
     this.refreshData()
+    wx.hideLoading().catch(() => {})
+  },
+
+  /** 刷新数据 */
+  reload() {
+    this.selectDate(this.data.selectedDateIndex, true)
   },
 
   getNowIndex() {
@@ -32,16 +123,19 @@ Page({
 
     return 当前节次
   },
- 
-  async refreshData(date, force = false) {
-    wx.showLoading({ title: '加载数据中' })
+
+  async refreshData() {
     let 北主楼 = new Array(11).fill(null).map(() => new Array(5).fill(null))
     let 马兰芳 = new Array(5).fill(null).map(() => new Array(4).fill(null))
     let 黄浩川 = new Array(5).fill(null).map(() => new Array(4).fill(null))
-    const { time, lessons } = await moreApi.getAllLessons(date, force)
-    // lessonApi.convertIndexToTime()
-    let 当前节次 = this.getNowIndex()
+    let 南主楼 = new Array(5).fill(null).map(() => new Array(30).fill(null))
+    let 南主楼空教室 = new Array(5).fill(null).map(() => new Array(30).fill(null))
     
+    // lessonApi.convertIndexToTime()
+    // let 当前节次 = this.getNowIndex()
+    let 当前节次 = this.data.lessonIndexRaw
+    const lessons = this.data.dayLessons
+    let onGoingCount = 0
     lessons.forEach(e => {
       if (e['节次'][0] !== 当前节次)
         return ;
@@ -56,14 +150,27 @@ Page({
       switch(e['教学地点']) {
         case '北主楼':
           北主楼[floor][index] = e
+          onGoingCount++
           break;
         case '黄浩川教学楼':
           黄浩川[floor][index] = e
+          onGoingCount++
           break;
         case '马兰芳教学楼':
           马兰芳[floor][index] = e
+          onGoingCount++
+          break;
+        case '南主楼':
+          南主楼[floor].push(e['编号'])
           break;
       }
+    })
+
+    南主楼教室.forEach(id => {
+      let floor = Number(id.substr(0,1)) - 1
+      let index = Number(id.substr(1,2)) - 1
+      if (南主楼[floor].indexOf(id) === -1) 
+        南主楼空教室[floor].push(id)
     })
 
     this.setData({
@@ -72,9 +179,56 @@ Page({
         黄浩川,
         马兰芳,
       },
-      lastIndex: 当前节次
+
+      numbers: {
+        南主楼,
+        南主楼空教室
+      },
+      onGoingCount
+    })
+  },
+
+  /** 切换到列表视图 */
+  switchToListView() {
+
+  },
+
+  /**
+   * 切换课程
+   * @param {1 | 2 | 3 | 4 | 5 | 6 | 7} i 课程节次，1-7
+   */
+  setIndex(i) {
+    if (i <= 0 || i > 7) 
+      throw new Error("输入的课程节次有误")
+    
+    this.setData({
+      lessonIndexRaw: i * 2 - 1,
+      lessonIndex: i
     })
 
-    wx.hideLoading().catch(() => {})
+    this.refreshData()
+  },
+
+  handlePrevLessons() {
+    if (this.data.lessonIndex === 1) {
+      return ;
+    }
+
+    this.setIndex(this.data.lessonIndex - 1)
+  },
+
+  handleNextLessons() {
+    if (this.data.lessonIndex === 7) {
+      return ;
+    }
+
+    this.setIndex(this.data.lessonIndex + 1)
+  },
+
+  changeShowMode() {
+    const newStatus = this.data.show === 'occupy'? 'free': 'occupy'
+    this.setData({
+      show: newStatus
+    })
   }
 })

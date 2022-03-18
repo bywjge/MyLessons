@@ -139,10 +139,16 @@ page {
   transform: translateY(-50%);
 }
 
-.icon-target:before {
-  background: var(--color-purple-1);
-  mask-image: var(--icon-target);
-  -webkit-mask-image: var(--icon-target);
+.icon-find:before {
+  background: var(--color-blue-2);
+  mask-image: var(--icon-find);
+  -webkit-mask-image: var(--icon-find);
+}
+
+.icon-locate:before {
+  background: var(--color-pink-2);
+  mask-image: var(--icon-locate);
+  -webkit-mask-image: var(--icon-locate);
 }
 
 .more-icon i {

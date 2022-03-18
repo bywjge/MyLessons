@@ -3,10 +3,6 @@ import request from '../utils/request'
 import tools from '../utils/tools'
 import  * as database from '../static/js/database'
 
-export default {
-  getAllLessons
-}
-
 const log = new logger()
 log.setKeyword('apis/more.js')
 
@@ -29,7 +25,7 @@ const allRooms = {
 
   '北主楼': {
     id: '00024',
-    value: '201,202,203,204,205,301,302,303,304,305,401,402,403,404,405,501,502,503,504,505,601,602,603,604,605,701,702,703,704,705,801,802,803,804,805,901,902,903,904,905,1001,1002,1003,1004,1005,1101,1102,1103,1104,1105,1205,1206'
+    value: '201,202,203,204,205,301,302,303,304,305,401,402,403,404,405,501,502,503,504,505,601,602,603,604,605,701,702,703,704,705,801,802,803,804,805,901,902,903,904,905,1001,1002,1003,1004,1005,1101,1102,1103,1104,1105'
   }
 }
 
@@ -145,4 +141,9 @@ async function getAllLessons(date, forceFromSchool = false) {
     date,
     time: new Date()
   })
+}
+
+export default {
+  allRooms,
+  getAllLessons
 }

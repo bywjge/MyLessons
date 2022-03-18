@@ -1,6 +1,36 @@
 <view class="container">
   <navigation enableMenu="{{false}}" title="空教室查询" />
   <view class="content">
+    <view class="top-bar">
+      <view class="time">
+        <view class="title">{{timeList[lessonIndex - 1]['text']}}</view>
+        <view class="subtitle">{{timeList[lessonIndex - 1]['time']}}</view>
+      </view>
+
+      <view class="operations">
+        <!-- <view bindtap="switchToListView" class="icon list" hover-class="button-tap" /> -->
+        <picker 
+          mode="selector" 
+          range="{{pickerArray}}"
+          range-key="text"
+          value="{{selectedDate}}" 
+          bindchange="selectDate"
+          header-text="选择未来两周内的一天"
+        >
+          <view class="calendar" hover-class="button-tap">
+            {{pickerArray[selectedDateIndex]['text']}}
+          </view>
+        </picker>
+        <view bindtap="reload" class="icon reload" hover-class="button-tap" />
+      </view>
+
+      <view class="filter button {{show === 'occupy'? 'undone': 'done'}}" hover-class="filter-button-tap" bindtap="changeShowMode" data-name="pass" data-disabled="{{disableButton.pass}}">
+        <view>{{show === 'occupy'? '正在上课': '未在上课'}}</view>
+        <view class="number">{{show === 'occupy'? onGoingCount: 90 - onGoingCount}}</view>
+      </view>
+    </view>
+
+    <!-- 下方可拖动区域 -->
     <movable-area class="move-area" >
       <movable-view 
         x="{{x}}" 
@@ -14,50 +44,63 @@
         <view class="building-wrapper show-{{show}}">
           <!-- 马兰芳 -->
           <view class="building">
-            <view class="row" wx:for="{{5}}" wx:for-item="floor">
+            <view class="row" wx:for="{{5}}" wx:for-item="floor" wx:key="floor">
               <view class="indexer">{{floor + 1}}F</view>
-              <view class="square {{!buildings['马兰芳'][floor][index]? 'free': 'occupied'}}" wx:for="{{4}}" wx:for-item="index" />
+              <view class="square {{!buildings['马兰芳'][floor][index]? 'free': 'occupied'}}" wx:for="{{4}}" wx:for-item="index" wx:key="index"/>
             </view>
             <view class="row top-indexer">
-              <view class="indexer" wx:for="{{4}}" wx:for-item="index">0{{index+1}}</view>
+              <view class="indexer" wx:for="{{4}}" wx:for-item="index" wx:key="index">0{{index+1}}</view>
             </view>
             <view class="name">马兰芳教学楼</view>
           </view>
 
           <!-- 北主楼 -->
           <view class="building">
-            <view class="row {{floor===0?'hidden':''}}" wx:for="{{11}}" wx:for-item="floor">
+            <view class="row {{floor===0?'hidden':''}}" wx:for="{{11}}" wx:for-item="floor" wx:key="floor">
               <view class="indexer">{{floor + 1}}F</view>
-              <view class="square {{!buildings['北主楼'][floor][index]? 'free': 'occupied'}}" wx:for="{{5}}" wx:for-item="index" />
+              <view class="square {{!buildings['北主楼'][floor][index]? 'free': 'occupied'}}" wx:for="{{5}}" wx:for-item="index" wx:key="index"/>
             </view>
             <view class="row top-indexer">
-              <view class="indexer" wx:for="{{5}}" wx:for-item="e">0{{e+1}}</view>
+              <view class="indexer" wx:for="{{5}}" wx:for-item="index" wx:key="index">0{{index+1}}</view>
             </view>
             <view class="name">北主楼</view>
           </view>
 
           <!-- 黄浩川 -->
           <view class="building">
-            <view class="row" wx:for="{{5}}" wx:for-item="floor">
+            <view class="row" wx:for="{{5}}" wx:for-item="floor" wx:key="floor">
               <view class="indexer">{{floor + 1}}F</view>
-              <view class="square {{!buildings['黄浩川'][floor][index]? 'free': 'occupied'}}" wx:for="{{4}}" wx:for-item="index" />
+              <view class="square {{!buildings['黄浩川'][floor][index]? 'free': 'occupied'}}" wx:for="{{4}}" wx:for-item="index" wx:key="index" />
             </view>
             <view class="row top-indexer">
-              <view class="indexer" wx:for="{{4}}" wx:for-item="index">0{{index+1}}</view>
+              <view class="indexer" wx:for="{{4}}" wx:for-item="index" wx:key="index">0{{index+1}}</view>
             </view>
             <view class="name">黄浩川教学楼</view>
           </view>
 
           <!-- 南主楼 -->
           <view class="building south">
+            <view class="number-wrapper"> 
+              <view class="row" wx:for="{{5}}" wx:for-item="floor" wx:key="floor" wx:if="{{floor !== 0}}">
+                <view class="indexer">{{floor + 1}}F</view>
+                <view style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                  <view class="text" wx:for="{{numbers['南主楼'][floor]}}" wx:for-item="e" wx:key="e" wx:if="{{show === 'occupy' && e !== null}}">{{e}} </view>
+                  <view class="text" wx:for="{{numbers['南主楼空教室'][floor]}}" wx:for-item="e" wx:key="e" wx:if="{{show !== 'occupy' && e !== null}}">{{e}}</view>
+                </view>
+              </view>
+            </view>
             <view style="font-size: 200rpx">😅</view>
-            <view class="subtitle">点击切换到列表视图查看南主楼的课程</view>
+            <view class="subtitle">以下是{{show === 'occupy'? '正在上课': '未在上课'}}的教室列表</view>
             <view class="title">我画不出来</view>
             <view class="name">南主楼</view>
           </view>
-
         </view>
       </movable-view>
     </movable-area>
+
+    <view class="bottom-operations">
+      <view class="change-index reverse {{lessonIndex === 1? 'disable': ''}}" style="margin-right: 40rpx" hover-class="change-index-tap" bindtap="handlePrevLessons" />
+      <view class="change-index {{lessonIndex === 7? 'disable': ''}}" hover-class="change-index-tap" bindtap="handleNextLessons" />
+    </view>
   </view>
 </view>
