@@ -35,7 +35,7 @@ page {
 
 .top-bar {
   position: absolute;
-  display: flex;
+  /* display: flex; */
   align-items: center;
   justify-content: space-between;
   top: 0;
@@ -364,4 +364,11 @@ page {
 
 .change-index.disable:before {
   background: var(--text-black-4);
+}
+
+.warning {
+  margin-top: 10rpx;
+  font-size: 20rpx;
+  color: var(--text-black-2);
+  /* width: 500rpx; */
 }

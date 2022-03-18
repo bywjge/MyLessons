@@ -2,27 +2,30 @@
   <navigation enableMenu="{{false}}" title="空教室查询" />
   <view class="content">
     <view class="top-bar">
-      <view class="time">
-        <view class="title">{{timeList[lessonIndex - 1]['text']}}</view>
-        <view class="subtitle">{{timeList[lessonIndex - 1]['time']}}</view>
-      </view>
+      <view style="display: flex; align-items: center; justify-content: space-between; width: 100%">
+        <view class="time">
+          <view class="title">{{timeList[lessonIndex - 1]['text']}}</view>
+          <view class="subtitle">{{timeList[lessonIndex - 1]['time']}}</view>
+        </view>
 
-      <view class="operations">
-        <!-- <view bindtap="switchToListView" class="icon list" hover-class="button-tap" /> -->
-        <picker 
-          mode="selector" 
-          range="{{pickerArray}}"
-          range-key="text"
-          value="{{selectedDate}}" 
-          bindchange="selectDate"
-          header-text="选择未来两周内的一天"
-        >
-          <view class="calendar" hover-class="button-tap">
-            {{pickerArray[selectedDateIndex]['text']}}
-          </view>
-        </picker>
-        <view bindtap="reload" class="icon reload" hover-class="button-tap" />
+        <view class="operations">
+          <!-- <view bindtap="switchToListView" class="icon list" hover-class="button-tap" /> -->
+          <picker 
+            mode="selector" 
+            range="{{pickerArray}}"
+            range-key="text"
+            value="{{selectedDate}}" 
+            bindchange="selectDate"
+            header-text="选择未来两周内的一天"
+          >
+            <view class="calendar" hover-class="button-tap">
+              {{pickerArray[selectedDateIndex]['text']}}
+            </view>
+          </picker>
+          <view bindtap="reload" class="icon reload" hover-class="button-tap" />
+        </view>
       </view>
+      <view class="warning">⚠️ 免责声明：结果仅供参考，教务系统中无法查询非课程以外的教室占用</view>
 
       <view class="filter button {{show === 'occupy'? 'undone': 'done'}}" hover-class="filter-button-tap" bindtap="changeShowMode" data-name="pass" data-disabled="{{disableButton.pass}}">
         <view>{{show === 'occupy'? '正在上课': '未在上课'}}</view>

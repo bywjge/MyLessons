@@ -24,7 +24,8 @@ export {
   getLesson,
   updateLesson,
   getSchoolLesson,
-  updateSchoolLesson
+  updateSchoolLesson,
+  updateEnterTime
 }
 
 /**
@@ -231,4 +232,20 @@ async function updateSchoolLesson(lessons, date){
   }
 
   return db.collection('all-lessons').add({ data })
+}
+
+/**
+ * 上报进入时间
+ */
+async function updateEnterTime() {
+  let records = (await db.collection('accounts').get()).data
+  if (records.length <= 0) {
+    return Promise.resolve()
+  }
+  const id = records[0]._id
+  return db.collection('accounts').doc(id).update({ 
+    data: {
+      lastEnterTime: new Date()
+    }
+  })
 }

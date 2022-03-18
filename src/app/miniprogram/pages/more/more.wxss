@@ -103,6 +103,11 @@ page {
 }
 
 /* 带注释文字的按钮 */
+.icon-button.multiple .title {
+  font-size: 34rpx;
+  font-weight: 450;
+}
+
 .icon-button.multiple .description {
   margin-top: 5rpx;
   font-size: 24rpx;

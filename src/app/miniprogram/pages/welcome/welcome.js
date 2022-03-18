@@ -3,6 +3,7 @@ import api from '../../apis/app'
 import tools from '../../utils/tools'
 import lessonApi from '../../apis/lessons'
 import accountApi from '../../apis/account'
+import * as database from '../../static/js/database'
 // import { changeTheme } from '../../utils/theme'
 
 const log = new logger()
@@ -106,6 +107,10 @@ Page({
       })
       return ;
     }
+
+    database.updateEnterTime().then(() => {
+      log.info('upload info done')
+    })
 
     if (wx.getStorageSync('passwordFailure')) {
       await wx.showModal({
