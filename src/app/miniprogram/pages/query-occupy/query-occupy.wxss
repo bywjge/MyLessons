@@ -43,10 +43,12 @@ page {
 
 .move-area .building-wrapper {
   /* display: flex; */
-  /* width: 250rpx; */
-  /* display: inline-flex; */
-  flex-direction: row;
-  margin: 100px;
+  width: 1260rpx;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  padding: 500px;
+  position: relative;
 }
 
 .move-area .building-wrapper .building {
@@ -58,6 +60,33 @@ page {
   border-radius: 10px;
   padding: 20rpx 14rpx;
   margin: 0 20px;
+}
+
+.move-area .building-wrapper .building.south {
+  --size: 600rpx;
+  width: var(--size);
+  height: var(--size);
+  position: absolute;
+  top: calc(500px + 900rpx);
+  left: calc(500px + (1260rpx - var(--size)) / 2);
+  transform: translateX(-100rpx);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.move-area .building-wrapper .building.south .title {
+  font-size: 40rpx;
+  font-weight: 450;
+  color: var(--text-black-2);
+  margin-bottom: 10rpx;
+}
+
+.move-area .building-wrapper .building.south .subtitle {
+  font-size: 28rpx;
+  color: var(--text-black-3);
 }
 
 .move-area .building-wrapper .building .name {
@@ -90,11 +119,13 @@ page {
   background: var(--color-black-10);
 }
 
-.move-area .building-wrapper .building .row .square.occupied {
+.move-area .building-wrapper.show-occupy .building .square.occupied {
   background: var(--color-pink-1);
 }
 
-
+.move-area .building-wrapper.show-free .building .square.free {
+  background: var(--color-blue-1);
+}
 
 .indexer {
   font-size: 20rpx;

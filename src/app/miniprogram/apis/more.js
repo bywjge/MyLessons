@@ -88,10 +88,31 @@ async function getAllLessonsFromSchool(date) {
 
   const { total, rows } = ret.data
   let formattedRows = tools.keyMapConvert(rows, keyMap)
+
   // 所有可以查询的教学楼
   const buildings = Object.keys(allRooms).join('')
+
   // 过滤
-  formattedRows = formattedRows.filter(e => buildings.indexOf(e['教学地点'].substr(0, 3)) !== -1)
+  formattedRows = formattedRows.filter(e => {
+    const 上课地点 = e['教学地点'].replace(/\w/g, "")
+    if (!buildings.includes(上课地点))
+      return false;
+
+    let 上课教室编号 = /\d+/.exec(e['教学地点'])
+    上课教室编号 = 上课教室编号 ? 上课教室编号[0]: ''
+
+    if (allRooms[上课地点].value.indexOf(上课教室编号) === -1) {
+      return false
+    }
+
+    Object.assign(e, {
+      教学地点: 上课地点,
+      编号: 上课教室编号
+    })
+
+    return true
+  })
+  // formattedRows = formattedRows.filter(e => buildings.indexOf(e['教学地点'].substr(0, 3)) !== -1)
 
   return Promise.resolve(formattedRows)
 }
@@ -103,6 +124,7 @@ async function getAllLessonsFromSchool(date) {
  */
 async function getAllLessons(date, forceFromSchool = false) {
   // 检查数据库
+  date = date || new Date().format('YYYY-mm-dd')
   log.info('调用getAllLessons')
   if (!forceFromSchool) {
     try {

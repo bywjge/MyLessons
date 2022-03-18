@@ -1,0 +1,12 @@
+<!--miniprogram/pages/profile/profile.wxml-->
+<view class="container">
+  <navigation title="讨论区" enableMenu="{{false}}" />
+  <view class="content">
+    <view class="user-bar">
+      <view class="header">
+        <image class="avator" src="{{avatarUrl}}" mode="aspectFit" />
+        <text>Test</text>
+      </view>
+    </view>
+  </view>
+</view>

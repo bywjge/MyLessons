@@ -1,26 +1,34 @@
 <view class="container">
   <navigation enableMenu="{{false}}" title="空教室查询" />
   <view class="content">
-    <movable-area class="move-area">
-      <movable-view x="{{x}}" y="{{y}}" direction="all" out-of-bounds="{{true}}" style="width: 1000px; ">
-        <view class="building-wrapper">
+    <movable-area class="move-area" >
+      <movable-view 
+        x="{{x}}" 
+        y="{{y}}" 
+        direction="all" 
+        out-of-bounds="{{true}}" 
+        scale="{{true}}" 
+        scale-max="{{1.5}}"
+        style="width: 2000px; height: 2000px"
+      >
+        <view class="building-wrapper show-{{show}}">
           <!-- 马兰芳 -->
           <view class="building">
-            <view class="row" wx:for="{{4}}" wx:for-item="e">
-              <view class="indexer">{{e + 1}}F</view>
-              <view class="square" wx:for="{{4}}" wx:for-item="e" />
+            <view class="row" wx:for="{{5}}" wx:for-item="floor">
+              <view class="indexer">{{floor + 1}}F</view>
+              <view class="square {{!buildings['马兰芳'][floor][index]? 'free': 'occupied'}}" wx:for="{{4}}" wx:for-item="index" />
             </view>
             <view class="row top-indexer">
-              <view class="indexer" wx:for="{{4}}" wx:for-item="e">0{{e+1}}</view>
+              <view class="indexer" wx:for="{{4}}" wx:for-item="index">0{{index+1}}</view>
             </view>
             <view class="name">马兰芳教学楼</view>
           </view>
 
           <!-- 北主楼 -->
           <view class="building">
-            <view class="row {{e===0?'hidden':''}}" wx:for="{{12}}" wx:for-item="e">
-              <view class="indexer">{{e + 1}}F</view>
-              <view class="square" wx:for="{{5}}" wx:for-item="e" />
+            <view class="row {{floor===0?'hidden':''}}" wx:for="{{11}}" wx:for-item="floor">
+              <view class="indexer">{{floor + 1}}F</view>
+              <view class="square {{!buildings['北主楼'][floor][index]? 'free': 'occupied'}}" wx:for="{{5}}" wx:for-item="index" />
             </view>
             <view class="row top-indexer">
               <view class="indexer" wx:for="{{5}}" wx:for-item="e">0{{e+1}}</view>
@@ -30,14 +38,22 @@
 
           <!-- 黄浩川 -->
           <view class="building">
-            <view class="row" wx:for="{{4}}" wx:for-item="e">
-              <view class="indexer">{{e + 1}}F</view>
-              <view class="square" wx:for="{{4}}" wx:for-item="e" />
+            <view class="row" wx:for="{{5}}" wx:for-item="floor">
+              <view class="indexer">{{floor + 1}}F</view>
+              <view class="square {{!buildings['黄浩川'][floor][index]? 'free': 'occupied'}}" wx:for="{{4}}" wx:for-item="index" />
             </view>
             <view class="row top-indexer">
-              <view class="indexer" wx:for="{{4}}" wx:for-item="e">0{{e+1}}</view>
+              <view class="indexer" wx:for="{{4}}" wx:for-item="index">0{{index+1}}</view>
             </view>
-            <view class="name">马兰芳教学楼</view>
+            <view class="name">黄浩川教学楼</view>
+          </view>
+
+          <!-- 南主楼 -->
+          <view class="building south">
+            <view style="font-size: 200rpx">😅</view>
+            <view class="subtitle">点击切换到列表视图查看南主楼的课程</view>
+            <view class="title">我画不出来</view>
+            <view class="name">南主楼</view>
           </view>
 
         </view>
