@@ -1,4 +1,4 @@
-page{
+page {
   background-color: var(--page-background);
   height: 100%;
   width: 100%;
@@ -52,11 +52,11 @@ page{
 
   transition: all 0.1s;
 }
-.date-selector .date-button[data-selected="true"]{
+.date-selector .date-button.selected {
   background-color: var(--color-pink-2);
   color: var(--color-white);
 }
-.date-selector .date-button[data-selected="false"]{
+.date-selector .date-button {
   /* background-color: var(--color-white); */
   color: var(--text-black-1);
 }

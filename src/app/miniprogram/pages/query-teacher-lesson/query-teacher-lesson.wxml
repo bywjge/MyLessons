@@ -1,0 +1,135 @@
+<view class="container">
+  <navigation enableMenu="{{false}}" title="{{showElement === 'result'? teacher + '的所有课程': '教师课程查询'}}" />
+  <view class="content">
+    <!-- 主页 -->
+    <view class="card main {{showElement === 'main'?'show':''}} {{visibleElement === 'main'?'visible':''}}">
+      <view class="title">需要查询哪位老师？</view>
+      <view class="subtitle">在下方输入教师的姓名，并点击查询</view>
+      <view class="subtitle">如果不确定老师的全名，可以输入名字的一部分</view>
+
+      <view class="input-section" style="margin-top: 200rpx;">
+        <view class="cell-text">教师姓名</view>
+        <input class="cell-input" bindinput="handleNameInput" placeholder="" />
+      </view>
+      <view class="input-section" style="margin-top: 40rpx;">
+        <view class="button" hover-class="button-tap" bindtap="handleNextStep">查询</view>
+      </view>
+    </view>
+
+    <!-- 教师选择 -->
+    <view class="card select {{showElement === 'select'?'show':''}} {{visibleElement === 'select'?'visible':''}}">
+      <view class="title">
+        <fa class="back-icon" icon="fa fa-angle-down fa-lg" bindtap="backPrevStep" />
+        选择一位老师
+      </view>
+
+      <view class="teacher-list">
+        <view 
+          class="item"
+          wx:for="{{teacherList}}"
+          wx:for-item="e"
+          wx:for-index="index"
+          wx:key="index"
+          data-item="{{e}}"
+          bindtap="handleSelectTeacher"
+        >
+          <!-- 序号 -->
+          <view class="index">{{index + 1}}</view>
+          <view class="content">
+            <view class="text">
+              <!-- 教师名称 -->
+              <view class="name">{{e['姓名']}}</view>
+              <!-- 下方文字 -->
+              <view class="description">{{e['学院']}}</view>
+            </view>
+          </view>
+          <fa class="more-icon" icon="fa fa-angle-down fa-lg" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 结果展示 -->
+    <view class="result {{showElement === 'result'?'show':''}} {{visibleElement === 'result'?'visible':''}}">
+      <!-- 数据筛选器 -->
+      <view class="filters">
+        <view class="button undone" hover-class="icon-button-tap" bindtap="switchVisible" data-name="undone" data-disabled="{{disableButton.undone}}">
+          <view>未上完</view>
+          <view class="number">{{undoneList.length || 0}}</view>
+        </view>
+
+        <view class="button done" hover-class="icon-button-tap" bindtap="switchVisible" data-name="done" data-disabled="{{disableButton.done}}">
+          <view>已上完</view>
+          <view class="number">{{doneList.length || 0}}</view>
+        </view>
+      </view>
+
+      <view class="empty-hint" wx:if="{{empty}}">空空如也</view>
+
+      <!-- 未上完 -->
+      <view class="lesson-list {{showElement === 'result'?'show':''}} {{visibleElement === 'result'?'visible':''}}" style="margin-top: 40rpx" wx:if="{{!empty && !disableButton['undone']}}">
+        <view class="title">未上完({{undoneList.length || 0}})</view>
+        <view class="lesson-wrapper" wx:if="{{undoneList.length > 0}}">
+          <view 
+            class="item"
+            wx:for="{{undoneList}}"
+            wx:for-item="e"
+            wx:for-index="index"
+            wx:key="e"
+          >
+            <!-- 序号 -->
+            <view class="index">{{index + 1}}</view>
+            <view class="content">
+              <view class="text">
+                <!-- 课程名称 -->
+                <view class="name">{{e['课程名称']}}</view>
+                <!-- 下方文字 -->
+                <view class="description">
+                  <view class="introduction">{{e['上课内容'] || '无简介'}}</view>
+                </view>
+                <view class="description">
+                  <!-- 课程类型 -->
+                  <view class="location">{{e['教学地点']}}{{e['编号']}}</view>
+                  <!-- 学分 -->
+                  <view class="time">{{e['格式化时间']}}</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 已上完 -->
+      <view class="lesson-list over {{showElement === 'result'?'show':''}} {{visibleElement === 'result'?'visible':''}}" style="margin-top: 40rpx" wx:if="{{!empty && !disableButton['done']}}">
+        <view class="title">已上完({{doneList.length || 0}})</view>
+        <view class="lesson-wrapper" wx:if="{{doneList.length > 0}}">
+          <view 
+            class="item"
+            wx:for="{{doneList}}"
+            wx:for-item="e"
+            wx:for-index="index"
+            wx:key="e"
+          >
+            <!-- 序号 -->
+            <view class="index">{{index + 1}}</view>
+            <view class="content">
+              <view class="text">
+                <!-- 课程名称 -->
+                <view class="name">{{e['课程名称']}}</view>
+                <!-- 下方文字 -->
+                <view class="description">
+                  <view class="introduction">{{e['上课内容'] || '无简介'}}</view>
+                </view>
+                <view class="description">
+                  <!-- 课程类型 -->
+                  <view class="location">{{e['教学地点']}}{{e['编号']}}</view>
+                  <!-- 学分 -->
+                  <view class="time">{{e['格式化时间']}}</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

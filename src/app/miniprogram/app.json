@@ -16,7 +16,8 @@
     "pages/discuss/discuss",
     "pages/feedback/feedback",
     "pages/discuss-new-post/discuss-new-post",
-    "pages/query-occupy/query-occupy"
+    "pages/query-occupy/query-occupy",
+    "pages/query-teacher-lesson/query-teacher-lesson"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -156,6 +156,12 @@ page {
   -webkit-mask-image: var(--icon-locate);
 }
 
+.icon-target:before {
+  background: var(--color-green-1);
+  mask-image: var(--icon-target);
+  -webkit-mask-image: var(--icon-target);
+}
+
 .more-icon i {
   transform: rotate(-90deg);
   color: var(--text-black-3);

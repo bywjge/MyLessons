@@ -3,7 +3,7 @@
 /* 注意只能用page，不能用:root */
 @import './style.wxss';
 
-page{
+page {
   /* 防止影响到topbar */
   overflow: hidden;
   background-color: var(--page-background);

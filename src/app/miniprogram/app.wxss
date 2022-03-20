@@ -56,7 +56,7 @@ page {
     /* 菜单等高亮的背景 */
     --highlight-background: rgba(255, 0, 71, 0.1);
     /* 高亮的颜色 */
-    --highlight-color: #FF7D7D;
+    --highlight-color: #ffa7a7;
 
     --navigation-bar-text: white;
     --navigation-bar-background: #FFB8C5;
@@ -67,6 +67,10 @@ page {
     --card-underway: #FF7D7D;
     --card-normal: #66BFFF;
     --card-coming: #FFAF66;
+
+    --button-background: #FFA6B5;
+    --button-tap-background: #f092a2;
+    --button-text: white;
 
     --color-white: white;
     --color-blue-1: #1fa0ea;
@@ -141,6 +145,10 @@ page {
     --card-underway: #ce7d89;
     --card-normal: #5e87a1;
     --card-coming: #d4a57b;
+
+    --button-background: #FFA6B5;
+    --button-tap-background: #f092a2;
+    --button-text: white;
 
     --color-white: #121212;
     --color-blue-1: #1f8fcf;

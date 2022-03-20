@@ -1,13 +1,10 @@
-<view class="navigationBar" 
+<view 
+  class="navigationBar {{showMenu? 'show-mask': ''}} {{showMenuLayer? 'show-layer': ''}}" 
   bindtap="handleBarClick"
-  data-show-mask="{{showMenu}}"
-  data-show-layer="{{showMenuLayer}}"
-  style="min-height: {{navBarHeight }}px; width: {{windowWidth}}px; padding-top: {{statusBarHeight}}px"
+  style="min-height: {{navBarHeight }}px; width: {{windowWidth}}px; padding-top: {{statusBarHeight}}px; --bar-height: {{navBarHeight}}px;"
 >
   <view 
-    class="slot" 
-    data-hidden="{{hiddenOther}}"
-    data-hidden-layer="{{hiddenLayer}}"
+    class="slot {{hiddenLayer? 'hidden-layer': ''}} {{hiddenOther? 'hidden': ''}}" 
   >
     <slot name="left" />
     <view 
@@ -20,17 +17,15 @@
     </view>
   </view>
   
-  <view class="title-btn" id="title" bindtap="handleMenuClick" data-status="{{showMenu?'show':'hidden'}}">
+  <view class="title-btn {{showMenu?'show':'hidden'}}" id="title" bindtap="handleMenuClick">
     {{title}}
     <fa wx:if="{{enableMenu}}" icon="fa fa-angle-down fa-lg"></fa> 
   </view>
   <view
-    class="operation-bar"
-    data-status="{{showMenu?'show':'hidden'}}"
-    data-show-layer="{{showMenuLayer}}"
+    class="operation-bar {{!showMenuLayer?'disable': ''}} {{showMenu?'show':'hidden'}}"
   >
     <view 
-      class="item {{(item.url === nowPage)?'selected':''}}" 
+      class="item {{(item.url === nowPage)?'selected':''}} {{item.url === nowPage? 'selected': ''}}" 
       wx:for="{{pages}}"
       wx:for-item="item"
       wx:key="title"

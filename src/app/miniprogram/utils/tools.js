@@ -102,6 +102,7 @@ function decodeHTML(value){
   value = value.replace(/&gt;/g,">");
   value = value.replace(/&nbsp;/g," ");
   value = value.replace(/&quot/g,"'");
+  value = value.replace(/&mdash;/g,"——");
   return value
 }
 

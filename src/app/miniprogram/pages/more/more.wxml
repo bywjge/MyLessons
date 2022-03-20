@@ -2,7 +2,7 @@
   <navigation title="更多功能" />
   <!-- <developHint class="hint" /> -->
   <view class="content">
-    <view class="head">
+    <view class="head" wx:if="{{false}}">
       <view class="huge-entry discuss" hover-class="button-tap" bindtap="jumpToDiscuss">
         <text class="title">讨论区</text>
         <text class="subtitle">今日新增</text>
@@ -16,6 +16,10 @@
       </view>
     </view>
 
+    <view class="module" wx:else>
+      <view style="font-size:34rpx;font-weight:450;color:var(--text-black-4);text-align: center;">Coming soon...</view>
+    </view>
+
     <view class="module" style="margin-top: 70rpx">
       <view class="item icon-button multiple icon icon-find" bindtap="jumpToQueryOccupy">
         <span class="title">空教室查询</span>
@@ -23,9 +27,15 @@
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
       </view>
 
-      <view class="item icon-button multiple icon icon-locate">
+      <view class="item icon-button multiple icon icon-locate" wx:if="{{false}}">
         <span class="title">失物招领</span>
         <view class="description">丢东西或者捡到东西了吗</view>
+        <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
+      </view>
+
+      <view class="item icon-button multiple icon icon-target" bindtap="jumpToQueryTeacherLesson">
+        <span class="title">教师课程查询</span>
+        <view class="description">查询老师教的所有课程</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
       </view>
 

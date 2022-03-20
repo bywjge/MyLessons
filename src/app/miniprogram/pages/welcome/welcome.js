@@ -13,7 +13,7 @@ log.setKeyword('Page:index')
  * @TODOS
  *   授权未测试
  */
-
+5
 Page({
   data: {
     showButton: false

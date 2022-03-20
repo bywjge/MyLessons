@@ -17,7 +17,7 @@ Page({
     const doneList = []
     const undoneList = []
     const now = new Date()
-      for (const key in lesson) {
+    for (const key in lesson) {
       const element = lesson[key];
       const 已上节数 = element['上课时间']
         .map(e => new Date(e))

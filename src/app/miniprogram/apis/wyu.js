@@ -149,7 +149,7 @@ async function getCookieAndCode(cookie = null) {
 /**
  * 获取教师的基本信息
  * @param {string} username 教师的账号，以J开头
- * @returns {TeacherInfo} 教师信息
+ * @returns {Promise<Array<TeacherInfo>>} 教师信息
  */
 async function getTeacherInfo(username) {
   const keyMap = {
@@ -161,7 +161,7 @@ async function getTeacherInfo(username) {
     q: username
   })).data
   if (Array.isArray(ret) && ret.length > 0) {
-    return Promise.resolve(tools.keyMapConvert(ret[0], keyMap))
+    return Promise.resolve(tools.keyMapConvert(ret, keyMap))
   }
   return Promise.reject('用户不是教师或教师不存在')
 }

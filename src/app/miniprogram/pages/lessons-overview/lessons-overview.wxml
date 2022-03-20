@@ -14,8 +14,7 @@
     <!-- 日期选择器（五天） -->
     <view class="date-selector">
       <view 
-        class="date-button" 
-        data-selected="{{date.index === nowSelected}}" 
+        class="date-button {{date.index === nowSelected? 'selected': ''}}" 
         wx:for="{{dates}}" 
         wx:for-item="date"
         wx:key="date"
