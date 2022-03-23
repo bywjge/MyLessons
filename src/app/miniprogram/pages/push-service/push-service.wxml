@@ -1,0 +1,21 @@
+<view class="container">
+  <navigation enableMenu="{{false}}" title="推送服务" />
+  <view class="content" wx:if="{{ready}}">
+    <!-- 主页 -->
+    <view class="card main" wx:if="{{!isBinded}}">
+      <view class="title">开启课程推送服务</view>
+      <view class="subtitle">关注公众号"My Lesson推送服务"</view>
+      <view class="subtitle">长按扫描下方二维码，即可开启课程推送服务</view>
+
+      <image class="qrcode" mode="aspectFill" show-menu-by-longpress="{{true}}" src="{{qrcodeUrl}}" bindtap="fetchQRCode" />
+    </view>
+
+    <!-- 已经开启 -->
+    <view class="card done" wx:else>
+      <view class="icon" />
+      <view class="title">已开启课程推送</view>
+      <view class="subtitle">你已关注公众号“My Lesson推送服务”</view>
+      <view class="subtitle">如需关闭课程推送，取消关注或在公众号底部菜单操作即可</view>
+    </view>
+  </view>
+</view>

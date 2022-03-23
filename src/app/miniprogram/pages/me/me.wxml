@@ -40,6 +40,11 @@
     <view class="module app-functions">
       <span class="title">应用功能</span>
       <view class="content">
+        <view bindtap="jumpToPushService" class="icon-button multiple icon icon-push lesson-push" hover-class="icon-button-tap">
+          <span class="title">课程推送服务</span>
+          <view class="description">无需手动打开小程序，上课前自动推送课程信息到微信</view>
+        </view>
+
         <view bindtap="resetStorage" class="icon-button multiple icon icon-reload reload-lesson" hover-class="icon-button-tap">
           <span class="title">重新获取课程</span>
           <view class="description">手动从教务系统获取最新课表</view>

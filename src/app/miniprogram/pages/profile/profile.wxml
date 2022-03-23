@@ -10,7 +10,7 @@
 
     <view class="module" style="margin-top: 40rpx">
       <view class="title">
-        你好，我叫{{info['姓名']}}
+        你好，我是{{info['姓名']}}
         <view class="{{info['性别'] === '男'? 'male': 'female'}} gender-icon" />
       </view>
       <view class="brief" wx:if="{{!isTeacher}}">{{info['学号']}}</view>

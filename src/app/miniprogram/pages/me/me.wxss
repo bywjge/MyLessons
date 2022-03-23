@@ -317,3 +317,9 @@ page {
   mask-image: var(--icon-exam);
   -webkit-mask-image: var(--icon-exam);
 }
+
+.icon-push:before {
+  background: var(--color-orange-1);
+  mask-image: var(--icon-push);
+  -webkit-mask-image: var(--icon-push);
+}

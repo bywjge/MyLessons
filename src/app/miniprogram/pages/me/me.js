@@ -95,6 +95,13 @@ Page({
     })
   },
 
+  // 课程推送服务
+  jumpToPushService() {
+    wx.navigateTo({
+      url: '/pages/push-service/push-service',
+    })
+  },
+
   // 未开发功能的提示
   showModal() {
     tools.showModal({
