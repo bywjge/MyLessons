@@ -2,5 +2,13 @@
   "permissions": {
     "openapi": [
     ]
-  }
+  },
+
+  "triggers": [
+    {
+      "name": "pushLesson",
+      "type": "timer",
+      "config": "0 30 7,9,11,13,15,18,20 * * * *"
+    }
+  ]
 }
