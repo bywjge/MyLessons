@@ -36,7 +36,13 @@
     </view>
 
     <!-- 评论 -->
-    <view class="post-card">
+    <view class="empty-hint" wx:if="{{articles.length === 0}}">暂无内容</view>
+    <view 
+      class="post-card"
+      wx:for="{{articles}}"
+      wx:for-item="post"
+      wx:key="_id"
+    >
       <!-- 用户头部信息 -->
       <view class="head">
         <image class="avatar" src="{{avatarUrl}}" mode="aspectFit" />
@@ -49,12 +55,7 @@
       
       <!-- 正文 -->
       <view class="content">
-        <view 
-          class="tag-wrapper"
-          wx:for="{{articles}}"
-          wx:for-item="post"
-          wx:key="_id"
-        >
+        <view class="tag-wrapper">
           <view 
             class="tag"
             wx:for="{{post['tags']}}"
@@ -71,9 +72,9 @@
 
       <!-- 底部操作栏 -->
       <view class="bottom-operation">
-        <view class="icon-plain-button icon icon-agree active">1001</view>
-        <view class="icon-plain-button icon icon-disagree">12</view>
-        <view class="icon-plain-button icon icon-comment">200</view>
+        <view class="icon-plain-button icon icon-agree {{post['isLiked']? 'active': ''}}" data-articleid="{{post['_id']}}" bindtap="likeArticle">{{post['agreeCount']}}</view>
+        <view class="icon-plain-button icon icon-disagree {{post['isDisliked']? 'active': ''}}" data-articleid="{{post['_id']}}" bindtap="dislikeArticle">{{post['disagreeCount']}}</view>
+        <view class="icon-plain-button icon icon-comment" data-articleid="{{post['_id']}}" bindtap="testPost">{{post['commentCount']}}</view>
       </view>
     </view>
 

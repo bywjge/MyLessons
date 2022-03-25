@@ -154,7 +154,7 @@ async function getCurrentLessons(time = new Date(), fn) {
 async function doSendLessonMessage(openid, lesson) {
   const startTime = convertIndexToTime(Number(lesson['节次'][0]), false)[0]
   const endTime = convertIndexToTime(Number(lesson['节次'][1]), true)[0]
-
+  console.log(' >>> openid & lesson', openid, lesson)
   const ret = await cloud.openapi.uniformMessage.send({
     "touser": openid,
     "mp_template_msg": {
@@ -193,10 +193,29 @@ async function doSendLessonMessage(openid, lesson) {
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
+  const time = [
+    "07:30",
+    "09:30",
+    "13:30",
+    "12:00",
+    "15:50",
+    "19:00",
+    "20:40"
+  ]
+  let t = new Date()
+  const tick = t.format('HH:MM')
+  // 如果未到时间执行
+  if (time.indexOf(tick) === -1) {
+    console.log('未到时间广播，当前时间为', tick)
+    return ;
+  }
 
-  const t = new Date()
-  t.setDate(22)
-  t.setHours(16)
+  console.log('整点推送课程')
+  
+  // 获取一小时后上课的课程
+  t = new Date(t.getTime() + 60 * 60 * 1000)
+  // t.setDate(22)
+  // t.setHours(16)
 
   getCurrentLessons(t, async (list) => {
     list.forEach(({ _openid, lesson }) => {

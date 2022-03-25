@@ -2,7 +2,7 @@
   <navigation title="更多功能" />
   <!-- <developHint class="hint" /> -->
   <view class="content">
-    <view class="head" wx:if="{{false}}">
+    <view class="head" wx:if="{{true}}">
       <view class="huge-entry discuss" hover-class="button-tap" bindtap="jumpToDiscuss">
         <text class="title">讨论区</text>
         <text class="subtitle">今日新增</text>

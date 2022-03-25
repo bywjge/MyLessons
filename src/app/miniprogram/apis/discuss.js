@@ -1,5 +1,6 @@
 import db from '../static/js/database'
 import logger from '../utils/log'
+import cloud from '../utils/cloud'
 const log = new logger()
 
 const _ = db.command
@@ -10,7 +11,12 @@ log.setKeyword('apis/discuss.js')
 export default {
   addArticle,
   getArticle,
-  deleteArticle
+  getArticleById,
+  deleteArticle,
+  likeArticle,
+  dislikeArticle,
+  postComment,
+  deleteComment
 }
 
 /**
@@ -53,7 +59,7 @@ export default {
 
 
 /**
- * 发表一条动态
+ * 发表一篇文章
  * @param {*} payload 
  */
 async function addArticle(payload) {
@@ -67,6 +73,9 @@ async function addArticle(payload) {
     agreeCount: 0,
     disagreeList: [],
     disagreeCount: 0,
+    commentList: [],
+    commentCount: 0,
+    commentFloor: 0,
     createTime: new Date(),
     lastEditTime: new Date(),
     isDeleted: false,
@@ -81,23 +90,36 @@ async function addArticle(payload) {
 
 /**
  * 获取文章列表
- * @param {number} page 页数,从0开始
+ * @param {number} cursor 页数,从0开始
  * @param {number} [limit = 20] 每页数量
  * @param {boolean} [showDeleted = false] 是否显示删除文章
  * @param {boolean} [showHidden = false] 是否显示隐藏文章
  */
-async function getArticle(page, limit = 20, showDeleted = false, showHidden = false) {
-  const ret = await db.collection(databaseName)
-    .where({
-      isDeleted: _.eq(showDeleted),
-      isHidden: _.eq(showHidden)
-    })
-    .orderBy('createTime', 'desc') /** 按创建时间降序排序 */
-    .skip(page * limit) /** 按分页跳过前面的数据 */
-    .limit(limit) /** 限制每页数据量 */
-    .get()
+async function getArticle(cursor = '', limit = 20, showDeleted = false, showHidden = false) {
+  return cloud.callFunction({
+    name: 'discuss',
+    data: {
+      action: 'getArticle',
+      cursor,
+      limit,
+      showDeleted,
+      showHidden
+    }
+  })
+}
 
-  return Promise.resolve(ret.data)
+/**
+ * 根据id获取某一篇文章
+ * @param {string} id 文章的id
+ */
+async function getArticleById(id) {
+  return cloud.callFunction({
+    name: 'discuss',
+    data: {
+      action: 'getArticleById',
+      articleId: id
+    }
+  })
 }
 
 /**
@@ -113,23 +135,63 @@ async function deleteArticle(id) {
 }
 
 /**
- * 设置对文章的立场（点赞/点踩）
- * @param {string} articleId 文章的id
- * @param {'like' | 'unlike'} stand 立场名称
+ * 点赞某文章
+ * @param {string} id 文章id
  */
-async function setStandForArticle(articleId, stand = 'like') {
-  // 查询文章是否存在
-  // db.collection(databaseName).
-  // db.collection(databaseName).update({
-  //   _id: 
-  // })
+async function likeArticle(id) {
+  return cloud.callFunction({
+    name: 'discuss',
+    data: {
+      action: 'likeArticle',
+      articleId: id
+    }
+  })
 }
 
 /**
- * 取消设置对文章的立场（点赞/点踩）
- * @param {string} articleId 文章的id
- * @param {'like' | 'unlike'} stand 立场名称
+ * 点踩某文章
+ * @param {string} id 文章id
  */
-async function unsetStandForArticle(articleId, stand = 'like') {
+async function dislikeArticle(id) {
+  return cloud.callFunction({
+    name: 'discuss',
+    data: {
+      action: 'dislikeArticle',
+      articleId: id
+    }
+  })
+}
 
+/**
+ * 对文章发表评论
+ * @param {string} articleId 文章id
+ * @param {string} content 评论内容
+ * @param {string} replyTo 回复给谁，对方的openid
+ */
+async function postComment(articleId, content, replyTo) {
+  return cloud.callFunction({
+    name: 'discuss',
+    data: {
+      action: 'postComment',
+      articleId,
+      content,
+      replyTo
+    }
+  })
+}
+
+/**
+ * 对文章发表评论
+ * @param {string} articleId 文章id
+ * @param {string} floor 楼层数
+ */
+async function deleteComment(articleId, floor) {
+  return cloud.callFunction({
+    name: 'discuss',
+    data: {
+      action: 'deleteComment',
+      articleId,
+      floor
+    }
+  })
 }

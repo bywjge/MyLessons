@@ -57,7 +57,7 @@ Page({
 
   handleInput({ detail }) {
     this.setData({
-      'info.text': detail.value
+      'info.content': detail.value
     })
   },
 
@@ -74,6 +74,11 @@ Page({
 
     wx.showToast({ title: '发表成功' })
     await tools.sleep(1000)
+
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2];  //上一个页面
+    prevPage.refreshArticle.apply(prevPage)
+
     wx.navigateBack({
       delta: 1
     })

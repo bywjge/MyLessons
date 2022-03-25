@@ -48,6 +48,7 @@ Page({
     const openid = wx.getStorageSync('openid')
     wx.chooseImage({
       count: 1,
+      sizeType: ['compressed'], // 压缩后上传，节省空间
       success: async ret => {
         wx.showLoading({
           title: '上传数据中',
