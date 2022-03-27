@@ -14,13 +14,21 @@ Page({
     hideHead: false,
     lastY: 0,
     navBarHeight,
-    articles: []
+    articles: [],
+    isAdmin: false,
+    info: {
+      post: 0,
+      message: 0,
+      collection: 0,
+      mark: 0
+    }
   },
 
-  onLoad() {
+  async onLoad() {
     const { avatarUrl } = wx.getStorageSync('wxInfo')
     this.setData({
-      avatarUrl
+      avatarUrl,
+      isAdmin: wx.getStorageSync('admin')
     })
     this.refreshArticle()
   },
@@ -64,14 +72,67 @@ Page({
     .catch(() => {})
   },
 
+  /** 点击动态dropdown弹出菜单 */
+  handleArticleMenu({ target }) {
+    const { dataset: { articleid, owned } } = target
+    
+    const adminMenu = [
+      '举报',
+      '收藏',
+      '封禁该动态'
+    ]
+    const regularMenu = [
+      '举报',
+      '收藏'
+    ]
+    if (owned) {
+      adminMenu.push('删除该动态')
+      regularMenu.push('删除该动态')
+    }
+
+
+    wx.showActionSheet({
+      itemList: this.data.isAdmin? adminMenu: regularMenu,
+    })
+    .then(({ tapIndex: index }) => {
+      let item = null
+      if (this.data.isAdmin) {
+        item = adminMenu[index]
+      } else {
+        item = regularMenu[index]
+      }
+
+      switch(item) {
+        case '举报':
+          this.reportArticle(articleid)
+          break;
+        case '收藏':
+          this.collectArticle(articleid)
+          break;
+        case '封禁该动态':
+          this.blockArticle(articleid)
+          break;
+        case '删除该动态':
+          this.deleteArticle(articleid)
+          break;
+
+      }
+    })
+    .catch(() => {})
+
+  },
+  
   async refreshArticle() {
     wx.showLoading({ title: '加载数据中' })
     const data = await discussApi.getArticle()
     console.log(data)
-
     this.setData({
-      articles: data.result
+      articles: data
     })
+
+    const info = await discussApi.getPersonInfo()
+    this.setData({ info })
+
     wx.hideLoading()
   },
 
@@ -149,11 +210,79 @@ Page({
     await this.refreshSingleArtical(dataset.articleid)
   },
 
+  /**
+   * 举报文章
+   * @param {string} articleId 文章的id
+   */
+  async reportArticle(articleId) {
+    wx.showLoading({
+      title: '请稍后'
+    })
+    await discussApi.reportArticle(articleId)
+      .then(() => {
+        wx.showModal({
+          title: '已提交举报',
+          content: '后台审核将尽快处理您的请求，请等待处理结果'
+        })
+      })
+      .catch(e => {
+        tools.showModal({
+          title: '举报失败',
+          content: e
+        })
+      })
+
+    wx.hideLoading()
+  },
+
+  /**
+   * 收藏文章
+   * @param {string} articleId 文章的id
+   */
+  async collectArticle(articleId) {
+    tools.showModal({
+      title: '提示',
+      content: '功能正在开发中'
+    })
+  },
+
+  /**
+   * 封禁文章（管理员）
+   * @param {string} articleId 文章的id
+   */
+  async blockArticle(articleId) {
+
+  },
+
+  /**
+   * 删除自己发表过的某篇文章
+   * @param {string} articleId 文章id
+   */
+  async deleteArticle(articleId) {
+    console.log("????");
+    wx.showLoading({ title: '请稍后'})
+    await discussApi.deletePost(articleId)
+      .then(() => {
+        tools.showToast({
+          title: '已删除动态',
+        })
+      })
+      .catch(e => {
+        tools.showModal({
+          title: '删除失败',
+          content: '请稍后再试一试'
+        })
+      })
+    wx.hideLoading()
+    await tools.sleep(1000)
+    this.refreshArticle()
+  },
+
   async refreshSingleArtical(articalId) {
     const ret = await discussApi.getArticleById(articalId)
     const index = this.getLocalArticleById(articalId).index
     this.setData({
-      [`articles[${index}]`]: ret.result
+      [`articles[${index}]`]: ret
     })
     console.log(ret)
   },

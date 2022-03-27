@@ -16,7 +16,8 @@ let events = {
   getArticle,
   getArticleById,
   postComment,
-  deleteComment
+  deleteComment,
+  getPersonInfo
 }
 
 exports.main = async (event, context) => {
@@ -150,6 +151,12 @@ async function getArticle({ cursor, limit = 30, showDeleted, showHidden }) {
       isHidden: _.eq(showHidden),
       _id: _.gt(cursor)
     })
+    .lookup({
+      from: 'info',
+      localField: 'schoolId',
+      foreignField: 'username',
+      as: 'info'
+    })
     .addFields({
       isLiked: $.cond({
         if: $.in([openid, '$agreeList']),
@@ -160,9 +167,14 @@ async function getArticle({ cursor, limit = 30, showDeleted, showHidden }) {
         if: $.in([openid, '$disagreeList']),
         then: true,
         else: false
-      })
+      }),
+      isOwn: $.eq(['$_openid', openid])
     })
+    .unwind('$info')
     .project({
+      // userType: '$info.type',
+      'info._id': false,
+      'info.username': false,
       disagreeList: false,
       agreeList: false
     })
@@ -191,6 +203,12 @@ async function getArticleById({ articleId }) {
       _id: articleId,
       _openid: openid
     })
+    .lookup({
+      from: 'info',
+      localField: 'username',
+      foreignField: 'username',
+      as: 'info'
+    })
     .addFields({
       isLiked: $.cond({
         if: $.in([openid, '$agreeList']),
@@ -201,9 +219,12 @@ async function getArticleById({ articleId }) {
         if: $.in([openid, '$disagreeList']),
         then: true,
         else: false
-      })
+      }),
+      isOwn: $.eq(['$_openid', openid])
     })
     .project({
+      // userType: '$info.type',
+      // info: '$info.info',
       disagreeList: false,
       agreeList: false
     })
@@ -269,4 +290,54 @@ async function deleteComment({ articleId, floor }) {
     }
   })
   return Promise.resolve()
+}
+
+/** 
+ * 获取个人信息，动态数量、私信数量、收藏数量等等
+ * @param {Object} payload
+ * @param {string} payload.showDeleted 是否包括删除了的数量 
+ */
+async function getPersonInfo({ showDeleted = false }) {
+  const ret = {
+    post: 0,
+    message: 0,
+    collection: 0,
+    mark: 0
+  }
+  const p1 = db.collection('discusses').where({
+    _openid: openid,
+    isDeleted: showDeleted? undefined: _.eq(showDeleted)
+  }).count().then(res => { ret.post = res.total })
+
+  const p2 = db.collection('messages').where({
+    to: openid
+  }).count().then(res => { ret.message = res.total })
+
+  const p3 = db.collection('info')
+  .aggregate()
+  .match({ 
+    _openid: openid
+  }).project({
+    collectionCount: $.cond({
+      if: $.isArray('$collections'),
+      then: _.size('$collections'),
+      else: 0
+    }),
+
+    markCount: $.cond({
+      if: $.isArray('$marks'),
+      then: _.size('$marks'),
+      else: 0
+    })
+  })
+  .end()
+  .then(res => { 
+    if (res.list.length > 0) {
+      ret.collection = res.list[0].collectionCount
+      ret.mark = res.list[0].markCount
+    }
+   })
+
+  await Promise.all([p1, p2, p3])
+  return Promise.resolve({ result: ret })
 }

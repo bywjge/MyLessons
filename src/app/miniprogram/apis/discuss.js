@@ -12,11 +12,14 @@ export default {
   addArticle,
   getArticle,
   getArticleById,
-  deleteArticle,
+  deletePost,
   likeArticle,
   dislikeArticle,
   postComment,
-  deleteComment
+  deleteComment,
+  reportArticle,
+  reportComment,
+  getPersonInfo
 }
 
 /**
@@ -66,6 +69,7 @@ async function addArticle(payload) {
   // TODO 判断用户是否可以发言
 
   const emptyArticle = {
+    schoolId: wx.getStorageSync('username'),
     content: '',
     images: [],
     tags: [],
@@ -89,6 +93,58 @@ async function addArticle(payload) {
 }
 
 /**
+ * 处理文章内容
+ * @param {Array<Article>} articleList 文章列表
+ * @description 处理文章时间，
+ */
+function mapArticle(articleList) {
+  if (!Array.isArray(articleList)) 
+    return articleList;
+
+  const now = new Date()
+
+  // 时间间隔常数
+  const timeGapMap = {
+    minute: 60 * 1000,
+    hour: 3600 * 1000,
+    day: 24 * 3600 * 1000,
+    week: 7 * 24 * 3600 * 1000
+  }
+
+  articleList.forEach(e => {
+    let timeStr = ''
+    const time = new Date(e.lastEditTime)
+    const gap = now.getTime() - time.getTime()
+    // 小于一分钟，显示“刚刚”
+    if (gap < timeGapMap.minute) {
+      timeStr = '刚刚'
+
+    // 小于一小时，显示“xx分钟前”
+    } else if (gap < timeGapMap.hour) {
+      timeStr = `${Math.floor(gap / timeGapMap.minute)}分钟前`
+
+    // 小于一天，显示“xx小时前”
+    } else if (gap < timeGapMap.day) {
+      timeStr = `${Math.floor(gap / timeGapMap.hour)}小时前`
+
+    // 小于一周，显示“xx天前”
+    } else if (gap < timeGapMap.week) {
+      timeStr = `${Math.floor(gap / timeGapMap.day)}天前`
+
+    // 一周以上则显示具体日期YYYY-mm-dd HH:MM
+    } else {
+      timeStr = time.format('YYYY-mm-dd HH:MM')
+    }
+  
+    Object.assign(e, {
+      time: timeStr
+    })
+  })
+
+  return articleList
+}
+
+/**
  * 获取文章列表
  * @param {number} cursor 页数,从0开始
  * @param {number} [limit = 20] 每页数量
@@ -96,7 +152,7 @@ async function addArticle(payload) {
  * @param {boolean} [showHidden = false] 是否显示隐藏文章
  */
 async function getArticle(cursor = '', limit = 20, showDeleted = false, showHidden = false) {
-  return cloud.callFunction({
+  const ret = await cloud.callFunction({
     name: 'discuss',
     data: {
       action: 'getArticle',
@@ -106,6 +162,8 @@ async function getArticle(cursor = '', limit = 20, showDeleted = false, showHidd
       showHidden
     }
   })
+
+  return mapArticle(ret.result)
 }
 
 /**
@@ -113,24 +171,28 @@ async function getArticle(cursor = '', limit = 20, showDeleted = false, showHidd
  * @param {string} id 文章的id
  */
 async function getArticleById(id) {
-  return cloud.callFunction({
+  const ret = await cloud.callFunction({
     name: 'discuss',
     data: {
       action: 'getArticleById',
       articleId: id
     }
   })
+
+  return mapArticle(ret.result)
 }
 
 /**
  * 删除文章
  * @param {string} id 文章的id
  */
-async function deleteArticle(id) {
-  db.collection('dicusses')
+async function deletePost(id) {
+  return db.collection('discusses')
     .doc(id)
     .update({
-      isDeleted: true
+      data: {
+        isDeleted: true
+      }
     })
 }
 
@@ -187,11 +249,71 @@ async function postComment(articleId, content, replyTo) {
  */
 async function deleteComment(articleId, floor) {
   return cloud.callFunction({
-    name: 'discuss',
+    name: 'discusses',
     data: {
       action: 'deleteComment',
       articleId,
       floor
     }
   })
+}
+
+/**
+ * 举报文章/评论
+ * @param {'article' | 'comment'} [type='article'] 动态类型
+ * @param {string} postId 动态的id
+ * @param {string} [reason] 原因
+ */
+async function report(type = 'article', postId, reason = '') {
+  if (!postId) 
+    return Promise.reject('postid为空')
+    
+  const ret = await db.collection('report-discusses').where({
+    type,
+    postId
+  }).count()
+
+  if (ret.total > 0) {
+    return Promise.reject('您已经举报过该动态，请等待后台处理')
+  }
+
+  // 上报到report-discusses中等待人工审核
+  await db.collection('report-discusses').add({
+    data: {
+      type,
+      postId,
+      reason,
+      time: new Date()
+    }
+  })
+}
+
+/**
+ * 举报文章
+ * @param {string} commentId 评论的id
+ */
+async function reportArticle(articleId, reason) {
+  return report('article', articleId, reason)
+}
+
+/**
+ * 举报评论
+ * @param {string} commentId 评论的id
+ */
+async function reportComment(commentId, reason) {
+  return report('comment', commentId, reason)
+}
+
+/**
+ * 获取个人信息，如动态数量、私信数量、收藏数量
+ */
+async function getPersonInfo() {
+  const ret = await cloud.callFunction({
+    name: 'discuss',
+    data: {
+      action: 'getPersonInfo'
+    }
+  })
+
+  return Promise.resolve(ret.result)
 }

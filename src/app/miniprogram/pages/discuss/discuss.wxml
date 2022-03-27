@@ -10,23 +10,23 @@
       </view>
       <view class="info">
         <view class="item">
-          <view class="text">12</view>
+          <view class="text">{{info.post}}</view>
           <view class="description">动态</view>
         </view>
         <view class="divider" />
         <view class="item">
-          <view class="text">3</view>
+          <view class="text">{{info.message}}</view>
           <view class="description">私信</view>
         </view>
         <view class="divider" />
         <view class="item">
-          <view class="text">12</view>
+          <view class="text">{{info.collection}}</view>
           <view class="description">收藏</view>
         </view>
         <view class="divider" />
 
         <view class="item">
-          <view class="text">180</view>
+          <view class="text">{{info.mark}}</view>
           <view class="description">足迹</view>
         </view>
       </view>
@@ -48,9 +48,9 @@
         <image class="avatar" src="{{avatarUrl}}" mode="aspectFit" />
         <view class="text">
           <view class="name">{{publicName}}</view>
-          <view class="subtitle">3小时前 智能制造学部</view>
+          <view class="subtitle">{{post.time}} {{post.info.info['学院']}}</view>
         </view>
-        <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
+        <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg" data-articleid="{{post['_id']}}" data-owned="{{post['isOwn']}}" bindtap="handleArticleMenu" /> 
       </view>
       
       <!-- 正文 -->
