@@ -2,7 +2,7 @@
   <navigation title="更多功能" />
   <!-- <developHint class="hint" /> -->
   <view class="content">
-    <view class="head" wx:if="{{true}}">
+    <view class="head" wx:if="{{false}}">
       <view class="huge-entry discuss" hover-class="button-tap" bindtap="jumpToDiscuss">
         <text class="title">讨论区</text>
         <text class="subtitle">今日新增</text>
@@ -36,6 +36,18 @@
       <view class="item icon-button multiple icon icon-target" bindtap="jumpToQueryTeacherLesson">
         <span class="title">教师课程查询</span>
         <view class="description">查询老师教的所有课程</view>
+        <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
+      </view>
+
+      <view class="item icon-button multiple icon icon-target" bindtap="" wx:if="{{false}}">
+        <span class="title">我的课程报告</span>
+        <view class="description">查看我这个学期的课程情况</view>
+        <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
+      </view>
+
+      <view class="item icon-button multiple icon icon-target" bindtap="jumpToWhatToEat">
+        <span class="title">今天吃什么</span>
+        <view class="description">思考要吃什么简直是世纪难题</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
       </view>
 

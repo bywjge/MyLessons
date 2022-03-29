@@ -26,5 +26,9 @@ Page({
 
   jumpToQueryTeacherLesson() {
     wx.navigateTo({ url: '/pages/query-teacher-lesson/query-teacher-lesson' })
+  },
+
+  jumpToWhatToEat() {
+    wx.navigateTo({ url: '/pages/what-to-eat/what-to-eat' })
   }
 })

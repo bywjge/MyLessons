@@ -18,7 +18,8 @@
     "pages/discuss-new-post/discuss-new-post",
     "pages/query-occupy/query-occupy",
     "pages/query-teacher-lesson/query-teacher-lesson",
-    "pages/push-service/push-service"
+    "pages/push-service/push-service",
+    "pages/what-to-eat/what-to-eat"
   ],
   "window": {
     "backgroundTextStyle": "light",

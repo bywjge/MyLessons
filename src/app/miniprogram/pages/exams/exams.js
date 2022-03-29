@@ -34,6 +34,12 @@ Page({
     }
 
     this.selectTerm(this.data.selectedTerm)
+
+    const lastTime = wx.getStorageSync('examSyncTime')
+    // 如果两天没更新数据则重载数据
+    if (!lastTime || Date.now() - lastTime.getTime() > 3600 * 24 * 2 * 1000 ) {
+      this.reload()
+    }
   },
   onUnload() {
     unbindTheme()

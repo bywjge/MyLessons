@@ -90,11 +90,12 @@ function convertIndexToTime(index, endTime = false){
 
 /** 
  * 获取某个时间的课程列表
- * @param {Date} time 当前时间
+ * @param {string} index 节次,需要两位数
  * @param {(list: Array<Object>) => Promise} 遍历函数
  */
-async function getCurrentLessons(time = new Date(), fn) {
-  const index = convertTimeToIndex(time)
+async function getCurrentLessons(index, fn) {
+  // const index = convertTimeToIndex(time)
+  const nowDate = new Date().format('YYYY-mm-dd')
   let lastId = ''
   let counter = 0
   while(true) {
@@ -115,7 +116,7 @@ async function getCurrentLessons(time = new Date(), fn) {
       .unwind('$lessons')
       .match({
         '_id': _.gt(lastId), // 这里填入上次查询后最后一个结果的id
-        'lessons.日期': _.eq(time.format('YYYY-mm-dd')),
+        'lessons.日期': _.eq(nowDate),
         // 确保这里是两位数字的字符串
         'lessons.节次': _.elemMatch(_.eq(index))
       })
@@ -154,7 +155,7 @@ async function getCurrentLessons(time = new Date(), fn) {
 async function doSendLessonMessage(openid, lesson) {
   const startTime = convertIndexToTime(Number(lesson['节次'][0]), false)[0]
   const endTime = convertIndexToTime(Number(lesson['节次'][1]), true)[0]
-  console.log(' >>> openid & lesson', openid, lesson)
+  // console.log(' >>> openid & lesson', openid, lesson)
   const ret = await cloud.openapi.uniformMessage.send({
     "touser": openid,
     "mp_template_msg": {
@@ -182,7 +183,7 @@ async function doSendLessonMessage(openid, lesson) {
           "color": "#173177"
         },
         "remark": {
-          "value": `${lesson['上课内容'] || '无简介'}\n\n此条推送由于你打开了课程推送而产生，如不需要收到推送，请取关公众号或在下方菜单关闭该功能`,
+          "value": `${lesson['上课内容']?lesson['上课内容'] + '\n\n': ''} 此条推送由于你打开了课程推送而产生，如不需要收到推送，请取关公众号或在下方菜单关闭该功能`,
           "color": "#2F2F2F"
         }
       }
@@ -193,31 +194,32 @@ async function doSendLessonMessage(openid, lesson) {
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  const time = [
-    "07:30",
-    "09:30",
-    "13:30",
-    "12:00",
-    "15:50",
-    "19:00",
-    "20:40"
-  ]
+  const timeList = {
+    "07:30": "01",
+    "09:30": "03",
+    "13:30": "05",
+    "12:00": "13",
+    "15:50": "07",
+    "19:00": "09",
+    "20:40": "11"
+  }
   let t = new Date()
   const tick = t.format('HH:MM')
+
   // 如果未到时间执行
-  if (time.indexOf(tick) === -1) {
+  const index = timeList[tick]
+  if (typeof index === 'undefined') {
     console.log('未到时间广播，当前时间为', tick)
     return ;
   }
 
   console.log('整点推送课程')
-  
   // 获取一小时后上课的课程
-  t = new Date(t.getTime() + 60 * 60 * 1000)
+  // t = new Date(t.getTime() + 60 * 60 * 1000)
   // t.setDate(22)
   // t.setHours(16)
 
-  getCurrentLessons(t, async (list) => {
+  getCurrentLessons(index, async (list) => {
     list.forEach(({ _openid, lesson }) => {
       doSendLessonMessage(_openid, lesson)
     })

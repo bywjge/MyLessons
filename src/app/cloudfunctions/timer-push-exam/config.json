@@ -6,9 +6,9 @@
 
   "triggers": [
     {
-      "name": "pushLesson",
+      "name": "pushExam",
       "type": "timer",
-      "config": "0 0 8 */1 * * *"
+      "config": "* * * */1 * * *"
     }
   ]
 }

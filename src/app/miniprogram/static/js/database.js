@@ -25,7 +25,8 @@ export {
   updateLesson,
   getSchoolLesson,
   updateSchoolLesson,
-  updateEnterTime
+  updateEnterTime,
+  updateExam
 }
 
 /**
@@ -198,7 +199,7 @@ async function updateLesson(lessons, year, term){
  * 从数据库中获得全校课表
  * @param {Date} date 日期
  */
- async function getSchoolLesson(date){
+async function getSchoolLesson(date){
   let records = (await db.collection('all-lessons').where({
     date: _.eq(date)
   }).get()).data
@@ -248,4 +249,24 @@ async function updateEnterTime() {
       lastEnterTime: new Date()
     }
   })
+}
+
+/**
+ * 更新考试安排到数据库
+ * @param {Array} exams 考试安排，数组
+ */
+async function updateExam(exams) {
+  let records = (await db.collection('exams').get()).data
+
+  const data = {
+    exams,
+    time: new Date()
+  }
+
+  if (records.length > 0) {
+    const id = records[0]._id
+    return db.collection('exams').doc(id).update({ data })
+  }
+
+  return db.collection('exams').add({ data })
 }

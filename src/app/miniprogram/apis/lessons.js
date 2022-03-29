@@ -283,6 +283,7 @@ async function getExamFromSchool() {
   const formattedRows = tools.keyMapConvert(rows, keyMap)
 
   console.log("获取到考试安排数据量", formattedRows.length)
+  const newRows = []
   formattedRows.forEach(e => {
     let termId = e['学期']
     // 老师看不到学期id
@@ -300,11 +301,15 @@ async function getExamFromSchool() {
     if (!Array.isArray(examMap[termId]))
       examMap[termId] = new Array()
 
+    newRows.push(e)
     examMap[termId].push(e)
   })
 
   // 写入storage
   wx.setStorageSync('exams', examMap)
+  wx.setStorageSync('examSyncTime', new Date())
+  // 更新到后端
+  database.updateExam(newRows)
   return examMap
 }
 

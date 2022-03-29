@@ -1,0 +1,86 @@
+page {
+  --avator-size: 120rpx;
+
+  --button-icon-size: 40rpx;
+  --button-column-gap: 32rpx;
+
+  overflow: hidden;
+
+  --border-radius: 28rpx;
+  --button-icon-size: 40rpx;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  /* width: 90%; */
+  /* 不然box-shadow会被截断 */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 9%;
+  padding-top: 60rpx;
+  padding-bottom: 50rpx;
+  flex: 1;
+  overflow: scroll;
+}
+.container > .content .item {
+  position: absolute;
+  font-size: 50rpx;
+  font-weight: 450;
+  opacity: 0;
+  color: var(--text-black-3);
+  z-index: -1;
+  transition: opacity .8s;
+}
+
+.container > .content .item.show {
+  opacity: .4;
+}
+
+.container > .content .front {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+.container > .content .front .title {
+  color: var(--text-black-2);
+  font-size: 40rpx;
+  font-weight: 500;
+}
+
+.container > .content .front .subtitle {
+  text-align: center;
+  color: var(--text-black-3);
+  font-size: 24rpx;
+  margin-top: 10rpx;
+}
+
+.button{
+  margin-top: 110rpx;
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 30rpx;
+  color: #FFFFFF;
+  text-align: center;
+  user-select: none;
+  transition: all 0.3s;
+  font-weight: 500;
+  background: #FFA6B5;
+  border-radius: 11px;
+}
+
+.button-tap {
+  background-color: #f092a2;
+}
