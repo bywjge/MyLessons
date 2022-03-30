@@ -8,7 +8,7 @@
     {
       "name": "pushLesson",
       "type": "timer",
-      "config": "0 0 8 */1 * * *"
+      "config": "0 */5 * * * * *"
     }
   ]
 }

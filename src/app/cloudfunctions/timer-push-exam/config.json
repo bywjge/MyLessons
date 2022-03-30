@@ -8,7 +8,7 @@
     {
       "name": "pushExam",
       "type": "timer",
-      "config": "* * * */1 * * *"
+      "config": "0 0 8 */1 * * *"
     }
   ]
 }

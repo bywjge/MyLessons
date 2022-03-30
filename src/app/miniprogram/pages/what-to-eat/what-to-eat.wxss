@@ -36,10 +36,12 @@ page {
   color: var(--text-black-3);
   z-index: -1;
   transition: opacity .8s;
+  animation: zoomIn ease 1s forwards;
 }
 
-.container > .content .item.show {
-  opacity: .4;
+.container > .content .item.hidden {
+  /* opacity: 0; */
+  animation: zoomOut ease 1s forwards !important;
 }
 
 .container > .content .front {
@@ -55,7 +57,7 @@ page {
 
 .container > .content .front .title {
   color: var(--text-black-2);
-  font-size: 40rpx;
+  font-size: 50rpx;
   font-weight: 500;
 }
 
@@ -68,7 +70,8 @@ page {
 
 .button{
   margin-top: 110rpx;
-  width: 100%;
+  /* width: 100%; */
+  width: 400rpx;
   height: 80rpx;
   line-height: 80rpx;
   font-size: 30rpx;
@@ -83,4 +86,28 @@ page {
 
 .button-tap {
   background-color: #f092a2;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: translate(-10px, -10px) scale(.8);
+  }
+
+  to {
+    opacity: .5;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    opacity: .5;
+    transform: translate(0, 0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(10px, 10px) scale(.7);
+  }
 }

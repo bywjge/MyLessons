@@ -8,7 +8,7 @@ const foodList = "麦当劳,肯德基,炒面,云吞,泡面".split(',')
 Page({
   data: {
     items: [],
-    visible: {},
+    invisible: {},
     isRunning: false,
     timer: null,
     foodName: "麦当劳",
@@ -18,7 +18,7 @@ Page({
     let counter = 0
     const handler = setInterval(async () => {
       if (this.data.items.length > 20 || (!this.data.isRunning && this.data.items.length)) {
-        await this.changeItemVisible(this.data.items[0].id, false)
+        await this.changeItemVisible(this.data.items[0].id, true)
         this.data.items.shift()
         this.setData({
           items: this.data.items
@@ -30,12 +30,12 @@ Page({
         counter++
         this.data.items.push({
           id: "food-background-" + counter,
-          left: this.random(0, windowWidth - 200) + 'px',
+          left: this.random(0, windowWidth ) + 'px',
           top: this.random(navBarHeight, windowHeight - navBarHeight) + 'px',
           name: randomName
         })
         this.setData({ items: this.data.items, foodName: randomName })
-        this.changeItemVisible("food-background-" + counter, true)
+        // this.changeItemVisible("food-background-" + counter, true)
       }
     }, 200)
 
@@ -54,9 +54,9 @@ Page({
 
   async changeItemVisible(id, visible) {
     this.setData({
-      [`visible.${id}`]: visible
+      [`invisible.${id}`]: visible
     })
-    await tools.sleep(800)
+    await tools.sleep(1200)
     return Promise.resolve()
   },
 
