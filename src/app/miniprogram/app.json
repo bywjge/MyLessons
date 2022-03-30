@@ -6,7 +6,7 @@
     "pages/profile/profile",
     "pages/me/me",
     "pages/more/more",
-    "pages/about-test/about-test",
+    "pages/about/about",
     "pages/swiper/swiper",
     "pages/lessons-list/lessons-list",
     "pages/score/score",
@@ -19,7 +19,8 @@
     "pages/query-occupy/query-occupy",
     "pages/query-teacher-lesson/query-teacher-lesson",
     "pages/push-service/push-service",
-    "pages/what-to-eat/what-to-eat"
+    "pages/what-to-eat/what-to-eat",
+    "pages/contact/contact"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -323,3 +323,15 @@ page {
   mask-image: var(--icon-push);
   -webkit-mask-image: var(--icon-push);
 }
+
+.icon-face:before {
+  background: var(--color-green-1);
+  mask-image: var(--icon-face);
+  -webkit-mask-image: var(--icon-face);
+}
+
+.icon-info:before {
+  background: var(--color-green-1);
+  mask-image: var(--icon-info);
+  -webkit-mask-image: var(--icon-info);
+}

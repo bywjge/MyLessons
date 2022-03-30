@@ -7,7 +7,6 @@ import './utils/global.js'
 console.log("hello {0}, I am {1}".format("World", "MeetinaXD"));
 // require('./utils/decode.js')
 
-
 App({
   onLaunch: function () {
     const { height, top } = wx.getMenuButtonBoundingClientRect()
@@ -32,7 +31,7 @@ App({
       indexMode: "day",
       theme: 'dark',
 
-      version: "0.4.0.7"
+      version: "0.4.0.8"
     }
   },
   onError(error) {

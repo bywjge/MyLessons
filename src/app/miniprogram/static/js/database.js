@@ -26,7 +26,8 @@ export {
   getSchoolLesson,
   updateSchoolLesson,
   updateEnterTime,
-  updateExam
+  updateExam,
+  updateScores
 }
 
 /**
@@ -269,4 +270,25 @@ async function updateExam(exams) {
   }
 
   return db.collection('exams').add({ data })
+}
+
+
+/**
+ * 更新成绩到数据库
+ * @param {Array} scores 成绩记录，数组
+ */
+async function updateScores(scores) {
+  let records = (await db.collection('scores').get()).data
+
+  const data = {
+    scores,
+    time: new Date()
+  }
+
+  if (records.length > 0) {
+    const id = records[0]._id
+    return db.collection('scores').doc(id).update({ data })
+  }
+
+  return db.collection('scores').add({ data })
 }

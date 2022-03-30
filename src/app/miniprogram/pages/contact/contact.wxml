@@ -1,0 +1,13 @@
+<view class="container">
+  <navigation enableMenu="{{false}}" title="官方交流群" />
+  <view class="content">
+    <!-- 主页 -->
+    <view class="card main" wx:if="{{!isBinded}}">
+      <view class="title">添加官方交流群</view>
+      <view class="subtitle">欢迎加入My Lesson公测交流群</view>
+      <view class="subtitle">长按扫描下方二维码，即可加入群聊</view>
+
+      <image class="qrcode" mode="aspectFill" show-menu-by-longpress="{{true}}" src="{{qrcodeUrl}}" bindtap="fetchQRCode" />
+    </view>
+  </view>
+</view>

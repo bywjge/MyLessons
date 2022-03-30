@@ -44,3 +44,26 @@
   border-radius: 8rpx;
   background-color: rgba(0, 0, 0, 0.1);
 }
+
+
+.paragraph {
+  width: 75%;
+  margin: 0 auto;
+  font-size: 28rpx;
+  line-height: 52rpx;
+  color: var(--text-black-2);
+  padding-bottom: 100rpx;
+}
+
+.paragraph .text {
+  margin-left: 20rpx;
+  margin-top: 15rpx;
+}
+
+.paragraph .title {
+  font-size: 32rpx;
+  font-weight: 500;
+  line-height: 48rpx;
+  color: var(--color-pink-1);
+  margin-top: 40rpx;
+}

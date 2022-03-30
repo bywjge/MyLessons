@@ -1,0 +1,51 @@
+<!--miniprogram/pages/about-test/about-test.wxml-->
+<view class="container">
+  <navigation title="关于应用" enableMenu="{{false}}" />
+  <scroll-view scroll-y="true" style="height: calc(100% - {{navBarHeight}}px)">
+    <view class="scroll">
+      <view class="about-wrapper">
+        <image src="/assets/Logo-svg-about.svg" class="logo"></image>
+        <view class="name">My Lesson (邑课程)</view>
+        <view class="version">
+          当前版本
+          <view class="text">{{version}}</view>
+        </view>
+      </view>
+
+      <!-- <towxml nodes="{{article}}"/> -->
+      <view class="paragraph">
+        <view class="title">应用简介</view>
+        <view class="text">My Lesson是一个轻量级、用户友好、体验舒适的第三方课程客户端，为五邑大学的学生和老师提供服务。</view>
+        <view class="text">⚠️ 目前应用处于公测阶段，功能可能会发生变动，届时将提前通知。</view>
+        <view class="title">应用特色</view>
+        <view class="text">⭐ 支持教师以及学生账号使用</view>
+        <view class="text">⭐ 没有广告，以后也不会有</view>
+        <view class="text">⭐ 不需要输入验证码，不需要反复登录</view>
+        <view class="text">⭐ 云端同步，数据绑定微信</view>
+        <view class="text">⭐ 多平台兼容，有微信就能用</view>
+        <view class="text">⭐ 课程推送，无需进入程序就可以知道课程安排</view>
+        <view class="text">⭐ 可视化操作，一些作者深有体会的糟糕体验在这里已被优化</view>
+        <view class="text">⭐ 舒适的体验，等等...</view>
+
+        <view class="title">为什么要做</view>
+        <view class="text">我受够了不停地输入验证码...我也受够了没有审美的开发者们在应用里一通乱画，将“功能完善的半成品”推向公众。</view>
+        <view class="text">但一般地，这些应用又会具有丰富的广告功能...使用体验不可谓不奇妙</view>
+        <view class="text">同时我也深知开发不易，我并没有权利要求他们做什么事情。因此我决定自己开发一款符合个人使用习惯的应用</view>
+        <view class="text">因为应用一开始是打算自己做给自己用的，所以命名为My Lesson</view>
+
+        <view class="title">后话</view>
+        <view class="text">这是我开发的第一款小程序应用。因为经验的缺乏，某些地方的体验也许会比较糟糕。如：交互动画的流畅性不足、应用的交互逻辑不符合您的使用习惯、软件出现设计缺陷(Bug)等等。</view>
+        <view class="text">如果出现任何问题，烦请您添加官方交流群与开发者沟通。我会尽可能快地解决问题。</view>
+        <view class="text">✨ 小提示：尽可能心平气和地沟通，会使得问题解决的更快哦。</view>
+        <view class="title">如果你感兴趣...</view>
+        <view class="text">希望加入到开发团队中吗？如果您有兴趣提供点子，或者想要参与功能/界面的设计/应用程序的开发工作中，请联系我吧（在官方交流群中找到我）</view>
+
+        <view class="title">关于我</view>
+        <view class="text">Github: <text style="display: block;color: var(--color-pink-1)">https://github.com/MeetinaXD</text></view>
+        <view class="text">Blog: <text style="display: block;color: var(--color-pink-1)">https://meetinaxd.ltiex.com/</text></view>
+      </view>
+
+
+    </view>
+  </scroll-view>
+</view>

@@ -102,6 +102,18 @@ Page({
     })
   },
 
+  jumpToContact() {
+    wx.navigateTo({
+      url: '/pages/contact/contact',
+    })
+  },
+
+  jumpToAbout() {
+    wx.navigateTo({
+      url: '/pages/about/about',
+    })
+  },
+
   // 未开发功能的提示
   showModal() {
     tools.showModal({

@@ -2,6 +2,7 @@ const app = getApp();
 const { navBarHeight } = getApp().globalData
 const eventBus = app.globalData.eventBus;
 import { bindTheme, unbindTheme } from '../../utils/theme'
+import { doSync } from '../../static/js/schedule-sync'
 
 Page({
   data: {
@@ -26,7 +27,9 @@ Page({
   onUnload() {
     unbindTheme()
   },
+
   onReady: function () {
+    doSync()
     eventBus.on("switchView", name => {
       this.setData({
         indexMode: name
