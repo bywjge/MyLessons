@@ -12,7 +12,7 @@
       {{item.name}}
     </view>
     <view class="front">
-      <view class="title" wx:if="{{times > 3}}">这么作？别吃了</view>
+      <view class="title" wx:if="{{times > 5}}">这么作？别吃了</view>
       <view style="display: flex; flex-direction: column; align-items: center;" wx:else>
         <view class="title">{{isRunning? foodName: foodName? '今天就吃：' +foodName : '今天吃什么'}}</view>
         <view class="subtitle" wx:if="{{!isRunning}}">解决世纪难题，点击下方按钮开始</view>

@@ -212,6 +212,7 @@ async function getScoreFromSchool() {
   }
   const formattedRows = tools.keyMapConvert(rows, keyMap)
   console.log("获取到考试成绩数据条数", formattedRows.length)
+
   formattedRows.forEach(e => {
     const termId = e['学期']
     if (!Array.isArray(scoreMap[termId]))
@@ -222,6 +223,9 @@ async function getScoreFromSchool() {
 
   // 写入storage
   wx.setStorageSync('scores', scoreMap)
+  wx.setStorageSync('scoresSyncTime', new Date())
+  // 更新到后端
+  database.updateScores(formattedRows)
   return scoreMap
 }
 

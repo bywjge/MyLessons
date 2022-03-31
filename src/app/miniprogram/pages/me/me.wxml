@@ -70,6 +70,16 @@
           <span class="title">开发者模式</span>
           <view class="description">为开发和测试人员提供的一系列排错选项和工具，点击以{{!enableDebug?'启用':'禁用'}}</view>
         </view>
+
+        <view bindtap="jumpToContact" class="icon-button multiple icon icon-face delelop-mode" hover-class="icon-button-tap">
+          <span class="title">官方交流群</span>
+          <view class="description">遇到问题需要帮助，还是有更好的建议呢？点击联系并寻找作者帮助吧</view>
+        </view>
+
+        <view bindtap="jumpToAbout" class="icon-button multiple icon icon-info delelop-mode" hover-class="icon-button-tap">
+          <span class="title">关于应用</span>
+          <view class="description">关于My Lesson小程序应用</view>
+        </view>
       </view>
     </view>
 
@@ -88,7 +98,7 @@
         </view>
 
         <view bindtap="debugRecolorize" class="icon-button multiple icon icon-code" hover-class="icon-button-tap">
-          <span class="title">重新分配课程颜色</span>
+          <span class="title">重新分配课程颜色</span>
           <view class="description">如题。但所有课程的颜色仍然是随机分配</view>
         </view>
       </view>

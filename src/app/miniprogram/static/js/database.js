@@ -13,21 +13,6 @@
 const db = wx.cloud.database()
 const _ = db.command
 export default db
-export {
-  getFirstDayOfTerm,
-  setFirstDayOfTerm,
-  setUserAvatar,
-  getCookie,
-  updateCookie,
-  getAccount,
-  updateAccount,
-  getLesson,
-  updateLesson,
-  getSchoolLesson,
-  updateSchoolLesson,
-  updateEnterTime,
-  updateExam
-}
 
 /**
  * 获取某个学期第一天的日期
@@ -269,4 +254,42 @@ async function updateExam(exams) {
   }
 
   return db.collection('exams').add({ data })
+}
+
+
+/**
+ * 更新成绩到数据库
+ * @param {Array} scores 成绩记录，数组
+ */
+async function updateScores(scores) {
+  let records = (await db.collection('scores').get()).data
+
+  const data = {
+    scores,
+    time: new Date()
+  }
+
+  if (records.length > 0) {
+    const id = records[0]._id
+    return db.collection('scores').doc(id).update({ data })
+  }
+
+  return db.collection('scores').add({ data })
+}
+
+export {
+  getFirstDayOfTerm,
+  setFirstDayOfTerm,
+  setUserAvatar,
+  getCookie,
+  updateCookie,
+  getAccount,
+  updateAccount,
+  getLesson,
+  updateLesson,
+  getSchoolLesson,
+  updateSchoolLesson,
+  updateEnterTime,
+  updateExam,
+  updateScores
 }

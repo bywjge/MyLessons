@@ -3,3 +3,4 @@ dist
 .DS_*
 CaptchaSolution/
 */**/*-lock.json
+src/app/miniprogram/miniprogram_npm/*

@@ -355,3 +355,15 @@ page {
   mask-image: var(--badge-test);
   -webkit-mask-image: var(--badge-test);
 }
+
+.icon-face:before {
+  background: var(--color-green-1);
+  mask-image: var(--icon-face);
+  -webkit-mask-image: var(--icon-face);
+}
+
+.icon-info:before {
+  background: var(--color-green-1);
+  mask-image: var(--icon-info);
+  -webkit-mask-image: var(--icon-info);
+}
