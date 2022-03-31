@@ -4,6 +4,15 @@ import accountApi from '../../apis/account'
 
 const app = getApp()
 const eventBus = app.globalData.eventBus
+const dayGap = 3600 * 24 * 1000 //ms
+
+/** 徽章列表，包含了徽章的名字和描述 */
+const badges = {
+  test: {
+    name: '内测组勋章',
+    description: '小程序公布前参加内测活动的用户才能获得的特别勋章'
+  }
+}
 
 Page({
 
@@ -17,10 +26,23 @@ Page({
       学号: '',
       性别: '男'
     },
+    badges: [],
     enableDebug: false,
     avatarUrl: '',
     isTeacher: false
   },
+
+  async refreshInfo() {
+    const lastSyncTime = wx.getStorageSync('infoSyncTime')
+    if (!lastSyncTime || (Date.now() - lastSyncTime.getTime()) > dayGap)
+      await accountApi.asyncAccountInfo()
+
+    const badges = wx.getStorageSync('badges')
+    this.setData({
+      badges
+    })
+  },
+
   async onLoad() {
     this.setData({
       isTeacher: wx.getStorageSync('usertype') === 'teacher'
@@ -43,20 +65,37 @@ Page({
     }
 
     eventBus.on('updateAvatar', this.refreshAvatar.bind(this))
-    
+
     this.setData({
       info,
       enableDebug
     })
+
+    this.refreshInfo()
   },
+
   onUnload() {
     // unbindTheme()
   },
+
   refreshAvatar() {
     console.log("刷新");
     const { avatarUrl } = wx.getStorageSync('wxInfo')
     this.setData({
       avatarUrl
+    })
+  },
+
+  /** 点击徽章查看信息 */
+  handleBadgeTap({ currentTarget }) {
+    const { dataset } = currentTarget
+    const badgeInfo = badges[dataset.badge]
+    if (!badgeInfo)
+      return ;
+
+    tools.showModal({
+      title: badgeInfo.name,
+      content: badgeInfo.description
     })
   },
 

@@ -102,10 +102,12 @@ async function asyncAccountInfo() {
   wx.setStorageSync('username', record.username)
   wx.setStorageSync('password', record.password)
   wx.setStorageSync('admin', record.admin || false)
+  wx.setStorageSync('badges', record.badge || new Array(0))
   wx.setStorageSync('wxInfo', record.userInfo)
 
   // 设置绑定值为true
   wx.setStorageSync('binded', true)
+  wx.setStorageSync('infoSyncTime', new Date())
 
   return Promise.resolve()
 }

@@ -180,7 +180,9 @@ page {
   flex-direction: column;
   /* align-items: center; */
 }
-
+.module:not(:first-child) {
+  margin-top: 70rpx;
+}
 /* 功能标题 */
 .module > .title {
   margin-left: 30rpx;
@@ -196,6 +198,17 @@ page {
   justify-content: space-between;
 }
 
+.module > .content.card {
+  background: var(--item-background);
+  box-sizing: border-box;
+  box-shadow: 0 0 20rpx 0 var(--shadow-10);
+  border-radius: 9px;
+  display: flex;
+  width: 100%;
+  min-height: 100rpx;
+  align-items: center;
+}
+
 /* 功能的一列 */
 .module > .content .column {
   width: 50%;
@@ -208,11 +221,24 @@ page {
 }
 
 .app-functions {
-  margin-top: 70rpx;
+  /* margin-top: 70rpx; */
 }
 
 .app-functions > .content {
   flex-direction: column;
+}
+.module.badge .content {
+  /* width: 90%; */
+  padding: 0 30rpx;
+}
+
+.module.badge .badge {
+  background: var(--badge-test);
+  background-size: 76rpx 74rpx;
+  background-repeat: no-repeat;
+  height: 76rpx;
+  width: 74rpx;
+  /* transform: scale(3); */
 }
 
 /* 带图标的按钮 */
@@ -322,4 +348,10 @@ page {
   background: var(--color-orange-1);
   mask-image: var(--icon-push);
   -webkit-mask-image: var(--icon-push);
+}
+
+.icon-badge-test:before {
+  /* background: var(--color-orange-1); */
+  mask-image: var(--badge-test);
+  -webkit-mask-image: var(--badge-test);
 }

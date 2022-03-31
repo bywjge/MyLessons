@@ -19,6 +19,22 @@
       <fa class="more-icon" icon="fa fa-angle-down fa-lg"></fa> 
     </view>
 
+    <!-- 勋章 -->
+    <view class="module badge" wx:if="{{badges.length > 0}}">
+      <span class="title">获得的勋章</span>
+      <view class="content">
+        <view 
+          class="badge {{badge}}"
+          wx:for="{{badges}}"
+          wx:for-item="badge"
+          wx:key="badge"
+          data-badge="{{badge}}"
+          bindtap="handleBadgeTap"
+        />
+        
+      </view>
+    </view>
+
     <!-- 课程服务 -->
     <view class="module">
       <span class="title">课程服务</span>
