@@ -31,12 +31,13 @@ App({
       indexMode: "day",
       theme: 'dark',
 
-      version: "0.4.0.8"
+      version: "0.4.1.1"
     }
   },
   onError(error) {
     log.error(error)
   },
+
 
   // towxml:require('/towxml/index')
 })
