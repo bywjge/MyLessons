@@ -21,7 +21,7 @@
 
     <!-- 勋章 -->
     <view class="module badge" wx:if="{{badges.length > 0}}">
-      <span class="title">获得的勋章</span>
+      <span class="title">获得的勋章({{badges.length}}个)</span>
       <view class="content">
         <view 
           class="badge {{badge}}"

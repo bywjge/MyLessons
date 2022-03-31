@@ -37,6 +37,8 @@ page {
   z-index: -1;
   transition: opacity .8s;
   animation: zoomIn ease 1s forwards;
+  word-wrap: none;
+  word-break: keep-all;
 }
 
 .container > .content .item.hidden {
@@ -67,6 +69,23 @@ page {
   color: var(--text-black-3);
   font-size: 24rpx;
   margin-top: 10rpx;
+}
+
+.container > .content .front .inner-wrapper {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  /* background: var(--color-white-50);
+  padding: 80rpx 30rpx;
+  border-radius: 40rpx;
+  border: solid 2rpx var(--color-black-20); */
+  /* box-shadow: 0 0 16rpx 0 var(--shadow-10); */
+}
+
+.container > .content .front .inner-wrapper .backgrounded-item {
+  background: var(--item-background);
+  padding: 10rpx 20rpx;
+  border-radius: 10rpx;
 }
 
 .button{

@@ -1,6 +1,6 @@
 /* miniprogram/pages/about-test/about-test.wxss */
 .container{
-  background-color: white;
+  /* background-color: white; */
   overflow: hidden;
 }
 .logo{
@@ -15,11 +15,12 @@
   align-items: center;
 } */
 
-.about-wrapper{
+.about-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 120rpx;
+  color: var(--text-black-2);
 }
 
 .name{
@@ -42,7 +43,7 @@
   font-size: 32rpx;
   font-weight: 500;
   border-radius: 8rpx;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--color-black-10);
 }
 
 
@@ -65,5 +66,5 @@
   font-weight: 500;
   line-height: 48rpx;
   color: var(--color-pink-1);
-  margin-top: 40rpx;
+  margin-top: 60rpx;
 }

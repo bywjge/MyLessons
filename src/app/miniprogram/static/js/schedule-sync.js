@@ -22,6 +22,14 @@ export async function doSync() {
   if (!scoresSyncTime || (Date.now() - scoresSyncTime.getTime() > dayGap * 3)) {
     await lessonApi.getScoreFromSchool()
   }
+
+  /**
+   * 重新获取课程：7天一次
+   */
+  const lessonsSyncTime = wx.getStorageSync('lastSyncTime')
+  if (!lessonsSyncTime || (Date.now() - lessonsSyncTime.getTime() > dayGap * 7)) {
+    await lessonApi.syncLessons(true)
+  }
 }
 
 // doSync()

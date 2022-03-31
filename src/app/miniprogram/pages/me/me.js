@@ -79,8 +79,9 @@ Page({
   },
 
   refreshAvatar() {
-    console.log("刷新");
-    const { avatarUrl } = wx.getStorageSync('wxInfo')
+    console.log("刷新")
+    const wxInfo = wx.getStorageSync('wxInfo')
+    const avatarUrl = wx.getStorageSync('avatarUrl') || wxInfo.avatarUrl
     this.setData({
       avatarUrl
     })
@@ -179,7 +180,7 @@ Page({
   resetStorage() {
     tools.showModal({
       title: "确认操作",
-      content: "重新获取课程，将清空储存在云端的数据。（鉴于小程序还在测试阶段）不建议使用该功能。确定继续吗？",
+      content: "重新获取课程，将清空储存在云端的数据，如果中途失败，需要重新操作。确定继续吗？",
       confirmText: '是的',
       cancelText: '算了',
       showCancel: true

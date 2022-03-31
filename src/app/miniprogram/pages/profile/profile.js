@@ -35,7 +35,8 @@ Page({
   },
 
   refreshAvatar() {
-    const { avatarUrl } = wx.getStorageSync('wxInfo')
+    const wxInfo = wx.getStorageSync('wxInfo')
+    const avatarUrl = wx.getStorageSync('avatarUrl') || wxInfo.avatarUrl
     this.setData({
       avatarUrl
     })
@@ -78,7 +79,7 @@ Page({
             eventBus.emit('updateAvatar')
           },
         })
-        console.log(ret)
+        // console.log(ret)
       },
       fail: () => {}
     })
@@ -89,7 +90,7 @@ Page({
     return new Promise((resolve, reject) => {
       // 要先删除掉已存在的头像
       wx.cloud.deleteFile({
-        fileList: [this.data.avatarUrl],
+        fileList: [wx.getStorageSync('avatarUrl')],
         success: resolve,
         fail: reject
       })

@@ -65,11 +65,12 @@ async function setFirstDayOfTerm(year, term, date) {
  */
 async function setUserAvatar(fileId) {
   let records = (await db.collection('accounts').get()).data
-  const userInfo = wx.getStorageSync('wxInfo')
-  userInfo['avatarUrl'] = fileId
+  // const userInfo = wx.getStorageSync('wxInfo')
+  // userInfo['avatarUrl'] = fileId
   if (records.length > 0) {
-    wx.setStorageSync('wxInfo', userInfo)
-    return db.collection('accounts').doc(id).update({ data: { userInfo } })
+    wx.setStorageSync('avatarUrl', fileId)
+    const id = records[0]._id
+    return db.collection('accounts').doc(id).update({ data: { avatarUrl: fileId } })
   }
   return Promise.reject('数据库中无记录')
 }

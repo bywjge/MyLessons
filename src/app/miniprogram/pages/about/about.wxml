@@ -17,6 +17,11 @@
         <view class="title">应用简介</view>
         <view class="text">My Lesson是一个轻量级、用户友好、体验舒适的第三方课程客户端，为五邑大学的学生和老师提供服务。</view>
         <view class="text">⚠️ 目前应用处于公测阶段，功能可能会发生变动，届时将提前通知。</view>
+
+        <view class="title">如果您需要使用帮助...</view>
+        <view class="text">请关注公众号“My Lesson推送服务”（在“我的”页面的“课程推送服务”可以关注），在下方菜单有帮助入口</view>
+
+
         <view class="title">应用特色</view>
         <view class="text">⭐ 支持教师以及学生账号使用</view>
         <view class="text">⭐ 没有广告，以后也不会有</view>
@@ -25,6 +30,7 @@
         <view class="text">⭐ 多平台兼容，有微信就能用</view>
         <view class="text">⭐ 课程推送，无需进入程序就可以知道课程安排</view>
         <view class="text">⭐ 可视化操作，一些作者深有体会的糟糕体验在这里已被优化</view>
+        <view class="text">⭐ 支持深色模式（跟随系统），将来会有自定义主题</view>
         <view class="text">⭐ 舒适的体验，等等...</view>
 
         <view class="title">为什么要做</view>
