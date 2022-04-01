@@ -45,7 +45,7 @@ Component({
         nowPage
       })
 
-      console.log(nowPage);
+      // console.log(nowPage);
     }
   },
   

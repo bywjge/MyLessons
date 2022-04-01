@@ -147,7 +147,7 @@ async function getLessonFromSchool(year, term = 1, isTeacher = false) {
       zc: '',
       teadm: 200001483,
       page: 1,
-      rows: 20,
+      rows: 1000,
       sort: 'kxh',
       order: 'asc',
     })

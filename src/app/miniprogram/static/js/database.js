@@ -133,6 +133,7 @@ async function updateAccount(username, password, userInfo) {
     password,
     userInfo,
     admin: false,
+    badge: [],
     time: new Date()
   }
 
