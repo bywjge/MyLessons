@@ -24,6 +24,7 @@ page {
 
 .selector-wrapper .date-week-viewer{
   font-size: 37rpx;
+  line-height: 50rpx;
   font-weight: 500;
   color: var(--text-black-1);
   letter-spacing: -0.22px;

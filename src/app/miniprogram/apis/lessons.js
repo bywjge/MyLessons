@@ -111,13 +111,13 @@ async function getLessonFromSchool(year, term = 1, isTeacher = false) {
     kcmc: '课程名称',
     teaxms: '教师姓名',
     jxbmc: '上课班级',
-    zc: '上课周次', 
+    zc: '上课周次',
     /** 只有每周课表是jcdm2 */
     jcdm: ['节次', str => {
       str = str.trim()
       if (str.length < 4)
         return null;
-      
+
       let arr = [0, 0]
       arr[0] = str.slice(0, 2)
       arr[1] = str.slice(str.length - 2, str.length)
@@ -248,6 +248,7 @@ async function getExamFromSchool() {
         sort: 'ksrq',
         order: 'asc'
       }
+
     )
   } else {
     // 学生获取数据
@@ -264,7 +265,7 @@ async function getExamFromSchool() {
     )
   }
   const keyMap = {
-    "xnxqdm": "学期", 
+    "xnxqdm": "学期",
     "xs": "学时",
     "rs": "考试人数",
     "jkteaxms": ["监考老师", ret => ret.split(',')],
@@ -280,7 +281,7 @@ async function getExamFromSchool() {
     "sjbh": "试卷编号",
     "jxbmc": ["考试班级", ret => ret.split(',')],
     "iszk": ["是否主考", ret => Number(ret) === 1],
-    "kscdmc": "考试场地" 
+    "kscdmc": "考试场地"
   }
   const { total, rows } = ret.data
   const examMap = { }
@@ -360,8 +361,12 @@ function convertDateToWeek(nowDate, convertToChinese = false){
   }
 
   let week = Math.floor((nowDate.nDaysAgo(1).getTime() - from.getTime()) / (1000 * 60 * 60 * 24 * 7)) + 1
+
   // 最大到22周
-  week = Math.min(week, 22)
+  if (week > 22)
+    return null
+
+  // week = Math.min(week, 22)
 
   if (convertToChinese){
     return chineseNumber[week - 1]
@@ -426,7 +431,7 @@ function convertIndexToTime(index, endTime = false){
 /**
  * 同步课表
  * @param {boolean} [forceFromSchool = false] 是否强制更新，从教务系统获取
- * 
+ *
  * @TODO 没有分学期储存，云端或者本地都只能储存一个学期
  * @description
  *   若数据库无数据，则从教务处同步;
@@ -445,6 +450,7 @@ async function syncLessons(forceFromSchool = false){
       const { lessons, time } = await database.getLesson(year, term)
       convertAndStorage(lessons)
       wx.setStorageSync('lastSyncTime', time || new Date())
+      wx.setStorageSync('lastSyncTerm', `${year}0${term}`)
       return ;
     } catch {
       log.warn('数据库中不存在课程')
@@ -456,9 +462,10 @@ async function syncLessons(forceFromSchool = false){
   const isTeacher = wx.getStorageSync('usertype') === 'teacher'
   const lessons = await getLessonFromSchool(year, term, isTeacher)
   log.info('上传课程到数据库')
-  database.updateLesson(lessons)
+  database.updateLesson(lessons, year, term)
   convertAndStorage(lessons)
   wx.setStorageSync('lastSyncTime', new Date())
+  wx.setStorageSync('lastSyncTerm', `${year}0${term}`)
 }
 
 /**
@@ -484,7 +491,7 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
   } else {
     lessonsByDay = lessons
   }
-  
+
   /** 合并大节的课 */
   for (const key in lessonsByDay) {
     // 取出一天的课程
@@ -513,7 +520,7 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
       // 跳过第一节课
       if (index === 0)
         return true
-      
+
       const pre = raw[index - 1]
       const now = e
       if (!pre || !now)
@@ -523,7 +530,7 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
       // ! 而且需要前一节课的结束节次 + 1 === 后一节课的开始节次
       if (
         (now['课程名称'] === pre['课程名称']) &&
-        (!now['冲突'] && !pre['冲突']) && 
+        (!now['冲突'] && !pre['冲突']) &&
         (Number(pre['节次'][1]) + 1 === Number(now['节次'][0]))
       ) {
         pre['节次'][1] = now['节次'][1]
@@ -547,7 +554,7 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
   if (!skipColorize)
     colorizeLesson(lessonsByDay)
 
-  /** 
+  /**
    * 生成课表映射
    * 1.统计每一节课出现的时间
    * 2.上课起始 / 终止时间
@@ -601,7 +608,7 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
     })
   }
   wx.setStorageSync('lessonsMap', lessonMap)
-  
+
   // 先储存到storage，避免影响
   wx.setStorageSync('lessonsByDay', lessonsByDay)
 
@@ -731,7 +738,7 @@ function deleteLesson(lesson, wholeLesson = false) {
    */
 
   const lessonsByDay = wx.getStorageSync('lessonsByDay')
-  
+
   if (!wholeLesson) {
     const date = lesson['日期']
     _deleteByDate(lesson, lessonsByDay, date)

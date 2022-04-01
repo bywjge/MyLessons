@@ -1,4 +1,6 @@
 import { bindTheme, unbindTheme } from '../../utils/theme'
+import api from '../../apis/app'
+
 Page({
   data: {
     doneList: [],
@@ -12,7 +14,7 @@ Page({
   onLoad() {
     // data中自动添加一个theme
     bindTheme(this)
-
+    this.checkBind()
     const lesson = wx.getStorageSync('lessonsMap')
     const doneList = []
     const undoneList = []
@@ -54,6 +56,15 @@ Page({
   },
   onUnload() {
     unbindTheme()
+  },
+  async checkBind() {
+    const authed = await api.isAppAuthed()
+    const binded = wx.getStorageSync('binded')
+    if (!authed || !binded) {
+      wx.redirectTo({
+        url: '/pages/welcome/welcome',
+      })
+    }
   },
   switchVisible({ currentTarget }) {
     const { dataset } = currentTarget

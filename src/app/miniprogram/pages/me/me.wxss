@@ -230,15 +230,11 @@ page {
 .module.badge .content {
   /* width: 90%; */
   padding: 0 30rpx;
+  justify-content: flex-start;
 }
 
-.module.badge .badge {
-  background: var(--badge-test);
-  background-size: 76rpx 74rpx;
-  background-repeat: no-repeat;
-  height: 76rpx;
-  width: 74rpx;
-  /* transform: scale(3); */
+.module.badge .content .badge {
+  margin-right: 30rpx;
 }
 
 /* 带图标的按钮 */
@@ -350,12 +346,6 @@ page {
   -webkit-mask-image: var(--icon-push);
 }
 
-.icon-badge-test:before {
-  /* background: var(--color-orange-1); */
-  mask-image: var(--badge-test);
-  -webkit-mask-image: var(--badge-test);
-}
-
 .icon-face:before {
   background: var(--color-green-1);
   mask-image: var(--icon-face);
@@ -367,3 +357,42 @@ page {
   mask-image: var(--icon-info);
   -webkit-mask-image: var(--icon-info);
 }
+
+/* 徽章列表 */
+
+/* 内测组 */
+.module.badge .test {
+  background: var(--badge-test);
+  background-size: 76rpx 74rpx;
+  background-repeat: no-repeat;
+  height: 76rpx;
+  width: 74rpx;
+}
+
+/* 除错大师（debug） */
+.module.badge .debug {
+  background: var(--badge-debug);
+  background-size: 77rpx 74rpx;
+  background-repeat: no-repeat;
+  height: 77rpx;
+  width: 77rpx;
+}
+
+/* 尝鲜者 */
+.module.badge .pioneer {
+  background: var(--badge-cup);
+  background-size: 77rpx 74rpx;
+  background-repeat: no-repeat;
+  height: 77rpx;
+  width: 77rpx;
+}
+
+/* 功能建议被采纳 */
+.module.badge .recommender {
+  background: var(--badge-target);
+  background-size: 77rpx 74rpx;
+  background-repeat: no-repeat;
+  height: 77rpx;
+  width: 77rpx;
+}
+

@@ -9,8 +9,20 @@ const dayGap = 3600 * 24 * 1000 //ms
 /** 徽章列表，包含了徽章的名字和描述 */
 const badges = {
   test: {
-    name: '内测组勋章',
-    description: '小程序公布前参加内测活动的用户才能获得的特别勋章'
+    name: '内测组徽章',
+    description: '小程序公布前参加内测活动的用户才能获得的特别徽章'
+  },
+  debug: {
+    name: '除错大师徽章',
+    description: '找出小程序内的设计缺陷(Bug)一定数量后可获得'
+  },
+  recommender: {
+    name: '出谋划策徽章',
+    description: '提出功能建议并被采纳后可获得'
+  },
+  pioneer: {
+    name: '尝鲜者徽章',
+    description: '在公测期使用小程序即可获得'
   }
 }
 
@@ -79,7 +91,6 @@ Page({
   },
 
   refreshAvatar() {
-    console.log("刷新")
     const wxInfo = wx.getStorageSync('wxInfo')
     const avatarUrl = wx.getStorageSync('avatarUrl') || wxInfo.avatarUrl
     this.setData({
@@ -88,7 +99,8 @@ Page({
   },
 
   /** 点击徽章查看信息 */
-  handleBadgeTap({ currentTarget }) {
+  handleBadgeTap
+  ({ currentTarget }) {
     const { dataset } = currentTarget
     const badgeInfo = badges[dataset.badge]
     if (!badgeInfo)

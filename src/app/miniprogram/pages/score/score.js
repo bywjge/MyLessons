@@ -1,5 +1,7 @@
 import lessonApi from '../../apis/lessons'
 import tools from '../../utils/tools'
+import api from '../../apis/app'
+
 Page({
   data: {
     passList: [],
@@ -19,6 +21,7 @@ Page({
   },
 
   async onLoad() {
+    this.checkBind()
     this.generateTermList()
     let scores = wx.getStorageSync('scores')
     if (!scores || scores === "") {
@@ -32,6 +35,15 @@ Page({
     this.selectTerm(this.data.selectedTerm)
   },
 
+  async checkBind() {
+    const authed = await api.isAppAuthed()
+    const binded = wx.getStorageSync('binded')
+    if (!authed || !binded) {
+      wx.redirectTo({
+        url: '/pages/welcome/welcome',
+      })
+    }
+  },
   // 生成课表选择器
   generateTermList() {
     const from = Number(wx.getStorageSync('profile')['入学年份'])

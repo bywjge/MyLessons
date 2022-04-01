@@ -1,6 +1,7 @@
 import lessonApi from '../../apis/lessons'
 import tools from '../../utils/tools'
 import { bindTheme, unbindTheme } from '../../utils/theme'
+import api from '../../apis/app'
 
 Page({
   data: {
@@ -18,6 +19,7 @@ Page({
   },
 
   async onLoad() {
+    this.checkBind()
     this.setData({
       isTeacher: wx.getStorageSync('usertype') === 'teacher'
     })
@@ -43,6 +45,16 @@ Page({
   },
   onUnload() {
     unbindTheme()
+  },
+
+  async checkBind() {
+    const authed = await api.isAppAuthed()
+    const binded = wx.getStorageSync('binded')
+    if (!authed || !binded) {
+      wx.redirectTo({
+        url: '/pages/welcome/welcome',
+      })
+    }
   },
 
   // 生成课表选择器

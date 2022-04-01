@@ -12,7 +12,8 @@ Page({
     isRunning: false,
     timer: null,
     foodName: null,
-    times: 0
+    times: 0,
+    preStop: false,
   },
   onReady() {
     let counter = 0
@@ -26,7 +27,7 @@ Page({
       } 
       const randomName = foodList[this.random(0, foodList.length)]
 
-      if (this.data.isRunning) {
+      if (this.data.isRunning && ! this.data.preStop) {
         counter++
         this.data.items.push({
           id: "food-background-" + counter,
@@ -35,10 +36,10 @@ Page({
           name: randomName
         })
         this.setData({ items: this.data.items, foodName: randomName })
-        // await tools.sleep(1000)
-        // this.changeItemVisible("food-background-" + counter, true)
+        await tools.sleep(1000)
+        this.changeItemVisible("food-background-" + counter, true)
       }
-    }, 200)
+    }, 100)
 
     this.setData({
       timer: handler
@@ -61,11 +62,23 @@ Page({
     return Promise.resolve()
   },
 
-  handleStart() {
+  async handleStart() {
     if (!this.data.isRunning)
       this.setData({ invisible: {}, times: this.data.times + 1, isRunning: true, foodName: foodList[this.random(0, foodList.length)] })
-    else
-      this.setData({ isRunning: false })
+    else {
+      this.setData({ preStop: true })
+      for (let i = 1; i <= 10; i++) {
+        const randomName = foodList[this.random(0, foodList.length)]
+        this.setData({
+          foodName: randomName
+        })
+        await tools.sleep(i * 50)
+      }
+      this.setData({
+        preStop: false,
+        isRunning: false
+      })
+    }
 
     if (this.data.times > 5) {
       this.setData({ isRunning: false })

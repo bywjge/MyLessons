@@ -56,7 +56,6 @@
     </view>
   </view>
 
-
   <!-- 日期选择器 -->
   <view class="selector-wrapper">
     <!-- 周次选择按钮 -->
@@ -142,4 +141,7 @@
     </view>
   </scroll-view>
 
+  <view class="weekly-hint" wx:if="{{outOfTerm}}">
+    ⚠️ 学期已结束
+  </view>
 </view>

@@ -419,3 +419,19 @@ page {
     transform: scale(1) translate(-50%, -50%);
   }
 }
+
+/* 学期完结或未开始的提示 */
+.container .weekly-hint {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-black-2);
+  background: var(--item-background);
+  padding: 10rpx 20rpx;
+  border-radius: 16rpx 16rpx 0 0;
+  font-size: 30rpx;
+  font-weight: 450;
+  box-shadow: 0 0 10rpx 0 var(--shadow-10);
+  opacity: .8;
+}

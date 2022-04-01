@@ -19,7 +19,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
-    const md = (await request.get('https://meetinaxd.ltiex.com/static/about.md')).data
+    // const md = (await request.get('https://meetinaxd.ltiex.com/static/about.md')).data
     // let result = app.towxml(md,'markdown',{
 		// 	events:{					// 为元素绑定的事件方法
 		// 		tap:(e)=>{
@@ -28,10 +28,6 @@ Page({
 		// 	}
 		// });
 
-		// 更新解析数据
-		this.setData({
-			// article:result
-		});
   },
 
   /**
