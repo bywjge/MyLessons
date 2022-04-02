@@ -1,0 +1,14 @@
+<view class="container">
+  <navigation enableMenu="{{false}}" title="分享小程序" />
+  <view class="content">
+    <!-- 主页 -->
+    <view class="card main" wx:if="{{!isBinded}}">
+      <view class="title">分享My Lesson小程序</view>
+      <view class="subtitle">喜欢这个小程序吗？分享给朋友使用吧！</view>
+      <view class="subtitle">您的分享与喜爱是开发者继续创作的动力</view>
+      <view class="subtitle">长按小程序码即可分享或保存</view>
+
+      <image class="qrcode" mode="aspectFill" show-menu-by-longpress="{{true}}" src="/assets/app-code.jpg" />
+    </view>
+  </view>
+</view>

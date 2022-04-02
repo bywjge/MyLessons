@@ -21,7 +21,7 @@
     </view>
 
     <view class="module" style="margin-top: 70rpx">
-      <view class="item icon-button multiple icon icon-find" bindtap="jumpToQueryOccupy">
+      <view class="item icon-button multiple icon icon-find blue" bindtap="jumpToQueryOccupy">
         <span class="title">空教室查询</span>
         <view class="description">需要空教室自习或者开班会吗～</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
@@ -33,7 +33,7 @@
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
       </view>
 
-      <view class="item icon-button multiple icon icon-target" bindtap="jumpToQueryTeacherLesson">
+      <view class="item icon-button multiple icon icon-find green" bindtap="jumpToQueryTeacherLesson">
         <span class="title">教师课程查询</span>
         <view class="description">查询老师教的所有课程</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
@@ -45,7 +45,7 @@
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
       </view>
 
-      <view class="item icon-button multiple icon icon-target" bindtap="jumpToWhatToEat">
+      <view class="item icon-button multiple icon icon-bulb pink" bindtap="jumpToWhatToEat">
         <span class="title">今天吃什么</span>
         <view class="description">思考要吃什么简直是世纪难题</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 

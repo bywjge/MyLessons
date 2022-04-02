@@ -30,6 +30,7 @@ page{
   font-size: 29rpx;
   padding: 0rpx 25rpx;
   box-sizing: border-box;
+  /* color: var(--navigation-bar-text); */
 
   transition: all 0.1s;
 }

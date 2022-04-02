@@ -104,6 +104,7 @@ async function asyncAccountInfo() {
   wx.setStorageSync('admin', record.admin || false)
   wx.setStorageSync('badges', record.badge || new Array(0))
   wx.setStorageSync('wxInfo', record.userInfo)
+  wx.setStorageSync('avatarUrl', record.avatarUrl)
 
   // 设置绑定值为true
   wx.setStorageSync('binded', true)

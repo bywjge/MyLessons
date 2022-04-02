@@ -141,13 +141,16 @@ async function getLessonFromSchool(year, term = 1, isTeacher = false) {
     sknrjj: ['上课内容', str => tools.decodeHTML(str)]
   }
   let ret = null
+  
+  const teacherId = wx.getStorageSync('profile').id || ''
   if (isTeacher) {
     ret = await request.post('https://jxgl.wyu.edu.cn/teagrkbcx!getDataList.action', {
       xnxqdm: `${year}0${term}`,
       zc: '',
-      teadm: 200001483,
+      // teadm: 200001483,
+      teadm: teacherId,
       page: 1,
-      rows: 20,
+      rows: 1000,
       sort: 'kxh',
       order: 'asc',
     })

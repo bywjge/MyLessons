@@ -119,9 +119,13 @@ Component({
 
     goBack() {
       this.triggerEvent()
-      wx.navigateBack({
-        delta: 1
-      })   
+      const pages = getCurrentPages()
+      // 没有上一页可以返回
+      if (pages.length === 1) {
+        wx.redirectTo({ url: '/pages/me/me'})
+      } else {
+        wx.navigateBack({ delta: 1 })   
+      }
     }
   }
 })

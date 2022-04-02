@@ -1,6 +1,11 @@
 <!--miniprogram/pages/profile/profile.wxml-->
 <view class="container" data-theme="{{theme}}">
-  <navigation title="我的" />
+  <navigation title="我的">
+    <view slot="left" class="operation-btn" bindtap="shareApp">
+      分享
+      <fa style="margin-left: 10rpx;" icon="fa fa-share"></fa> 
+    </view>
+  </navigation>
   <view class="content">
     <!-- 个人信息入口 -->
     <view class="profile-card" bindtap="jumpToProfile" hover-class="icon-button-tap" data-gender="female">
@@ -41,13 +46,13 @@
       <view class="content">
         <!-- 第一列 -->
         <view class="column">
-          <view bindtap="jumpToLessonList" class="icon-button icon normal icon-list" hover-class="icon-button-tap">所有课程</view>
-          <view wx:if="{{!isTeacher}}" bindtap="jumpToCreativeScore" class="icon-button icon normal icon-target" hover-class="icon-button-tap">创新学分</view>
+          <view bindtap="jumpToLessonList" class="icon-button icon normal icon-paper blue" hover-class="icon-button-tap">所有课程</view>
+          <view wx:if="{{!isTeacher}}" bindtap="jumpToCreativeScore" class="icon-button icon normal icon-chart green" hover-class="icon-button-tap">创新学分</view>
         </view>
         <!-- 第二列 -->
         <view class="column" style="margin-left: 32rpx;">
-          <view wx:if="{{!isTeacher}}" bindtap="jumpToScore" class="icon-button normal icon icon-rank" hover-class="icon-button-tap">绩点成绩</view>
-          <view bindtap="jumpToExam" class="icon-button normal icon icon-exam" hover-class="icon-button-tap">考试安排</view>
+          <view wx:if="{{!isTeacher}}" bindtap="jumpToScore" class="icon-button normal icon icon-chart purple" hover-class="icon-button-tap">绩点成绩</view>
+          <view bindtap="jumpToExam" class="icon-button normal icon icon-clock orange" hover-class="icon-button-tap">考试安排</view>
         </view>
       </view>
     </view>
@@ -56,29 +61,29 @@
     <view class="module app-functions">
       <span class="title">应用功能</span>
       <view class="content">
-        <view bindtap="jumpToPushService" class="icon-button multiple icon icon-push lesson-push" hover-class="icon-button-tap">
+        <view bindtap="jumpToPushService" class="icon-button multiple icon icon-bell lesson-push orange" hover-class="icon-button-tap">
           <span class="title">课程推送服务</span>
           <view class="description">无需手动打开小程序，上课前自动推送课程信息到微信</view>
         </view>
 
-        <view bindtap="resetStorage" class="icon-button multiple icon icon-reload reload-lesson" hover-class="icon-button-tap">
+        <view bindtap="resetStorage" class="icon-button multiple icon icon-reload reload-lesson blue" hover-class="icon-button-tap">
           <span class="title">重新获取课程</span>
           <view class="description">手动从教务系统获取最新课表</view>
         </view>
 
-        <view bindtap="switchDebugMode" class="icon-button multiple icon icon-debug delelop-mode" hover-class="icon-button-tap">
-          <span class="title">开发者模式</span>
-          <view class="description">为开发和测试人员提供的一系列排错选项和工具，点击以{{!enableDebug?'启用':'禁用'}}</view>
-        </view>
-
-        <view bindtap="jumpToContact" class="icon-button multiple icon icon-face delelop-mode" hover-class="icon-button-tap">
+        <view bindtap="jumpToContact" class="icon-button multiple icon icon-face delelop-mode purple" hover-class="icon-button-tap">
           <span class="title">官方交流群</span>
           <view class="description">遇到问题需要帮助，还是有更好的建议呢？点击联系并寻找作者帮助吧</view>
         </view>
 
-        <view bindtap="jumpToAbout" class="icon-button multiple icon icon-info delelop-mode" hover-class="icon-button-tap">
+        <view bindtap="jumpToAbout" class="icon-button multiple icon icon-info delelop-mode green" hover-class="icon-button-tap">
           <span class="title">关于应用</span>
           <view class="description">关于My Lesson小程序应用</view>
+        </view>
+
+        <view bindtap="switchDebugMode" class="icon-button multiple icon icon-debug delelop-mode red" hover-class="icon-button-tap">
+          <span class="title">开发者模式</span>
+          <view class="description">为开发和测试人员提供的一系列排错选项和工具，点击以{{!enableDebug?'启用':'禁用'}}</view>
         </view>
       </view>
     </view>
@@ -87,19 +92,24 @@
     <view class="module app-functions" wx:if="{{enableDebug}}">
       <span class="title">调试工具</span>
       <view class="content">
-        <view bindtap="debugGetInfo" class="icon-button multiple icon icon-code" hover-class="icon-button-tap">
+        <view bindtap="debugGetInfo" class="icon-button multiple icon icon-code red" hover-class="icon-button-tap">
           <span class="title">重新获取个人信息</span>
           <view class="description">手动从教务系统获取个人信息，可能需要重新进入个人页面</view>
         </view>
 
-        <view bindtap="debugClearStrage" class="icon-button multiple icon icon-code" hover-class="icon-button-tap">
+        <view bindtap="debugClearStrage" class="icon-button multiple icon icon-code red" hover-class="icon-button-tap">
           <span class="title">强制刷新本地数据</span>
           <view class="description">版本更新、数据结构发生变化时，app会自动清空本地数据重新向云端请求。点击以手动执行该过程</view>
         </view>
 
-        <view bindtap="debugRecolorize" class="icon-button multiple icon icon-code" hover-class="icon-button-tap">
+        <view bindtap="debugRecolorize" class="icon-button multiple icon icon-code red" hover-class="icon-button-tap">
           <span class="title">重新分配课程颜色</span>
           <view class="description">如题。但所有课程的颜色仍然是随机分配</view>
+        </view>
+
+        <view bindtap="debugGetOpenid" class="icon-button multiple icon icon-code red" hover-class="icon-button-tap">
+          <span class="title">获取用户身份标识</span>
+          <view class="description">复制openid到剪切板</view>
         </view>
       </view>
     </view>

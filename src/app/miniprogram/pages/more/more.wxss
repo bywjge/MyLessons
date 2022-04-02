@@ -7,7 +7,7 @@ page {
   overflow: hidden;
 
   --border-radius: 28rpx;
-  --button-icon-size: 40rpx;
+  --button-icon-size: 46rpx;
 }
 
 ::-webkit-scrollbar{
@@ -145,7 +145,6 @@ page {
 }
 
 .icon-find:before {
-  background: var(--color-blue-2);
   mask-image: var(--icon-find);
   -webkit-mask-image: var(--icon-find);
 }
@@ -157,9 +156,13 @@ page {
 }
 
 .icon-target:before {
-  background: var(--color-green-1);
   mask-image: var(--icon-target);
   -webkit-mask-image: var(--icon-target);
+}
+
+.icon-bulb:before {
+  mask-image: var(--icon-bulb);
+  -webkit-mask-image: var(--icon-bulb);
 }
 
 .more-icon i {
@@ -169,4 +172,16 @@ page {
 
 .module .item:not(:first-child) {
   margin-top: 50rpx;
+}
+
+.blue:before {
+  background: var(--color-blue-2);
+}
+
+.green:before {
+  background: var(--color-green-1);
+}
+
+.pink:before {
+  background: var(--color-pink-1);
 }

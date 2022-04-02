@@ -1,7 +1,7 @@
 page {
   --avatar-size: 120rpx;
 
-  --button-icon-size: 40rpx;
+  --button-icon-size: 46rpx;
   --button-column-gap: 32rpx;
 
   overflow: hidden;
@@ -12,6 +12,23 @@ page {
   height: 0;
   color: transparent;
   scroll-behavior: smooth;
+}
+
+/* 分享按钮 */
+.operation-btn{
+  display: flex;
+  align-items: center;
+  height: 32px;
+  border: solid 1rpx var(--color-white-50);
+  border-radius: 50px;
+  /* background-color: var(--item-background); */
+  text-align: center;
+  font-size: 29rpx;
+  padding: 0rpx 25rpx;
+  box-sizing: border-box;
+
+  transition: all 0.1s;
+  color: var(--navigation-bar-text);
 }
 
 .container > .content {
@@ -220,16 +237,13 @@ page {
   margin-top: var(--button-column-gap);
 }
 
-.app-functions {
-  /* margin-top: 70rpx; */
-}
-
 .app-functions > .content {
   flex-direction: column;
 }
 .module.badge .content {
   /* width: 90%; */
   padding: 0 30rpx;
+  justify-content: flex-start;
 }
 
 .module.badge .badge {
@@ -302,68 +316,82 @@ page {
 }
 
 .icon-reload:before {
-  background: var(--color-blue-1);
-  mask-image: var(--icon-reload);
-  -webkit-mask-image: var(--icon-reload);
+  mask-image: var(--icon-reload-2);
+  -webkit-mask-image: var(--icon-reload-2);
 }
 
 .icon-code:before {
-  background: var(--color-red-1);
-  mask-image: var(--icon-code);
-  -webkit-mask-image: var(--icon-code);
+  mask-image: var(--icon-code-2);
+  -webkit-mask-image: var(--icon-code-2);
 }
 
 .icon-debug:before {
-  background: var(--color-red-1);
-  mask-image: var(--icon-code);
-  -webkit-mask-image: var(--icon-debug);
+  mask-image: var(--icon-code-2);
+  -webkit-mask-image: var(--icon-code-2);
 }
 
-
-.icon-list:before {
-  background: var(--color-green-1);
-  mask-image: var(--icon-list);
-  -webkit-mask-image: var(--icon-list);
+.icon-paper:before {
+  mask-image: var(--icon-paper);
+  -webkit-mask-image: var(--icon-paper);
 }
 
 .icon-target:before {
-  background: var(--color-purple-1);
   mask-image: var(--icon-target);
   -webkit-mask-image: var(--icon-target);
 }
 
-.icon-rank:before {
-  background: var(--color-blue-1);
-  mask-image: var(--icon-rank);
-  -webkit-mask-image: var(--icon-rank);
+.icon-chart:before {
+  mask-image: var(--icon-chart);
+  -webkit-mask-image: var(--icon-chart);
 }
 
-.icon-exam:before {
-  background: var(--color-orange-1);
-  mask-image: var(--icon-exam);
-  -webkit-mask-image: var(--icon-exam);
+.icon-clock:before {
+  mask-image: var(--icon-clock);
+  -webkit-mask-image: var(--icon-clock);
 }
 
 .icon-push:before {
-  background: var(--color-orange-1);
   mask-image: var(--icon-push);
   -webkit-mask-image: var(--icon-push);
 }
 
+.icon-bell:before {
+  mask-image: var(--icon-bell);
+  -webkit-mask-image: var(--icon-bell);
+}
+
+
 .icon-badge-test:before {
-  /* background: var(--color-orange-1); */
   mask-image: var(--badge-test);
   -webkit-mask-image: var(--badge-test);
 }
 
 .icon-face:before {
-  background: var(--color-green-1);
   mask-image: var(--icon-face);
   -webkit-mask-image: var(--icon-face);
 }
 
 .icon-info:before {
-  background: var(--color-green-1);
   mask-image: var(--icon-info);
   -webkit-mask-image: var(--icon-info);
+}
+
+.blue:before {
+  background: var(--color-blue-1);
+}
+
+.green:before {
+  background: var(--color-green-1);
+}
+
+.orange:before {
+  background: var(--color-orange-1);
+}
+
+.red:before {
+  background: var(--color-red-1);
+}
+
+.purple:before {
+  background: var(--color-purple-1);
 }

@@ -20,7 +20,8 @@
     "pages/query-teacher-lesson/query-teacher-lesson",
     "pages/push-service/push-service",
     "pages/what-to-eat/what-to-eat",
-    "pages/contact/contact"
+    "pages/contact/contact",
+    "pages/share-app/share-app"
   ],
   "window": {
     "backgroundTextStyle": "light",

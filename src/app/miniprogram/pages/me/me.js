@@ -1,4 +1,5 @@
 import tools from '../../utils/tools'
+import appApi from '../../apis/app'
 import lessonApi from '../../apis/lessons'
 import accountApi from '../../apis/account'
 
@@ -72,6 +73,7 @@ Page({
     })
 
     this.refreshInfo()
+    this.refreshAvatar()
   },
 
   onUnload() {
@@ -97,6 +99,12 @@ Page({
     tools.showModal({
       title: badgeInfo.name,
       content: badgeInfo.description
+    })
+  },
+
+  shareApp() {
+    wx.navigateTo({
+      url: '/pages/share-app/share-app',
     })
   },
 
@@ -218,5 +226,15 @@ Page({
     tools.showToast({
       title: '重分配成功',
     })
+  },
+
+  async debugGetOpenid() {
+    wx.showLoading({ title: '请求数据中' })
+    const openid = await appApi.getOpenId()
+    wx.setClipboardData({
+      data: openid,
+    })
+    wx.hideLoading().catch(() => {})
+    wx.showToast({ title: '已复制信息' })
   }
 })
