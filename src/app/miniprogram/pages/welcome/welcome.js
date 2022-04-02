@@ -1,3 +1,4 @@
+
 import logger from '../../utils/log'
 import api from '../../apis/app'
 import tools from '../../utils/tools'
@@ -5,6 +6,7 @@ import lessonApi from '../../apis/lessons'
 import accountApi from '../../apis/account'
 import * as database from '../../static/js/database'
 // import { changeTheme } from '../../utils/theme'
+
 
 const log = new logger()
 log.setKeyword('Page:index')
@@ -20,12 +22,6 @@ Page({
   },
 
   onLoad: async function () {
-    // wx.redirectTo({
-    //   url: '/pages/social-bind/social-bind',
-    // })
-
-    // return ;
-
     require('../../utils/debug')
     // changeTheme('dark')
 

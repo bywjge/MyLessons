@@ -131,7 +131,9 @@ function proxyingWxObject(){
         }
 
         const ret = target[name](obj)
-
+        if (!obj) 
+          return ret
+          
         // promise默认不捕获异常，如需捕获，请加上showError字段
         if (ret instanceof Promise) {
           ret.catch(err => {

@@ -9,6 +9,7 @@ console.log("hello {0}, I am {1}".format("World", "MeetinaXD"));
 
 App({
   onLaunch: function () {
+
     const { height, top } = wx.getMenuButtonBoundingClientRect()
     const { statusBarHeight, windowWidth, windowHeight } = wx.getSystemInfoSync()
     const navBarHeight = statusBarHeight + height + (top-statusBarHeight) * 2

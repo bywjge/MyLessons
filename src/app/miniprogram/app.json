@@ -27,7 +27,7 @@
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FFB8C5",
     "navigationBarTitleText": "My Lesson",
-    "navigationBarTextStyle": "black",
+    "navigationBarTextStyle": "white",
     "navigationStyle": "custom"
   },
   "usingComponents": {

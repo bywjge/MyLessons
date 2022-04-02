@@ -54,7 +54,9 @@ Component({
     currentDetail: {},
     detailLessons: [],
     detailIndex: 0,
-    activeDay: -1
+    activeDay: -1,
+
+    outOfTerm: false
   },
   async ready() {
     let indexer = [];
@@ -65,7 +67,11 @@ Component({
       }
       indexer.push(item)
     })
-    const week = lessonApi.convertDateToWeek(new Date())
+    let week = lessonApi.convertDateToWeek(new Date())
+    if (week === null) {
+      week = 1
+      this.setData({ outOfTerm: true })
+    }
     // 初始化周次选择器数组
     const pickerArray = Array.from({ length: 22 }, (e, i) => {
       if (i === week - 1)

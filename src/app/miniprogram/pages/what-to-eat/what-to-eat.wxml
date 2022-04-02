@@ -16,8 +16,8 @@
       <view class="inner-wrapper" wx:else>
         <view class="title backgrounded-item">{{isRunning? foodName: foodName? '今天就吃：' +foodName : '今天吃什么'}}</view>
         <view class="subtitle backgrounded-item" wx:if="{{!isRunning}}">解决世纪难题，点击下方按钮开始</view>
-        <view class="subtitle backgrounded-item" wx:else>点击按钮停止</view>
-        <view class="button" hover-class="button-tap" bindtap="handleStart">{{!isRunning? '开始': '停止'}}</view>
+        <view class="subtitle backgrounded-item" wx:elif="{{!preStop}}">点击按钮停止</view>
+        <view class="button" hover-class="button-tap" bindtap="handleStart" wx:if="{{!preStop}}">{{!isRunning? '开始': '停止'}}</view>
       </view>
     </view>
   </view>

@@ -2,7 +2,8 @@ export default {
   getCookie,
   bindAccount,
   getPersonInfo,
-  asyncAccountInfo
+  asyncAccountInfo,
+  updateBadges
 }
 
 import cloud from '../utils/cloud'
@@ -56,7 +57,7 @@ async function getCookie(forceNew = false) {
     if (!username || !password) {
       return Promise.reject('storage中没有username或password')
     }
-  
+
     const _cookie = await wyu.doLogin(username, password, false).catch(err => {
       if (err === '密码错误') {
         passwordFailure()
@@ -122,7 +123,7 @@ async function asyncAccountInfo() {
 async function getPersonInfo(username, forceNew = false) {
   await getCookie()
   const _username = username || wx.getStorageSync('username')
-  
+
   let ret = await cloud.callFunction({
     name: 'wyu',
     data: {
@@ -156,4 +157,11 @@ async function passwordFailure() {
   wx.redirectTo({
     url: '/pages/login/login',
   })
+}
+
+/** 更新勋章 */
+async function updateBadges() {
+  const record = await database.getAccount()
+  wx.setStorageSync('badges', record.badge || new Array(0))
+  return Promise.resolve()
 }

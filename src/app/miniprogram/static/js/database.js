@@ -10,6 +10,8 @@
  * 数据库访问服务
  */
 
+import appApi from '../../apis/app'
+
 const db = wx.cloud.database()
 const _ = db.command
 export default db
@@ -133,6 +135,7 @@ async function updateAccount(username, password, userInfo) {
     password,
     userInfo,
     admin: false,
+    badge: [],
     time: new Date()
   }
 
@@ -167,18 +170,32 @@ async function getLesson(year, term){
 async function updateLesson(lessons, year, term){
   const termid = `${year}0${term}`
   let records = (await db.collection('lessons').get()).data
+  // 需要将data分成20条一份上传
+  let pack = lessons.splice(0, 20)
   const data = {
-    lessons,
+    lessons: pack,
+    termid,
     time: new Date()
   }
 
+  let id = null
   if (records.length > 0) {
-    const id = records[0]._id
+    id = records[0]._id
     // data.time = records[0].time || data.time
-    return db.collection('lessons').doc(id).update({ data })
+    await db.collection('lessons').doc(id).update({ data })
+  } else {
+    await db.collection('lessons').add({ data }).then(ret => id = ret._id)
   }
 
-  return db.collection('lessons').add({ data })
+  while (lessons.length > 0) {
+    pack = lessons.splice(0, 20)
+    await db.collection('lessons').doc(id).update({ 
+      data: {
+        lessons: _.push(pack)
+      } 
+    })
+  }
+  return Promise.resolve()
 }
 
 /**
@@ -230,7 +247,7 @@ async function updateEnterTime() {
     return Promise.resolve()
   }
   const id = records[0]._id
-  return db.collection('accounts').doc(id).update({ 
+  return db.collection('accounts').doc(id).update({
     data: {
       lastEnterTime: new Date()
     }

@@ -3,6 +3,7 @@ import request from '../utils/request'
 import tools from '../utils/tools'
 import lessonApi from './lessons'
 import  * as database from '../static/js/database'
+import cloud from '../utils/cloud'
 
 const log = new logger()
 log.setKeyword('apis/more.js')
@@ -225,9 +226,33 @@ async function getAllLessons(date, forceFromSchool = false) {
   })
 }
 
+/**
+ * 同步公告板数据
+ * @param {boolean} [getAll = false] 是否获取全部公告，如果为false，则只获取已经查看过的公告
+ */
+async function syncAnnounce(getAll = false) {
+  const ret = await cloud.callFunction({
+    name: 'announce',
+    data: {
+      action: 'getAnnounces',
+      getAll
+    }
+  })
+
+  let announces = wx.getStorageSync('announces') || []
+  let count = wx.getStorageSync('unreadAnnounceCount') || 0
+  count += ret.data.length
+  announces = announces.concat(ret.data)
+  wx.setStorageSync('announces', announces)
+  wx.setStorageSync('unreadAnnounceCount', count)
+  wx.setStorageSync('announceSyncTime', new Date())
+  return announces
+}
+
 export default {
   allRooms,
   collegeId,
   getAllLessons,
-  getAllLessonsFromSchool
+  getAllLessonsFromSchool,
+  syncAnnounce
 }

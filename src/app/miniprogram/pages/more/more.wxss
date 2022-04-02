@@ -20,6 +20,7 @@ page {
 .container > .content {
   /* width: 90%; */
   /* 不然box-shadow会被截断 */
+  position: relative;
   width: 100%;
   box-sizing: border-box;
   padding: 0 9%;
@@ -32,10 +33,99 @@ page {
 .button-tap {
   box-shadow: 0 4rpx 26rpx 0 var(--shadow-20) !important;
 }
+.head-image-wrapper {
+  top: 0;
+  left: 0;
+  width: 100%;
+  position: absolute;
+}
 
-.head {
+.head-image {
+  width: 100%;
+  position: relative;
+  border-radius: var(--border-radius);
+  opacity: .8;
+}
+.head-image.night {
+  /* filter: brightness(.6); */
+  /* z-index: 1; */
+}
+
+.head-image:before {
+  position: absolute;
+  content: '';
+  bottom: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0), var(--item-background));
+  height: 300rpx;
+  width: 100%;
+}
+
+@media (prefers-color-scheme: light) {
+  .head-image.night {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .head-image.day {
+    display: none;
+  }
+}
+
+.image-head {
   display: flex;
   justify-content: space-between;
+  padding-top: 440rpx !important;
+  box-sizing: border-box;
+}
+.image-head > .text {
+  position: absolute;
+  top: 280rpx;
+  color: var(--text-black-2);
+}
+
+.image-head .text .title {
+  font-weight: 450;
+}
+
+.image-head .text .subtitle {
+  font-weight: 400;
+  font-size: 26rpx;
+  color: var(--text-black-2);
+}
+
+.image-head .announce .title {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: var(--text-black-1);
+}
+.image-head .announce .text {
+  position: relative;
+  font-size: 30rpx;
+  overflow: hidden;
+  /* padding-left: 25rpx; */
+  text-overflow: -o-ellipsis-lastline;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  margin-top: 10rpx;
+}
+.image-head .announce .text:before {
+  /* content: ''; */
+  position: absolute;
+  left: 0;
+  width: 10rpx;
+  height: 100%;
+  border-radius: 5rpx;
+  background: var(--color-pink-2);
+}
+
+.image-head .announce .entrance {
+  font-size: 30rpx;
+  font-weight: 450;
+  text-align: center;
+  margin-top: 20rpx;
+  color: var(--highlight-font-color);
 }
 
 /* 入口按钮 */
@@ -87,6 +177,7 @@ page {
 .module {
   display: flex;
   flex-direction: column;
+  position: relative;
   /* align-items: center; */
   background: var(--item-background);
   box-shadow: 0 0 16rpx 0 var(--shadow-10);

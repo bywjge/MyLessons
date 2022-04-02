@@ -16,8 +16,27 @@
       </view>
     </view>
 
-    <view class="module" wx:else>
-      <view style="font-size:34rpx;font-weight:450;color:var(--text-black-4);text-align: center;">Coming soon...</view>
+    <view class="module image-head" wx:else>
+      <view class="head-image-wrapper">
+        <image class="head-image day" src="/assets/day.jpeg" mode="widthFix" />
+        <image class="head-image night" src="/assets/night.jpeg" mode="widthFix" />
+      </view>
+      <!-- <view style="font-size:34rpx;font-weight:450;color:var(--text-black-4);text-align: center;">Coming soon...</view> -->
+      <view class="text">
+        <view class="title">告示板</view>
+        <view class="subtitle">共{{announceList.length}}个公告{{announceList.length > 0? '，最后更新于' + lastEdit: ''}}</view>
+      </view>
+
+      <view class="announce">
+        <view class="title" wx:if="{{lastAnnounce !== null}}">
+          {{lastAnnounce.title}}
+        </view>
+        <view class="text" wx:if="{{lastAnnounce !== null}}">
+          {{lastAnnounce.content}}
+        </view>
+        <view class="text" wx:else>The price of freedom is eternal vigilance</view>
+        <view class="entrance" wx:if="{{announceList.length > 0}}">点击查看全部公告</view>
+      </view>
     </view>
 
     <view class="module" style="margin-top: 70rpx">

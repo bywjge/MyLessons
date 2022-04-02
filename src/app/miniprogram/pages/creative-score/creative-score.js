@@ -1,5 +1,7 @@
 import lessonApi from '../../apis/lessons'
 import { bindTheme, unbindTheme } from '../../utils/theme'
+import api from '../../apis/app'
+
 Page({
   data: {
     passList: [],
@@ -21,6 +23,7 @@ Page({
   async onLoad() {
     // data中自动添加一个theme
     bindTheme(this)
+    this.checkBind()
 
     let scores = wx.getStorageSync('creativeScores')
     if (!scores || scores === "") {
@@ -45,6 +48,15 @@ Page({
     unbindTheme()
   },
 
+  async checkBind() {
+    const authed = await api.isAppAuthed()
+    const binded = wx.getStorageSync('binded')
+    if (!authed || !binded) {
+      wx.redirectTo({
+        url: '/pages/welcome/welcome',
+      })
+    }
+  },
   // 选择学期
   getData() {
     let scores = wx.getStorageSync('creativeScores')
