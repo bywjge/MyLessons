@@ -84,7 +84,7 @@ Page({
       enableDebug
     })
 
-    this.refreshInfo()
+    await this.refreshInfo()
     this.refreshAvatar()
   },
 

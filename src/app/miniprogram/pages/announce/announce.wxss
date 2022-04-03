@@ -1,0 +1,126 @@
+page {
+  --avator-size: 120rpx;
+
+  --button-icon-size: 40rpx;
+  --button-column-gap: 32rpx;
+
+  overflow: hidden;
+
+  --border-radius: 28rpx;
+  --button-icon-size: 40rpx;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  /* width: 90%; */
+  /* 不然box-shadow会被截断 */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 8%;
+  padding-top: 60rpx;
+  padding-bottom: 50rpx;
+  flex: 1;
+  overflow: scroll;
+}
+
+.empty-hint {
+  font-size: 30rpx;
+  color: var(--text-black-3);
+  text-align: center;
+}
+
+.button-tap {
+  background-color: #f092a2;
+}
+
+.add-post {
+  --size: 110rpx;
+  position: fixed;
+  right: 8%;
+  bottom: 5%;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  border: solid 1px var(--border-optional);
+  background: var(--color-pink-2);
+  box-shadow: 0 2px 7px 1px var(--shadow-20);
+  transition: box-shadow .2s, transform .1s .2s, opacity .1s .2s;
+}
+
+.add-post-tap {
+  box-shadow: 0 2px 12px 2px var(--shadow-30);
+}
+
+.add-post:before {
+  --size: 34rpx;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: '';
+  position: absolute;
+  background: white;
+  mask-image: var(--icon-plus);
+  -webkit-mask-image: var(--icon-plus);
+  width: var(--size);
+  height: var(--size);
+  mask-size: var(--size) var(--size);
+  -webkit-mask-size: var(--size) var(--size);
+}
+
+
+/* 公告卡片 */
+.post-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-background);
+  box-shadow: 0 4rpx 28rpx 0 var(--shadow-10);
+  border-radius: var(--border-radius);
+  padding: 34rpx 40rpx;
+}
+
+.post-card:not(:last-child) {
+  margin-bottom: 40rpx;
+}
+
+.post-card .head .title {
+  display: flex;
+  font-size: 30rpx;
+  line-height: 46rpx;
+  font-weight: 450;
+  color: var(--text-black-2);
+  justify-content: space-between;
+}
+
+.post-card .head .title .to-top-hint {
+  color: var(--color-warning);
+  font-size: 24rpx;
+  font-weight: 450;
+}
+
+.post-card .head .subtitle {
+  font-size: 20rpx;
+  line-height: 20rpx;
+  margin-top: 10rpx;
+  color: var(--text-black-4);
+}
+
+/* 评论的正文 */
+.post-card .content {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+}
+
+/* 文字内容 */
+.post-card .content .text {
+  flex: 1;
+  line-height: 44rpx;
+  color: var(--text-black-2);
+  text-align: justify;
+  margin-right: 10rpx;
+}

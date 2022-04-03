@@ -21,7 +21,9 @@
     "pages/push-service/push-service",
     "pages/what-to-eat/what-to-eat",
     "pages/contact/contact",
-    "pages/share-app/share-app"
+    "pages/share-app/share-app",
+    "pages/announce/announce",
+    "pages/announce-new-post/announce-new-post"
   ],
   "window": {
     "backgroundTextStyle": "light",

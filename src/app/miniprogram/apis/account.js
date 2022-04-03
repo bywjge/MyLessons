@@ -102,7 +102,7 @@ async function asyncAccountInfo() {
 
   wx.setStorageSync('username', record.username)
   wx.setStorageSync('password', record.password)
-  wx.setStorageSync('admin', record.admin || false)
+  wx.setStorageSync('isAdmin', record.admin || false)
   wx.setStorageSync('badges', record.badge || new Array(0))
   wx.setStorageSync('wxInfo', record.userInfo)
   wx.setStorageSync('avatarUrl', record.avatarUrl)

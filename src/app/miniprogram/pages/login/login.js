@@ -124,7 +124,6 @@ Page({
    * 在绑定完成后做的事情
    */
   async bindFinished(){
-
     wx.showLoading({ title: '获取身份' })
     await accountApi.getPersonInfo()
 

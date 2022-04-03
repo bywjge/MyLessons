@@ -1,0 +1,78 @@
+page {
+  overflow: hidden;
+
+  --border-radius: 28rpx;
+  --button-icon-size: 38rpx;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  /* width: 90%; */
+  /* 不然box-shadow会被截断 */
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 8%;
+  padding-top: 60rpx;
+  padding-bottom: 50rpx;
+  flex: 1;
+  overflow: scroll;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-background);
+  box-shadow: 0 1rpx 16rpx 0 var(--shadow-10);
+  border-radius: var(--border-radius);
+}
+
+.text-area {
+  padding: 30rpx 40rpx;
+}
+.text-area:not(:last-child) {
+  margin-bottom: 30rpx;
+}
+.text-area textarea, input {
+  width: auto;
+  color: var(--text-black-2);
+  font-size: 30rpx;
+}
+
+.text-area textarea {
+  height: 500rpx;
+}
+
+.to-top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 40rpx;
+  color: var(--text-black-2);
+}
+
+.bottom-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 50rpx;
+  padding: 20rpx 50rpx;
+}
+
+.operations {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.bottom-bar .post-button {
+  color: var(--highlight-font-color);
+}

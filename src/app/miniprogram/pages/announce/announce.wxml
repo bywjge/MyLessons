@@ -1,0 +1,29 @@
+<view class="container" data-theme="{{theme}}">
+  <navigation title="告示板" enableMenu="{{false}}" />
+  <view class="content">
+    <view class="empty-hint" wx:if="{{announceList.length === 0}}">暂时还没有公告哦</view>
+    <view 
+      class="post-card"
+      wx:for="{{announceList}}"
+      wx:for-item="post"
+      wx:key="_id"
+      data-post="{{post}}"
+      catchlongpress="handleLongPress"
+    >
+      <!-- 头部信息 -->
+      <view class="head">
+        <view class="title">
+          {{post.title}}
+          <view class="to-top-hint" wx:if="{{post.toTop}}">置顶</view>
+        </view>
+        <view class="subtitle">{{post.poster}} 发表于 {{post.time}}</view>
+      </view>
+      
+      <!-- 正文 -->
+      <view class="content">
+        <text class="text">{{post.content}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="add-post" hover-class="add-post-tap" bindtap="handleAddButton" wx:if="{{isAdmin}}" />
+</view>

@@ -239,10 +239,9 @@ async function syncAnnounce(getAll = false) {
     }
   })
 
-  let announces = wx.getStorageSync('announces') || []
-  let count = wx.getStorageSync('unreadAnnounceCount') || 0
-  count += ret.data.length
-  announces = announces.concat(ret.data)
+  const announces = ret.data
+  const count = ret.data.filter(e => !e.read).length
+
   wx.setStorageSync('announces', announces)
   wx.setStorageSync('unreadAnnounceCount', count)
   wx.setStorageSync('announceSyncTime', new Date())

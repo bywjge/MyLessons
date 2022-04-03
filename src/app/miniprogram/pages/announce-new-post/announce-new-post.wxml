@@ -1,0 +1,28 @@
+<view class="container">
+  <navigation enableMenu="{{false}}" title="发表公告" />
+  <view class="content" bindtouchmove="handleTouchMove">
+    <view class="card-container text-area">
+      <input type="text" placeholder="请输入公告标题" value="{{info.title}}" bindinput="handleTitleInput" />
+    </view>
+    <view class="card-container text-area">
+      <textarea 
+        value="{{info.content}}"
+        maxlength="-1" 
+        placeholder="请输入公告内容" 
+        placeholder-class=""
+        bindinput="handleContentInput"
+      />
+    </view>
+    <view class="card-container to-top">
+      <view>需要置顶公告</view>
+      <switch checked="{{info.toTop}}" bindchange="switchToTop" color="#FFA6B5" />
+    </view>
+    <view class="card-container bottom-bar">
+      <view class="operations">
+        <input type="text" placeholder="发布人名称" value="{{info.poster}}" bindinput="handlePosterInput" />
+      </view>
+
+      <view class="post-button" bindtap="post">发表</view>
+    </view>
+  </view>
+</view>

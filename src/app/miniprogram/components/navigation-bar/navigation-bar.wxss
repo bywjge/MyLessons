@@ -65,11 +65,28 @@
   background: var(--color-black-20) !important;
 }
 
-.title-btn.show{
+.title-btn {
+  position: relative;
+}
+
+.title-btn.show {
   padding: 10rpx 15rpx;
   border-radius: 12rpx;
   background-color: var(--color-white-30);
   transition: all 0.3s;
+}
+
+.title-btn.hidden.unread:before {
+  --size: 14rpx;
+  position: absolute;
+  content: '';
+  top: 50%;
+  left: calc(var(--size) * -1 - 15rpx);
+  transform: translateY(-50%);
+  width: var(--size);
+  height: var(--size);
+  background: var(--color-warning);
+  border-radius: 50%;
 }
 
 /* 菜单 */

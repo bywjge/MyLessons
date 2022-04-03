@@ -35,7 +35,7 @@
           {{lastAnnounce.content}}
         </view>
         <view class="text" wx:else>The price of freedom is eternal vigilance</view>
-        <view class="entrance" wx:if="{{announceList.length > 0}}">点击查看全部公告</view>
+        <view class="entrance" wx:if="{{announceList.length > 0 || isAdmin}}" bindtap="jumpToAnnounce">点击查看全部公告{{unreadAnnounceCount > 0? ' (+' + unreadAnnounceCount + ')': ''}}</view>
       </view>
     </view>
 

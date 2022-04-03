@@ -28,7 +28,7 @@ Page({
     const { avatarUrl } = wx.getStorageSync('wxInfo')
     this.setData({
       avatarUrl,
-      isAdmin: wx.getStorageSync('admin')
+      isAdmin: wx.getStorageSync('isAdmin')
     })
     this.refreshArticle()
   },

@@ -451,7 +451,7 @@ async function syncLessons(forceFromSchool = false){
   if (!forceFromSchool) {
     try {
       const { lessons, time } = await database.getLesson(year, term)
-      convertAndStorage(lessons)
+      convertAndStorage(lessons, true)
       wx.setStorageSync('lastSyncTime', time || new Date())
       wx.setStorageSync('lastSyncTerm', `${year}0${term}`)
       return ;

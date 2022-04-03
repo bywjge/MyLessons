@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk')
+const databaseName = 'announces'
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -6,11 +7,13 @@ cloud.init({
 
 const db = cloud.database()
 const _ = db.command
+const $ = _.aggregate
 
 let events = {
   getAnnounces,
   addAnnounce,
-  deleteAnnounce
+  deleteAnnounce,
+  editAnnounce
 }
 
 exports.main = async (event, context) => {
@@ -45,17 +48,50 @@ async function getAnnounces({ getAll = false }) {
   const openid = wxContext.OPENID
 
   if (getAll) {
-    records = await db.collection('announces').get()
+    records = await db.collection(databaseName)
+      .aggregate()
+      .project({
+        read: $.in([openid, '$readList']),
+        title: true,
+        content: true,
+        poster: true,
+        time: true,
+        toTop: true
+      })
+      .project({
+        readList: false
+      })
+      .sort({
+        /** 按创建时间降序排序 */
+        time: -1
+      })
+      .end()
   } else {
-    records = await db.collection('announces')
-      .where({
+    records = await db.collection(databaseName)
+      .aggregate()
+      .match({
         readList: _.nin([openid])
       })
-      .get()
+      .project({
+        readList: false,
+        title: true,
+        content: true,
+        poster: true,
+        time: true,
+        toTop: true
+      })
+      .addFields({
+        read: false
+      })
+      .sort({
+        /** 按创建时间降序排序 */
+        time: -1
+      })
+      .end()
   }
 
   // 设置所有公告为该用户已读
-  db.collection('announces')
+  db.collection(databaseName)
     .where({
       readList: _.nin([openid])
     })
@@ -66,25 +102,47 @@ async function getAnnounces({ getAll = false }) {
     })
   
   return Promise.resolve({
-    data: records.data
+    data: records.list
   })
 }
 
 /**
  * 添加公告内容
  */
-async function addAnnounce({ poster, title, content }) {
+async function addAnnounce({ poster, title, content, toTop }) {
+  const wxContext = cloud.getWXContext()
+  const openid = wxContext.OPENID
+
   if (!await isAdmin())
     return Promise.reject('用户不是管理员或用户不存在')
   
-  return db.collection('announces').add({
+  return db.collection(databaseName).add({
     data: {
-      _openid,
+      _openid: openid,
       poster,
       title,
       content,
       readList: [],
-      time: new Date()
+      time: new Date(),
+      toTop
+    }
+  })
+}
+
+/**
+ * 编辑某条公告
+ * @description 编辑公告不更新发布时间
+ */
+async function editAnnounce({ id, poster, title, content, toTop }) {
+  if (!await isAdmin())
+    return Promise.reject('用户不是管理员或用户不存在')
+
+  return db.collection(databaseName).doc(id).update({
+    data: {
+      poster,
+      title,
+      content,
+      toTop
     }
   })
 }
@@ -96,7 +154,7 @@ async function deleteAnnounce({ id }) {
   if (!await isAdmin())
     return Promise.reject('用户不是管理员或用户不存在')
 
-  return db.collection('announces').doc(id).remove()
+  return db.collection(databaseName).doc(id).remove()
 }
 
 /**
@@ -106,9 +164,9 @@ async function isAdmin() {
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID
 
-  const ret = await db.collection('account').where({
+  const ret = await db.collection('accounts').where({
     _openid: openid,
-    isAdmin: true
+    admin: true
   }).count()
 
   return ret.total > 0

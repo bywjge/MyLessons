@@ -189,9 +189,9 @@ page {
 } 
 
 .post-card .head .text .name {
-  font-size: 28rpx;
-  line-height: 30rpx;
-  font-weight: 400;
+  font-size: 30rpx;
+  line-height: 46rpx;
+  font-weight: 450;
   color: var(--text-black-2);
 }
 
@@ -321,7 +321,7 @@ page {
 }
 
 .add-post {
-  --size: 90rpx;
+  --size: 110rpx;
   position: fixed;
   right: 8%;
   bottom: 5%;

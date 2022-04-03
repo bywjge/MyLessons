@@ -43,7 +43,7 @@ page {
 .head-image {
   width: 100%;
   position: relative;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
   opacity: .8;
 }
 .head-image.night {
@@ -72,6 +72,7 @@ page {
   }
 }
 
+/* 带有图片的容器 */
 .image-head {
   display: flex;
   justify-content: space-between;
@@ -109,6 +110,7 @@ page {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   margin-top: 10rpx;
+  word-break: break-all;
 }
 .image-head .announce .text:before {
   /* content: ''; */
