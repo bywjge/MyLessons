@@ -8,7 +8,7 @@
   >
     <view
       wx:if="{{!e['ignore']}}"
-      class="{{e === null? 'empty-item': 'item'}} {{e['long']? 'connected': ''}} {{!!e['冲突']? 'conflict': ''}}"
+      class="{{e === null? 'empty-item': 'item'}} {{e['long']? 'connected': ''}} {{!!e['冲突']? 'conflict': ''}} {{~~e['节次'][1] % 2 == 1? 'half': ''}}"
       hover-class="item-tap"
       data-item="{{e}}"
       data-status="{{e !== null && e['日期'] === nowDate && ~~e['节次'][0] == nowIndex ? 'underway' : 'normal'}}"

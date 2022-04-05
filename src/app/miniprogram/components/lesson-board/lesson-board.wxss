@@ -76,6 +76,12 @@ page {
     0 4px 7px 2px var(--shadow-20);
 }
 
+/* 课程有半节课的情况发生 */
+.day-lesson-wrapper .strip .item.connected.half {
+  height: calc(var(--indexer-height) * 1.5 + var(--indexer-margin-bottom)) !important;
+  margin-bottom: calc(var(--indexer-margin-bottom) + var(--indexer-height) / 2);
+}
+
 /* 用户点下课程卡片时显示按下效果 */
 .item.item-tap {
   animation: pressIn 0.4s forwards;
