@@ -47,8 +47,8 @@
         <view class="text">希望加入到开发团队中吗？如果您有兴趣提供点子，或者想要参与功能/界面的设计/应用程序的开发工作中，请联系我吧（在官方交流群中找到我）</view>
 
         <view class="title">关于我</view>
-        <view class="text">Github: <text style="display: block;color: var(--color-pink-1)">https://github.com/MeetinaXD</text></view>
-        <view class="text">Blog: <text style="display: block;color: var(--color-pink-1)">https://meetinaxd.ltiex.com/</text></view>
+        <view class="text">Github: <text user-select="{{true}}" style="display: block;color: var(--color-pink-1)">https://github.com/MeetinaXD</text></view>
+        <view class="text">Blog: <text user-select="{{true}}" style="display: block;color: var(--color-pink-1)">https://meetinaxd.ltiex.com/</text></view>
 
         <view class="title">鸣谢</view>
         <view class="text">My Lesson的开发离不开以下用户的贡献，感谢他们在内测中提供的宝贵意见和耐心测试</view>

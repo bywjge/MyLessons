@@ -3,9 +3,9 @@
 
 import { log } from './utils/log'
 import './utils/global.js'
+// const updateManager = wx.getUpdateManager()
 
 console.log("hello {0}, I am {1}".format("World", "MeetinaXD"));
-// require('./utils/decode.js')
 
 App({
   onLaunch: function () {
@@ -34,6 +34,16 @@ App({
 
       version: "0.4.1.5"
     }
+
+    // updateManager.onUpdateReady(function () {
+    //   wx.showModal({
+    //     title: '更新提示',
+    //     content: '新版应用已经准备好，点击确定来更新'
+    //   }).then(() => {
+    //     // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+    //     updateManager.applyUpdate()
+    //   }).catch(() => {})
+    // })
   },
   onError(error) {
     log.error(error)
