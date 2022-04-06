@@ -172,15 +172,15 @@ async function doSendLessonMessage(openid, lesson) {
         },
         "keyword1": {
           "value": lesson['课程名称'],
-          "color": "#173177"
+          "color": "#FF617C"
         },
         "keyword2": {
           "value": `${lesson['日期']} ${startTime} - ${endTime}`,
-          "color": "#173177"
+          "color": "#FF617C"
         },
         "keyword3": {
           "value": lesson['教学地点'],
-          "color": "#173177"
+          "color": "#FF617C"
         },
         "remark": {
           "value": `${lesson['上课内容']?lesson['上课内容'] + '\n\n': ''} 此条推送由于你打开了课程推送而产生，如不需要收到推送，请取关公众号或在下方菜单关闭该功能`,

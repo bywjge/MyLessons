@@ -17,7 +17,7 @@ const _ = db.command
  * @param {Array<string>} dates 需要推送的日期数组，格式必须为YYYY/mm/dd
  * @param {(list: Array<Object>) => Promise} 遍历函数
  */
-async function getCurrentLessons(dates, fn) {
+async function getCurrentExams(dates, fn) {
   let lastId = ''
   let counter = 0
   while(true) {
@@ -89,15 +89,15 @@ async function doSendExamMessage(openid, exam) {
         },
         "keyword1": {
           "value": exam['课程名称'],
-          "color": "#7f8fa7"
+          "color": "#FF617C"
         },
         "keyword2": {
           "value": `${exam['考试日期']} ${exam['考试时间']}`,
-          "color": "#7f8fa7"
+          "color": "#FF617C"
         },
         "keyword3": {
           "value": exam['考试场地'],
-          "color": "#7f8fa7"
+          "color": "#2F2F2F"
         },
         "keyword4": {
           "value": exam['监考老师'].join(','),
@@ -140,7 +140,7 @@ exports.main = async (event, context) => {
   ]
 
   console.log('今日推送考试安排')
-  getCurrentLessons(dates, async (list) => {
+  getCurrentExams(dates, async (list) => {
     list.forEach(({ _openid, exam }) => {
       doSendExamMessage(_openid, exam)
     })
