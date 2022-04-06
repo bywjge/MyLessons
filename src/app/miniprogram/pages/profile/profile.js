@@ -35,7 +35,7 @@ Page({
     unbindTheme()
   },
 
-  async refreshAvatar() {
+  async refreshAvatar(force = false) {
     const wxInfo = wx.getStorageSync('wxInfo')
     const avatarUrl = wx.getStorageSync('avatarUrl') || wxInfo.avatarUrl
     const fs = wx.getFileSystemManager()
@@ -45,16 +45,38 @@ Page({
       that.setData({
         avatarUrl: 'data:image/jpeg;base64,' + avatarData
       })
+
+      if (!force && (Date.now() - wx.getStorageSync('avatarSyncTime').getTime()) < 3600 * 24 * 1000)
+        return 
     } catch { }
 
-    const ret = await request.get(avatarUrl, {
-      responseType: 'arraybuffer'
-    })
-    
-    this.setData({
-      avatarUrl: 'data:image/jpeg;base64,' + wx.arrayBufferToBase64(ret.data)
-    })
-    fs.writeFileSync(`${wx.env.USER_DATA_PATH}/avatar.jpg`, ret.data)
+    let data = null
+    if (avatarUrl.indexOf('cloud://') === -1) {
+      data = (await request.get(avatarUrl, {
+        responseType: 'arraybuffer'
+      })).data
+      this.setData({
+        avatarUrl: 'data:image/jpeg;base64,' + wx.arrayBufferToBase64(data)
+      })
+    } else {
+      // 如果是云储存头像
+      let res = null
+      const p = new Promise(resolve => res = resolve)
+      wx.cloud.downloadFile({
+        fileID: avatarUrl,
+        success(ret) {
+          console.log("hi")
+          const path = ret.tempFilePath
+          data = fs.readFileSync(path)
+          res()
+        }
+      })
+      await p
+    }
+
+    this.setData({ avatarUrl: 'data:image/jpeg;base64,' + wx.arrayBufferToBase64(data) })
+    wx.setStorageSync('avatarSyncTime', new Date())
+    fs.writeFileSync(`${wx.env.USER_DATA_PATH}/avatar.jpg`, data)
   },
 
   /**
@@ -89,7 +111,7 @@ Page({
             // wx.hideLoading()
             await setUserAvatar(res.fileID)
             tools.showToast({ title: '上传成功' })
-            this.refreshAvatar()
+            this.refreshAvatar(true)
 
             eventBus.emit('updateAvatar')
           },
@@ -103,6 +125,11 @@ Page({
   // 删除已经存在的头像
   deleteAvatar() {
     return new Promise((resolve, reject) => {
+      const url = wx.getStorageSync('avatarUrl')
+      if (!url || url.indexOf('cloud://') === -1) {
+        resolve()
+        return ;
+      }
       // 要先删除掉已存在的头像
       wx.cloud.deleteFile({
         fileList: [wx.getStorageSync('avatarUrl')],

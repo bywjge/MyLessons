@@ -529,10 +529,11 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
       if (!pre || !now)
         return false;
 
-      // 如果前后两节课名字一样，而且没有课程冲突，合并
+      // 如果前后两节课名字一样，上课的地方一样，而且没有课程冲突，合并
       // ! 而且需要前一节课的结束节次 + 1 === 后一节课的开始节次
       if (
         (now['课程名称'] === pre['课程名称']) &&
+        (now['教学地点'] == pre['教学地点']) &&
         (!now['冲突'] && !pre['冲突']) &&
         (Number(pre['节次'][1]) + 1 === Number(now['节次'][0]))
       ) {

@@ -21,7 +21,7 @@
       
       <!-- 正文 -->
       <view class="content">
-        <text class="text">{{post.content}}</text>
+        <text class="text" user-select="{{true}}">{{post.content}}</text>
       </view>
     </view>
   </view>
