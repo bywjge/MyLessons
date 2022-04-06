@@ -16,7 +16,6 @@ Page({
 
   onLoad() {
     log.setKeyword('Page:login')
-
     const username = wx.getStorageSync('username')
     const password = wx.getStorageSync('password')
     
@@ -101,7 +100,8 @@ Page({
     // 绑定账号到数据库
     wx.showLoading({ title: '绑定账号中' })
     try {
-      await accountApi.bindAccount(that.data.username, that.data.password)
+      const info = getApp().globalData.userInfo
+      await accountApi.bindAccount(that.data.username, that.data.password, info)
     } catch(e) {
       log.error('绑定账号出错', e)
       tools.showModal({

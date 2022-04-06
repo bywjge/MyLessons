@@ -130,10 +130,13 @@ async function getAccount() {
  */
 async function updateAccount(username, password, userInfo) {
   let records = (await db.collection('accounts').get()).data
+  let avatarUrl = userInfo.avatarUrl || ''
+  avatarUrl = avatarUrl.replaceAll('132', '0')
   const data = {
     username,
     password,
     userInfo,
+    avatarUrl: userInfo.avatarUrl || '',
     admin: false,
     badge: [],
     time: new Date()

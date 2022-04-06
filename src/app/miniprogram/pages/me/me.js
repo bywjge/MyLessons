@@ -2,6 +2,7 @@ import tools from '../../utils/tools'
 import appApi from '../../apis/app'
 import lessonApi from '../../apis/lessons'
 import accountApi from '../../apis/account'
+import request from '../../utils/request'
 
 const app = getApp()
 const eventBus = app.globalData.eventBus
@@ -92,17 +93,30 @@ Page({
     // unbindTheme()
   },
 
-  refreshAvatar() {
+  async refreshAvatar() {
     const wxInfo = wx.getStorageSync('wxInfo')
     const avatarUrl = wx.getStorageSync('avatarUrl') || wxInfo.avatarUrl
-    this.setData({
-      avatarUrl
+    const fs = wx.getFileSystemManager()
+    const that = this
+    try {
+      const avatarData = fs.readFileSync(`${wx.env.USER_DATA_PATH}/avatar.jpg`, 'base64')
+      that.setData({
+        avatarUrl: 'data:image/jpeg;base64,' + avatarData
+      })
+    } catch { }
+
+    const ret = await request.get(avatarUrl, {
+      responseType: 'arraybuffer'
     })
+    
+    this.setData({
+      avatarUrl: 'data:image/jpeg;base64,' + wx.arrayBufferToBase64(ret.data)
+    })
+    fs.writeFileSync(`${wx.env.USER_DATA_PATH}/avatar.jpg`, ret.data)
   },
 
   /** 点击徽章查看信息 */
-  handleBadgeTap
-  ({ currentTarget }) {
+  handleBadgeTap({ currentTarget }) {
     const { dataset } = currentTarget
     const badgeInfo = badges[dataset.badge]
     if (!badgeInfo)

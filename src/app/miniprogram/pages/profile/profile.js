@@ -1,6 +1,7 @@
 import tools from '../../utils/tools'
 import { setUserAvatar } from '../../static/js/database'
 import { bindTheme, unbindTheme } from '../../utils/theme'
+import request from '../../utils/request'
 
 const app = getApp()
 const eventBus = app.globalData.eventBus
@@ -34,12 +35,26 @@ Page({
     unbindTheme()
   },
 
-  refreshAvatar() {
+  async refreshAvatar() {
     const wxInfo = wx.getStorageSync('wxInfo')
     const avatarUrl = wx.getStorageSync('avatarUrl') || wxInfo.avatarUrl
-    this.setData({
-      avatarUrl
+    const fs = wx.getFileSystemManager()
+    const that = this
+    try {
+      const avatarData = fs.readFileSync(`${wx.env.USER_DATA_PATH}/avatar.jpg`, 'base64')
+      that.setData({
+        avatarUrl: 'data:image/jpeg;base64,' + avatarData
+      })
+    } catch { }
+
+    const ret = await request.get(avatarUrl, {
+      responseType: 'arraybuffer'
     })
+    
+    this.setData({
+      avatarUrl: 'data:image/jpeg;base64,' + wx.arrayBufferToBase64(ret.data)
+    })
+    fs.writeFileSync(`${wx.env.USER_DATA_PATH}/avatar.jpg`, ret.data)
   },
 
   /**
