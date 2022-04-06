@@ -78,14 +78,7 @@ async function getCookie(forceNew = false) {
  *
  * @returns {Promise<any>} 数据库执行结果
  */
-async function bindAccount(username, password) {
-  let userInfo = null
-  await wx.getUserInfo()
-    .then(ret => {
-      userInfo = ret.userInfo
-    })
-    .then(() => {})
-
+async function bindAccount(username, password, userInfo) {
   return database.updateAccount(username, password, userInfo)
 }
 

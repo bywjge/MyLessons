@@ -15,7 +15,6 @@ log.setKeyword('Page:index')
  * @TODOS
  *   授权未测试
  */
-5
 Page({
   data: {
     showButton: false
@@ -43,16 +42,11 @@ Page({
    */
   async nextStep() {
     // 页面加载，判断storage是否已经授权
-    const authed = await api.isAppAuthed()
     const binded = wx.getStorageSync('binded')
     const lessons = wx.getStorageSync('lessonsByDay')
-    log.info("authed, binded = ", authed, binded);
+    log.info("binded = ", binded);
 
     // 微信未授权，留在本页面
-    if (!authed){
-      this.setData({ showButton: true })
-      return ;
-    }
 
     // 已经授权未绑定，跳到绑定页面
     if (!binded || !lessons) {
@@ -62,15 +56,9 @@ Page({
       try {
         await accountApi.asyncAccountInfo()
       } catch {
+        // 无个人数据，停留在本地
         wx.hideLoading()
-        // 如果未绑定
-        tools.showModal({
-          title: "需要绑定账号",
-          content: "您的微信账号需要绑定五邑大学教务处账号，点击确定继续",
-        }).then(() => {
-          wx.redirectTo({ url: '/pages/login/login' })
-        })
-
+        this.setData({ showButton: true })
         return ;
       }
 
@@ -86,17 +74,6 @@ Page({
       wx.showLoading({ title: '同步课表中' })
       await lessonApi.syncLessons()
 
-      // 有绑定，重新设置值，并跳转到课程表页面
-      // 如果没有个人信息
-      // if (!isBind.userInfo || isBind.userInfo === '') {
-      //   log.warn('没有找到个人信息，重新绑定中')
-      //   await api.bindAccount(isBind.username, isBind.password)
-      //   const { userInfo } = await wx.getUserInfo()
-      //   wx.setStorageSync('wxInfo', userInfo)
-      // } else {
-      //   wx.setStorageSync('wxInfo', isBind.userInfo)
-      // }
-      
       wx.hideLoading()
       wx.redirectTo({
         url: '../lesson-view/lesson-view',
@@ -128,15 +105,26 @@ Page({
    * 用户点击授权按钮事件
    */
   onGetUserInfo: function(e){
-    if (e.detail.userInfo) {
-      // 授权通过
-      wx.setStorageSync('authed', true)
-      this.nextStep();
-    } else {
+    // 张小龙司马，旧接口废弃，使用新接口来获取个人信息
+    wx.getUserProfile({
+      lang: 'zh_CN',
+      desc: "用于个人信息展示及标识"
+    })
+    .then(ret => {
+      const info = ret.userInfo
+      getApp().globalData.userInfo = info
+      tools.showModal({
+        title: "需要绑定账号",
+        content: "您的微信账号需要绑定五邑大学教务处账号，点击确定继续",
+      }).then(() => {
+        wx.redirectTo({ url: '/pages/login/login' })
+      })
+    })
+    .catch(() => {
       wx.showToast({
         title: '已拒绝授权',
         icon: 'none'
       })
-    }
+    })
   }
 })
