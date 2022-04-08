@@ -45,6 +45,7 @@
       backgroundColor="{{theme==='dark'?'#d8d8d8':'#FFF0F8'}}"
       stroke-width="32" 
       border-radius="8"
+      duration="10"
       active 
     />
 

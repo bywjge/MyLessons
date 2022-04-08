@@ -35,7 +35,10 @@ Page({
     isRunning: false,
     results: [],
     counter: 0,
-    timer: null
+    timer: null,
+    hasClick: false,
+    rightCount: 0,
+    wrongCount: 0
   },
   async onReady() {
     await tools.nextTick()
@@ -72,10 +75,14 @@ Page({
     await this.changeVisible('choose')
     this.setData({ isRunning: true })
     await tools.nextTick()
-    await tools.sleep(800)
-    const result = Math.random() > 0.5? 'right': 'wrong'
-    await tools.sleep(3000)
+    const result = Math.random() >= 0.5? 'right': 'wrong'
+    await tools.sleep(1500)
     await tools.nextTick()
+
+    if (result === 'right')
+      this.setData({ rightCount: this.data.rightCount + 1 })
+    else
+      this.setData({ wrongCount: this.data.wrongCount + 1 })
 
     this.setData({
       results: this.data.results.concat(result),
@@ -124,13 +131,34 @@ Page({
     })
   },
 
-  restart() {
-    if (this.data.counter === 3) {
+  async restart() {
+    if (this.data.counter > 20) {
+      this.setData({
+        counter: 999
+      })
       tools.showModal({
-        title: '哦噢',
-        content: '别耍赖啦，三次就好～'
+        title: '不给按',
+        content: '别纠结了！！'
       })
       return ;
+    }
+    if (!this.data.hasClick && this.data.counter === 3) {
+      tools.showModal({
+        title: '啊哦',
+        content: '别耍赖啦，三次就好～'
+      }).then(() => {
+        this.setData({
+          hasClick: true
+        })
+      })
+      return ;
+    }
+
+    if (this.data.hasClick && this.data.counter === 3) {
+      await tools.showModal({
+        title: '哎呀',
+        content: '真拿你没办法！'
+      })
     }
 
     if (this.data.mode === 'choose')

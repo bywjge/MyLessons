@@ -186,9 +186,11 @@ Component({
       lesson['教学地点'] = lesson['教学地点'].join('、')
 
       const now = new Date()
-      const 已经上过的课程节数 = lesson['上课时间']
+      let 已经上过的课程节数 = lesson['上课时间']
         .map(e => new Date(e))
         .findIndex(e => e > now)
+
+      已经上过的课程节数 = (已经上过的课程节数 < 0)?lesson['课程节数']: 已经上过的课程节数
       lesson['课程进度'] = 100
       lesson['已上节数'] = 已经上过的课程节数
       // 还没上完课

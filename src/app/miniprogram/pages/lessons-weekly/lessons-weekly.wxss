@@ -366,6 +366,7 @@ page {
   margin-top: 30rpx;
   font-size: 26rpx;
   font-weight: 450;
+  color: var(--text-black-2);
 }
 
 /* 课程卡片隐藏样式 */

@@ -38,9 +38,9 @@ page {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  -webkit-filter: drop-shadow(0 0 6rpx var(--color-pink-2));
+  /* -webkit-filter: drop-shadow(0 0 6rpx var(--color-pink-2)); */
 }
-.results > .item {
+.results > .item, .battle-progress .item {
   --size: 50rpx;
   width: var(--size);
   height: var(--size);
@@ -51,10 +51,19 @@ page {
   margin-bottom: 10rpx;
 }
 
-.results > .item.right {
+.square-button.wrong .inner {
+  -webkit-filter: drop-shadow(0 0 6rpx var(--color-blue-2));
+}
+.results > .item.wrong, .square-button.wrong .inner:before {
+  background-color: var(--color-blue-1);
+}
+
+
+.item.right {
   -webkit-mask-image: var(--icon-right);
 }
-.results > .item.wrong {
+
+.item.wrong {
   -webkit-mask-image: var(--icon-wrong);
 }
 .results > .item.dice-1, .cube > view.dice-1 .inner:before {
@@ -324,6 +333,33 @@ page {
   bottom: 200rpx; 
   left: 50%;
   transform: translateX(-50%);
+}
+
+.battle-progress {
+  position: absolute;
+  bottom: 100rpx;
+  width: calc(100% - 9% * 2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.battle-progress .circle {
+  position: relative;
+  border-radius: 50%;
+}
+.battle-progress .circle text {
+  position: absolute;
+  color: var(--text-black-2);
+  font-weight: 450;
+  font-size: 28rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 110%;
+}
+.battle-progress .circle .item {
+  margin: 0;
+  transform: scale(.6);
+  background: #FFFFFF;
 }
 
 @keyframes zoomIn {

@@ -76,6 +76,11 @@ Page({
     wx.navigateTo({ url: '/pages/query-teacher-lesson/query-teacher-lesson' })
   },
 
+  // 打开高级课程查询
+  jumpToQueryLessonAdvanced() {
+    wx.navigateTo({ url: '/pages/query-lesson-advanced/index' })
+  },
+
   // 打开今天吃什么
   jumpToWhatToEat() {
     wx.navigateTo({ url: '/pages/what-to-eat/what-to-eat' })

@@ -35,6 +35,20 @@
       </view>
     </view>
 
-    <view class="button restart" hover-class="button-tap" bindtap="restart" wx:if="{{!isRunning && (results.length > 0)}}">再来一次</view>
+    <view class="button restart" hover-class="button-tap" bindtap="restart" wx:if="{{counter !== 999 && !isRunning && (results.length > 0)}}">再来一次{{hasClick? '嘛': ''}}</view>
+    <view class="battle-progress" wx:if="{{mode == 'choose' && results.length > 0}}">
+      <view class="circle" style="transform: translateX(5rpx); background-color: var(--color-pink-1);"><view class="item right" /><text>{{rightCount}}</text></view>
+      <progress 
+        style="flex: 1" 
+        percent="{{rightCount * 100 / (rightCount + wrongCount)}}"
+        active-color="var(--color-pink-1)" 
+        backgroundColor="var(--color-blue-1)"
+        stroke-width="8" 
+        duration="20"
+        active-mode="forwards"
+        active="{{true}}"
+      />
+      <view class="circle" style="transform: translateX(-5rpx); background-color: var(--color-blue-1);"><view class="item wrong" /><text>{{wrongCount}}</text></view>
+    </view>
   </view>
 </view>

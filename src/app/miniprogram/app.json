@@ -24,7 +24,8 @@
     "pages/share-app/share-app",
     "pages/announce/announce",
     "pages/announce-new-post/announce-new-post",
-    "pages/answer-book/answer-book"
+    "pages/answer-book/answer-book",
+    "pages/query-lesson-advanced/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

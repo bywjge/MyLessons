@@ -449,17 +449,37 @@ function convertIndexToTime(index, endTime = false){
  */
 async function syncLessons(forceFromSchool = false){
   await initCheck()
-  console.log()
+
+  const getLessonCount = o => {
+    if (!o || typeof o !== 'object') return 0;
+    let count = 0
+    for (const key in o) {
+      const arr = o[key];
+      count += arr.length
+    }
+    return count
+  }
+
+  let lessonCount = getLessonCount(wx.getStorageSync('lessonsByDay'))
+
   const { year, term } = getTerm()
   log.info('调用syncLessons')
 
   // 检查数据库
   if (!forceFromSchool) {
     try {
-      const { lessons, time } = await database.getLesson(year, term)
-      convertAndStorage(lessons, false)
+      let { lessons, time } = await database.getLesson(year, term)
+      lessons = convertAndStorage(lessons, false)
       wx.setStorageSync('lastSyncTime', time || new Date())
       wx.setStorageSync('lastSyncTerm', `${year}0${term}`)
+
+      const nc = getLessonCount(lessons)
+      if (lessonCount > 0 && nc !== lessonCount) {
+        tools.showModal({
+          title: '课程变动提醒',
+          content: `课程数据已更新，更新前课程为${lessonCount}节，更新后为${nc}节，请注意查看课表`
+        })
+      }
       return ;
     } catch(e) {
       console.log(e)
@@ -470,13 +490,23 @@ async function syncLessons(forceFromSchool = false){
   /** 如果数据库没有，则从教务系统获取 */
   log.info('从教务系统获取课程')
   const isTeacher = wx.getStorageSync('usertype') === 'teacher'
-  const lessons = await getLessonFromSchool(year, term, isTeacher)
+  let lessons = await getLessonFromSchool(year, term, isTeacher)
+
   log.info('上传课程到数据库')
   const newLesson = cloneDeep(lessons)
   database.updateLesson(lessons, year, term)
-  convertAndStorage(newLesson)
+
+  lessons = convertAndStorage(newLesson)
   wx.setStorageSync('lastSyncTime', new Date())
   wx.setStorageSync('lastSyncTerm', `${year}0${term}`)
+  
+  const nc = getLessonCount(lessons)
+  if (lessonCount > 0 && nc !== lessonCount) {
+    tools.showModal({
+      title: '课程变动提醒',
+      content: `课程数据已更新，更新前课程为${lessonCount}节，更新后为${nc}节，请注意查看课表`
+    })
+  }
 }
 
 /**
@@ -677,6 +707,8 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
 
   wx.setStorageSync('lessonsByWeek', lessonsByWeek)
   log.info("课表存储成功");
+
+  return lessonsByDay
 }
 
 /**
