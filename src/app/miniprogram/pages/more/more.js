@@ -71,11 +71,18 @@ Page({
     wx.navigateTo({ url: '/pages/query-occupy/query-occupy' })
   },
 
+  // 打开教师课程查询
   jumpToQueryTeacherLesson() {
     wx.navigateTo({ url: '/pages/query-teacher-lesson/query-teacher-lesson' })
   },
 
+  // 打开今天吃什么
   jumpToWhatToEat() {
     wx.navigateTo({ url: '/pages/what-to-eat/what-to-eat' })
+  },
+
+  // 打开答案之书
+  jumpToAnswerBook() {
+    wx.navigateTo({ url: '/pages/answer-book/answer-book' })
   }
 })

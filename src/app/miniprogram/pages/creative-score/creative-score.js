@@ -1,6 +1,5 @@
 import lessonApi from '../../apis/lessons'
 import { bindTheme, unbindTheme } from '../../utils/theme'
-import api from '../../apis/app'
 
 Page({
   data: {
@@ -31,7 +30,7 @@ Page({
         title: '同步数据中',
       })
       await lessonApi.getCreativeScoreFromSchool()
-      wx.hideLoading()
+      wx.hideLoading().catch(() => {})
     }
     this.getData()
   },
@@ -49,9 +48,8 @@ Page({
   },
 
   async checkBind() {
-    const authed = await api.isAppAuthed()
     const binded = wx.getStorageSync('binded')
-    if (!authed || !binded) {
+    if (!binded) {
       wx.redirectTo({
         url: '/pages/welcome/welcome',
       })
@@ -120,7 +118,7 @@ Page({
     })
 
     await lessonApi.getCreativeScoreFromSchool()
-    wx.hideLoading()
+    wx.hideLoading().catch(() => {})
     this.getData()
   }
 })

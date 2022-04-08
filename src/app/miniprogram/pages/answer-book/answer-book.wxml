@@ -1,0 +1,40 @@
+<view class="container" data-theme="{{theme}}">
+  <navigation title="答案之书" enableMenu="{{false}}" />
+  <view class="content">
+    <view class="results">
+      <view wx:for="{{results}}" wx:for-item="e" wx:for-index="index" class="item {{e}}" wx:key="index"></view>
+    </view>
+
+    <view class="front">
+      <view class="stage inner-wrapper invisible {{visible.main? 'visible': ''}}" wx:if="{{render.main}}">
+        <view class="title backgrounded-item">替你做决定</view>
+        <view class="subtitle backgrounded-item" wx:if="{{!isRunning}}">需要一个答案吗？在下方选择所需的答案类型吧</view>
+        <view class="button-wrapper">
+          <view class="square-button choose" hover-class="square-button-tap" bindtap="startChoose"><view class="inner" /></view>
+          <view class="square-button dice" hover-class="square-button-tap" bindtap="startDice"><view class="inner" /></view>
+        </view>
+      </view>
+
+      <view class="stage choose invisible {{visible.choose? 'visible': ''}}" wx:if="{{render.choose}}">
+        <view class="square-button {{nowRound}} result {{(!isRunning && results.length > 0)? 'show': ''}}"><view class="inner" /></view>
+        <view class="square-button right {{isRunning? 'shake': ''}}" style="animation-delay: .2s;"><view class="inner" /></view>
+        <view class="square-button wrong {{isRunning? 'shake': ''}}" style="animation-delay: .4s;"><view class="inner" /></view>
+      </view>
+
+      <view class="stage invisible {{visible.dice? 'visible': ''}}" wx:if="{{render.dice}}">
+        <view class="cube-container" bindtap="startDice">
+          <view class="cube" style="transform: scale(.4) rotateX({{rotate.x}}deg) rotateY({{rotate.y}}deg)">
+            <view class="front dice-1" ><view class="inner" /></view>
+            <view class="back dice-6" ><view class="inner" /></view>
+            <view class="right dice-2" ><view class="inner" /></view>
+            <view class="left dice-5" ><view class="inner" /></view>
+            <view class="top dice-3" ><view class="inner" /></view>
+            <view class="bottom dice-4" ><view class="inner" /></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="button restart" hover-class="button-tap" bindtap="restart" wx:if="{{!isRunning && (results.length > 0)}}">再来一次</view>
+  </view>
+</view>

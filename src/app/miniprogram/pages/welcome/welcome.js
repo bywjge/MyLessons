@@ -25,15 +25,22 @@ Page({
     // changeTheme('dark')
 
     // 测试强制清空数据
-    const version = "abcd103"
-    if (wx.getStorageSync('version') !== version){
-      wx.showLoading({ itle: '清空重载数据' })
+    const version = "abcd104"
+    if (wx.getStorageSync('version') !== version && wx.getStorageSync('binded') !== ""){
+      await wx.showModal({
+        title: '升级提示',
+        content: '应用已升级到最新版本，本次升级需要更新数据。本操作需要十几秒时间，点击确定继续。',
+        showCancel: false
+      })
+      wx.showLoading({ title: '重载课程数据' })
       log.info("数据已经清空")
-      wx.clearStorageSync()
-      wx.setStorageSync('version', version)
-      wx.setStorageSync('enableDebug', false)
+      // wx.clearStorageSync()
+      // wx.setStorageSync('enableDebug', false)
+      await lessonApi.resetLesson()
     }
-
+    wx.setStorageSync('version', version)
+    // 不知道为什么会这样，但需要这一步
+    // await lessonApi.initCheck()
     this.nextStep()
   },
 
@@ -57,7 +64,7 @@ Page({
         await accountApi.asyncAccountInfo()
       } catch {
         // 无个人数据，停留在本地
-        wx.hideLoading()
+        wx.hideLoading().catch(() => {})
         this.setData({ showButton: true })
         return ;
       }
@@ -74,7 +81,7 @@ Page({
       wx.showLoading({ title: '同步课表中' })
       await lessonApi.syncLessons()
 
-      wx.hideLoading()
+      wx.hideLoading().catch(() => {})
       wx.redirectTo({
         url: '../lesson-view/lesson-view',
       })

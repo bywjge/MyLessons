@@ -12,9 +12,10 @@
       {{item.name}}
     </view>
     <view class="front">
-      <view class="title" wx:if="{{times > 5}}">这么作？别吃了</view>
+      <view class="title" wx:if="{{times > maxTime}}">这么作？别吃了</view>
       <view class="inner-wrapper" wx:else>
-        <view class="title backgrounded-item">{{isRunning? foodName: foodName? '今天就吃：' +foodName : '今天吃什么'}}</view>
+        <view class="title backgrounded-item">{{isRunning? foodName.name: foodName? '今天就吃：' +foodName.name : '今天吃什么'}}</view>
+        <view class="subtitle backgrounded-item" wx:if="{{!isRunning && foodName}}">位于 {{foodName.location}}</view>
         <view class="subtitle backgrounded-item" wx:if="{{!isRunning}}">解决世纪难题，点击下方按钮开始</view>
         <view class="subtitle backgrounded-item" wx:elif="{{!preStop}}">点击按钮停止</view>
         <view class="button" hover-class="button-tap" bindtap="handleStart" wx:if="{{!preStop}}">{{!isRunning? '开始': '停止'}}</view>

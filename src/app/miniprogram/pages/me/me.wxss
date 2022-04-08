@@ -7,7 +7,7 @@ page {
   overflow: hidden;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 0;
   height: 0;
   color: transparent;
@@ -172,7 +172,7 @@ page {
   margin-top: 20rpx;
   font-size: 25rpx;
   /* line-height: 25rpx; */
-  letter-spacing: 0.3rpx;
+  letter-spacing: .3px;
   font-weight: 400;
   color: var(--text-black-3);
   display: flex;
@@ -187,7 +187,6 @@ page {
   color: var(--text-black-2);
   background: var(--color-black-10);
   word-break: keep-all;
-
   margin-right: 20rpx;
 }
 

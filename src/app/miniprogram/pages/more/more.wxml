@@ -58,7 +58,7 @@
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
       </view>
 
-      <view class="item icon-button multiple icon icon-find green" bindtap="jumpToQueryTeacherLesson">
+      <view class="item icon-button multiple icon icon-find green" bindtap="jumpToQueryTeacherLesson" wx:if="{{false}}">
         <span class="title">高级课程查询</span>
         <view class="description">按学院/课程名称/开课日期查询课程</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
@@ -76,7 +76,7 @@
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
       </view>
 
-      <view class="item icon-button multiple icon icon-bulb pink" bindtap="jumpToWhatToEat">
+      <view class="item icon-button multiple icon icon-book purple" bindtap="jumpToAnswerBook">
         <span class="title">答案之书</span>
         <view class="description">替你做决定！可以回答是否问题或投骰子</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 

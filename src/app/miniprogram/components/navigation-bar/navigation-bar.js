@@ -71,28 +71,26 @@ Component({
     // 显示/隐藏 菜单
     // 控制动画和display none
     // 注意动画时长为0.3s
-    async handleMenuClick(){
+    async handleMenuClick(e, status = null){
       // 如果正在忙或者不允许展示menu
       if (this.data.busy || !this.properties.enableMenu){
         return ;
       }
       const animationTime = 300 //ms
-      const newShowMenu = !this.data.showMenu
-      const that = this
-      this.setData({ busy: true })
-      if (newShowMenu){
-        this.setData({ showMenuLayer: true, hiddenOther: true })
-        setTimeout(() => {
-          that.setData({ hiddenLayer: true })
-        }, animationTime)
-        // 不加延时微信有bug
-        await tools.sleep(100)
-        this.setData({ showMenu: true, busy: false })
-      } else {
-        this.setData({ showMenu: false, hiddenLayer: false, hiddenOther: false })
-        await tools.sleep(animationTime)
-        this.setData({ showMenuLayer: false, busy: false })
+      let newShowMenu = !this.data.showMenu
+      if (status !== null) {
+        newShowMenu = status
       }
+      const that = this
+      // this.setData({ busy: true })
+      if (newShowMenu) {
+        this.setData({ showMenuLayer: true, hiddenOther: true, hiddenLayer: true, showMenu: true })
+        
+      } else {
+        this.setData({ showMenu: false, hiddenLayer: false, hiddenOther: false, showMenuLayer: false })
+      }
+      await tools.nextTick()
+      this.setData({ busy: false })
     },
 
     async handleItemClick({ currentTarget, type }){
@@ -102,8 +100,10 @@ Component({
       if (selected){
         return ;
       }
-      this.handleMenuClick()
-      await tools.sleep(200)
+      this.handleMenuClick(null, false)
+      this.setData({ busy: true })
+      // await tools.sleep(200)
+      // await tools.nextTick()
       wx.redirectTo({
         url: url,
       })

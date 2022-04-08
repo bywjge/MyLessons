@@ -65,6 +65,16 @@
   background: var(--color-black-20) !important;
 }
 
+.title-btn-wrapper {
+  position: absolute;
+  height: var(--operation-height);
+  width: 300rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+}
+
 .title-btn {
   position: relative;
 }

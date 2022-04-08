@@ -4,6 +4,10 @@ import os
 import cv2
 from PIL import Image
 from io import BytesIO
+from Crypto.Cipher import AES
+import base64
+from hashlib import md5
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
@@ -15,6 +19,9 @@ LOW_CASE = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'
 UP_CASE = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U','V', 'W', 'X', 'Y', 'Z']
 
 CAPTCHA_LIST = NUMBER + LOW_CASE + UP_CASE
+
+__KEY__ = md5('0x1ec10dForMyLesson'.encode('utf-8')).hexdigest()
+__IV__ = __KEY__[0:16]
 
 class CNN:
     def __init__(self):
@@ -62,13 +69,54 @@ class CNN:
         text_list = [captcha_list[v] for v in vec_idx]
         return ''.join(text_list)
 
+class AESTool:
+    def __init__(self):
+        self.key = __KEY__.encode('utf-8')
+        self.iv = __IV__.encode('utf-8')
+
+    def pkcs7padding(self, text):
+        """
+            明文使用PKCS7填充
+        """
+        bs = 16
+        length = len(text)
+        bytes_length = len(text.encode('utf-8'))
+        padding_size = length if (bytes_length == length) else bytes_length
+        padding = bs - padding_size % bs
+        padding_text = chr(padding) * padding
+        self.coding = chr(padding)
+        return text + padding_text
+
+    def aes_encrypt(self, content):
+        """
+            AES加密
+        """
+        cipher = AES.new(self.key, AES.MODE_CBC, self.iv)
+        # 处理明文
+        content_padding = self.pkcs7padding(content)
+        # 加密
+        encrypt_bytes = cipher.encrypt(content_padding.encode('utf-8'))
+        # 重新编码
+        result = str(base64.b64encode(encrypt_bytes), encoding='utf-8')
+        # result = str(base64.b64encode(encrypt_bytes), encoding='utf-8')
+        return result
+
+    def aes_decrypt(self, content):
+        """
+            AES解密
+        """
+        cipher = AES.new(self.key, AES.MODE_CBC, self.iv)
+        content = base64.b64decode(content)
+        text = cipher.decrypt(content).decode('utf-8')
+        return self.pkcs7padding(text)
+
 
 from aiohttp import web
-import time
 import aiohttp
 routes = web.RouteTableDef()
 global cnnObject
 
+aes = AESTool()
 indexMessage = '''
 Usage:
   /getImg?username=<username>&cnn=0
@@ -158,6 +206,14 @@ async def post(request):
     img_base64 = await request.post();
     text = cnnObject.convertImgToText2(img_base64['base64'])
     return web.Response(text = text[0])
+
+@routes.post('/re_1ec10d_cognize')
+async def post(request):
+    # request = self.request
+    img_base64 = await request.post();
+    text = cnnObject.convertImgToText2(img_base64['base64'])
+    text = aes.aes_encrypt(text[0])
+    return web.Response(text = text)
 
 # app.router.add_routes(routes)
 

@@ -1,8 +1,9 @@
-import CryproJS from 'crypto-js'
 import Request from '../utils/request-promise'
 import tools from '../utils/tools'
 import * as database from '../static/js/database'
 import requestWithCookie from '../utils/request'
+import { decrypt } from '../static/js/AES'
+import CryptoJS from 'crypto-js'
 
 const request = new Request()
 
@@ -26,6 +27,7 @@ const request = new Request()
  * @property {string} 学院 所在院校
  */
 
+
 /**
  * 登录到教务系统
  * @param {string} username 用户账号
@@ -40,9 +42,9 @@ async function doLogin(username, password, cookie = null, skipStorage = false) {
   const { cookie: _cookie, code: vcode } = await getCookieAndCode(cookie)
   console.log(_cookie, vcode)
 
-  const key = CryproJS.enc.Utf8.parse(vcode + vcode + vcode + vcode);
-  const srcs = CryproJS.enc.Utf8.parse(password);
-  const encrypted = CryproJS.AES.encrypt(srcs, key, { mode: CryproJS.mode.ECB, padding: CryproJS.pad.Pkcs7 });
+  const key = CryptoJS.enc.Utf8.parse(vcode + vcode + vcode + vcode);
+  const srcs = CryptoJS.enc.Utf8.parse(password);
+  const encrypted = CryptoJS.AES.encrypt(srcs, key, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 });
   const encryptedPassword = encrypted.ciphertext.toString()
 
   // 尝试登录
@@ -133,7 +135,7 @@ async function getCookieAndCode(cookie = null) {
 
   /** 识别验证码 */
   ret = await request.post(
-    'https://www.ltiex.com/recognizeVerifyCode/recognizeCaptcha2',
+    'https://www.ltiex.com/recognizeVerifyCode/re_1ec10d_cognize',
     { base64: base64String },
     {
       contentType: 'application/x-www-form-urlencoded'
@@ -141,7 +143,7 @@ async function getCookieAndCode(cookie = null) {
   )
 
   return Promise.resolve({
-    code: ret.data,
+    code: decrypt(ret.data),
     cookie: _cookie
   })
 }

@@ -28,8 +28,8 @@ page{
 
   padding: 20rpx 30rpx;
 
-  background: #FFA6B5;
-  border: 1px solid #FFFFFF;
+  background: var(--button-background);
+  border: 1px solid rgba(255, 255, 255, .7);
   border-radius: 11px;
   font-family: PingFangSC-Medium;
   font-size: 18px;
@@ -41,7 +41,7 @@ page{
 }
 
 .button:active{
-  background: #df8a98;
+  background: var(--button-tap-background);
 }
 
 .button.auth{

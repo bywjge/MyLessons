@@ -96,7 +96,7 @@ Page({
         try{
           await this.deleteAvatar()
         } catch (e) {
-          wx.hideLoading()
+          wx.hideLoading().catch(() => {})
           tools.showModal({
             title: '上传失败',
             content: '暂时无法处理请求'
@@ -108,7 +108,7 @@ Page({
           cloudPath: fileName,
           filePath: ret.tempFilePaths[0],
           success: async res => {
-            // wx.hideLoading()
+            // wx.hideLoading().catch(() => {})
             await setUserAvatar(res.fileID)
             tools.showToast({ title: '上传成功' })
             this.refreshAvatar(true)

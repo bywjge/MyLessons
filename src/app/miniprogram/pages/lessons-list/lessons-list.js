@@ -1,5 +1,4 @@
 import { bindTheme, unbindTheme } from '../../utils/theme'
-import api from '../../apis/app'
 
 Page({
   data: {
@@ -59,9 +58,8 @@ Page({
     unbindTheme()
   },
   async checkBind() {
-    const authed = await api.isAppAuthed()
     const binded = wx.getStorageSync('binded')
-    if (!authed || !binded) {
+    if (!binded) {
       wx.redirectTo({
         url: '/pages/welcome/welcome',
       })

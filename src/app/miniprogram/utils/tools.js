@@ -9,7 +9,8 @@ export default {
   getDaysGap,
   mergeCookie,
   debounce,
-  throttle
+  throttle,
+  nextTick
 }
 
 import logger from './log'
@@ -59,7 +60,7 @@ function sleep(ms){
 
 function showModal(obj){
   const f = wx.showModal;
-  wx.hideLoading()
+  wx.hideLoading().catch(() => {})
   return new Promise((resolve, reject) => {
     const defaultConfig = {
       showCancel: false,
@@ -79,7 +80,7 @@ function showModal(obj){
 }
 
 function showToast(obj){
-  wx.hideLoading()
+  wx.hideLoading().catch(() => {})
   return new Promise((resolve, reject) => {
     const defaultConfig = {
       title: "",
@@ -177,4 +178,9 @@ function throttle(fn, wait) {
     }, wait)
   }
 }
-  
+
+function nextTick() {
+  return new Promise(resolve => {
+    wx.nextTick(resolve)
+  })
+}

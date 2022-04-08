@@ -133,7 +133,7 @@ Page({
     const info = await discussApi.getPersonInfo()
     this.setData({ info })
 
-    wx.hideLoading()
+    wx.hideLoading().catch(() => {})
   },
 
   onPullDownRefresh() {
@@ -232,7 +232,7 @@ Page({
         })
       })
 
-    wx.hideLoading()
+    wx.hideLoading().catch(() => {})
   },
 
   /**
@@ -273,7 +273,7 @@ Page({
           content: '请稍后再试一试'
         })
       })
-    wx.hideLoading()
+    wx.hideLoading().catch(() => {})
     await tools.sleep(1000)
     this.refreshArticle()
   },

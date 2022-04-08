@@ -51,7 +51,7 @@ Page({
       })
       return ;
     } finally {
-      wx.hideLoading()
+      wx.hideLoading().catch(() => {})
     }
 
     /** 如果只有一个老师，则直接转到结果页面 */
@@ -98,7 +98,7 @@ Page({
   async showLesson(name, collegeId) {
     wx.showLoading({ title: '查询课程中' })
     const lessons = await moreApi.getAllLessonsFromSchool('', name, collegeId)
-    wx.hideLoading()
+    wx.hideLoading().catch(() => {})
 
     const doneList = []
     const undoneList = []

@@ -68,7 +68,7 @@ Page({
     if (!info) {
       wx.showLoading({ title: '获取数据中' })
       await accountApi.getPersonInfo()
-      wx.hideLoading()
+      wx.hideLoading().catch(() => {})
       this.onLoad()
       return ;
     }
@@ -95,7 +95,7 @@ Page({
 
   async refreshAvatar(force = false) {
     const wxInfo = wx.getStorageSync('wxInfo')
-    const avatarUrl = wx.getStorageSync('avatarUrl') || wxInfo.avatarUrl
+    const avatarUrl = wx.getStorageSync('avatarUrl') || wxInfo.avatarUrl || ''
     const fs = wx.getFileSystemManager()
     const that = this
     try {
@@ -123,7 +123,6 @@ Page({
       wx.cloud.downloadFile({
         fileID: avatarUrl,
         success(ret) {
-          console.log("hi")
           const path = ret.tempFilePath
           data = fs.readFileSync(path)
           res()
@@ -259,7 +258,8 @@ Page({
   // 强制刷新本地数据
   debugClearStrage() {
     // 设置一个永远不可能出现的版本号来触发重新获取
-    wx.setStorageSync('version', 'never-gonna-give-you-up')
+    // wx.setStorageSync('version', 'never-gonna-give-you-up')
+    wx.clearStorageSync()
     wx.redirectTo({
       url: '/pages/welcome/welcome'
     })

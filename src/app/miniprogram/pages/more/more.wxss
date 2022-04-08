@@ -258,6 +258,11 @@ page {
   -webkit-mask-image: var(--icon-bulb);
 }
 
+.icon-book:before {
+  mask-image: var(--icon-book);
+  -webkit-mask-image: var(--icon-book);
+}
+
 .more-icon i {
   transform: rotate(-90deg);
   color: var(--text-black-3);
@@ -277,4 +282,8 @@ page {
 
 .pink:before {
   background: var(--color-pink-1);
+}
+
+.purple:before {
+  background: var(--color-purple-1);
 }

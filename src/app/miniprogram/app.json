@@ -23,7 +23,8 @@
     "pages/contact/contact",
     "pages/share-app/share-app",
     "pages/announce/announce",
-    "pages/announce-new-post/announce-new-post"
+    "pages/announce-new-post/announce-new-post",
+    "pages/answer-book/answer-book"
   ],
   "window": {
     "backgroundTextStyle": "light",

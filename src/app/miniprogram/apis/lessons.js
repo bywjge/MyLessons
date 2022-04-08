@@ -1,4 +1,5 @@
 export default {
+  initCheck,
   getLessonFromSchool,
   getScoreFromSchool,
   getExamFromSchool,
@@ -42,11 +43,13 @@ log.setKeyword('apis/lessons.js')
 async function initCheck() {
   /** 检查学期初是否为空 */
   const firstDate = wx.getStorageSync('firstWeekDate')
+  console.log("check", firstDate)
   if (!firstDate || firstDate === "") {
     // 计算现在的学期
     const { year, term } = getTerm()
     await getFirstDayOfTerm(year, term)
   }
+  return Promise.resolve()
 }
 
 /**
@@ -62,6 +65,7 @@ async function getFirstDayOfTerm(year, term) {
   /** 从云端获取试试 */
   date = await database.getFirstDayOfTerm(year, term)
   if (date !== null) {
+    console.log(date)
     wx.setStorageSync('firstWeekDate', date)
     return Promise.resolve(date)
   }
@@ -81,6 +85,7 @@ async function getFirstDayOfTerm(year, term) {
   /** 上报云端 */
   database.setFirstDayOfTerm(year, term, date)
   /** 储存日期 */
+  console.log(date)
   wx.setStorageSync('firstWeekDate', date)
   return Promise.resolve(date)
 }
@@ -444,6 +449,7 @@ function convertIndexToTime(index, endTime = false){
  */
 async function syncLessons(forceFromSchool = false){
   await initCheck()
+  console.log()
   const { year, term } = getTerm()
   log.info('调用syncLessons')
 
@@ -451,11 +457,12 @@ async function syncLessons(forceFromSchool = false){
   if (!forceFromSchool) {
     try {
       const { lessons, time } = await database.getLesson(year, term)
-      convertAndStorage(lessons, true)
+      convertAndStorage(lessons, false)
       wx.setStorageSync('lastSyncTime', time || new Date())
       wx.setStorageSync('lastSyncTerm', `${year}0${term}`)
       return ;
-    } catch {
+    } catch(e) {
+      console.log(e)
       log.warn('数据库中不存在课程')
     }
   }
@@ -465,8 +472,9 @@ async function syncLessons(forceFromSchool = false){
   const isTeacher = wx.getStorageSync('usertype') === 'teacher'
   const lessons = await getLessonFromSchool(year, term, isTeacher)
   log.info('上传课程到数据库')
+  const newLesson = cloneDeep(lessons)
   database.updateLesson(lessons, year, term)
-  convertAndStorage(lessons)
+  convertAndStorage(newLesson)
   wx.setStorageSync('lastSyncTime', new Date())
   wx.setStorageSync('lastSyncTerm', `${year}0${term}`)
 }
@@ -724,6 +732,7 @@ async function resetLesson() {
   await syncLessons(true)
 
   wx.hideLoading().catch(() => {})
+  return Promise.resolve()
 }
 
 // 与业务关联
