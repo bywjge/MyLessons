@@ -4,6 +4,7 @@ import * as database from '../static/js/database'
 import requestWithCookie from '../utils/request'
 import { decrypt } from '../static/js/AES'
 import CryptoJS from 'crypto-js'
+import moreApi from './more'
 
 const request = new Request()
 
@@ -168,6 +169,33 @@ async function getTeacherInfo(username) {
   return Promise.reject('用户不是教师或教师不存在')
 }
 
+/**
+ * 查询课程，两个条件至少填写一个
+ * @param {string} collegeId 学院代码
+ * @param {string} lessonName 课程名称
+ * @returns {Array<Object>} 课程列表
+ */
+async function getLessonInfo(collegeId, lessonName) {
+  const collegeIdMap = {}
+  for (const key in moreApi.collegeId) {
+    const element = moreApi.collegeId[key]
+    collegeIdMap[element] = key
+  }
+
+  const keyMap = {
+    dm: 'id',
+    kkbmdm: ['学院', ret => collegeIdMap[ret]],
+    mc: '名称'
+  }
+  const ret = (await requestWithCookie.post(`https://jxgl.wyu.edu.cn/teagrkbcx!getKcxx.action?kkbmdm=${collegeId}&kkjysdm=`, {
+    q: lessonName
+  })).data
+  if (Array.isArray(ret) && ret.length > 0) {
+    return Promise.resolve(tools.keyMapConvert(ret, keyMap))
+  }
+  return Promise.reject('课程不存在')
+}
+
 function btoa(r) {
   const e = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
   for (var o, n, a = String(r), i = 0, c = e, d = ""; a.charAt(0 | i) || (c = "=", i % 1); d += c.charAt(63 & o >> 8 - i % 1 * 8)) {
@@ -181,5 +209,6 @@ function btoa(r) {
 export {
   doLogin,
   checkCookie,
-  getTeacherInfo
+  getTeacherInfo,
+  getLessonInfo
 }

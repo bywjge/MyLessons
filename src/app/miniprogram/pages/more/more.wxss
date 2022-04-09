@@ -280,6 +280,10 @@ page {
   background: var(--color-green-1);
 }
 
+.orange:before {
+  background: var(--color-orange-1);
+}
+
 .pink:before {
   background: var(--color-pink-1);
 }

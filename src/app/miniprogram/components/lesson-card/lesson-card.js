@@ -127,7 +127,7 @@ Component({
       this.setData({
         status: newStatus
       })
-      console.log(this.data.ignoreExtend);
+      // console.log(this.data.ignoreExtend);
       if (this.data.ignoreExtend)
         return ;
 

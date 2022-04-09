@@ -7,26 +7,38 @@
       <view class="subtitle">在下方任意选择两个及以上的条件来搜索</view>
       <view class="subtitle">如果不确定课程的名称，可以打出课程的部分名称</view>
 
-      <view class="input-section" style="margin-top: 200rpx;">
+      <picker style="margin-top: 40rpx" class="input-section" mode="selector" value="{{collegeIndex}}" range="{{collegeList}}" bindchange="bindCollegeChange">
+        <view class="cell-text">学院</view>
+        <view class="text">{{collegeList[collegeIndex]}}</view>
+        <fa class="more-icon" icon="fa fa-angle-down fa-lg"></fa> 
+      </picker>
+
+      <picker class="input-section" mode="date" value="{{date}}" start="2019-01-14" end="{{endDate}}" bindchange="bindDateChange" bindcancel="clearDate">
+        <view class="cell-text">上课日期</view>
+        <view class="text">{{date === null? '任意日期': date}}</view>
+        <fa class="more-icon" icon="fa fa-angle-down fa-lg"></fa> 
+      </picker>
+
+      <view class="input-section" bindtap="selectDate">
         <view class="cell-text">课程名称</view>
         <input class="cell-input" bindinput="handleNameInput" placeholder="" />
       </view>
-      <view class="input-section" style="margin-top: 40rpx;">
+      <view class="input-section" style="margin-top: 70rpx;">
         <view class="button" hover-class="button-tap" bindtap="handleNextStep">查询</view>
       </view>
     </view>
 
-    <!-- 教师选择 -->
+    <!-- 课程选择 -->
     <view class="card select {{showElement === 'select'?'show':''}} {{visibleElement === 'select'?'visible':''}}">
       <view class="title">
         <fa class="back-icon" icon="fa fa-angle-down fa-lg" bindtap="backPrevStep" />
-        选择一位老师
+        选择一门课程({{lessonList.length}})
       </view>
 
       <view class="teacher-list">
         <view 
           class="item"
-          wx:for="{{teacherList}}"
+          wx:for="{{lessonList}}"
           wx:for-item="e"
           wx:for-index="index"
           wx:key="index"
@@ -37,8 +49,8 @@
           <view class="index">{{index + 1}}</view>
           <view class="content">
             <view class="text">
-              <!-- 教师名称 -->
-              <view class="name">{{e['姓名']}}</view>
+              <!-- 课程名称 -->
+              <view class="name">{{e['名称']}}</view>
               <!-- 下方文字 -->
               <view class="description">{{e['学院']}}</view>
             </view>

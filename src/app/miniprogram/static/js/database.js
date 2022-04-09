@@ -168,10 +168,25 @@ async function getLesson(year, term){
 
 /**
  * 将课程表上传到云端
- * @param {array} lessons 全学期课程（从
+ * @param {array} lessons 全学期课程（每天结构
  */
-async function updateLesson(lessons, year, term){
+async function updateLesson(lessonsByDay, year, term){
   const termid = `${year}0${term}`
+  let lessons = []
+
+  /** 合并大节的课 */
+  for (const key in lessonsByDay) {
+    // 取出一天的课程
+    const t = lessonsByDay[key]
+    t.forEach(e => {
+      delete e.long
+      delete e.冲突
+      delete e.卡片颜色
+      delete e.课序号
+    })
+    lessons.push(...t)
+  }
+
   let records = (await db.collection('lessons').get()).data
   // 需要将data分成20条一份上传
   let pack = lessons.splice(0, 20)

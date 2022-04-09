@@ -97,8 +97,19 @@ Page({
 
   async showLesson(name, collegeId) {
     wx.showLoading({ title: '查询课程中' })
-    const lessons = await moreApi.getAllLessonsFromSchool('', name, collegeId)
+    const lessons = await moreApi.getAllLessonsFromSchool({
+      teacherName: name,
+      collegeId
+    })
     wx.hideLoading().catch(() => {})
+
+    if (lessons.length === 0) {
+      tools.showModal({
+        title: '无课程',
+        content: '所查询的老师没有开课数据哦～'
+      })
+      return ;
+    }
 
     const doneList = []
     const undoneList = []

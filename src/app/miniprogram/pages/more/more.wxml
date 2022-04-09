@@ -58,7 +58,7 @@
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 
       </view>
 
-      <view class="item icon-button multiple icon icon-find green" bindtap="jumpToQueryLessonAdvanced" wx:if="{{false}}">
+      <view class="item icon-button multiple icon icon-find orange" bindtap="jumpToQueryLessonAdvanced" wx:if="{{true}}">
         <span class="title">高级课程查询</span>
         <view class="description">按学院/课程名称/开课日期查询课程</view>
         <fa class="float-right more-icon" icon="fa fa-angle-down fa-lg"></fa> 

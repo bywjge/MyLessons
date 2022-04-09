@@ -1,7 +1,7 @@
 <view 
   class="navigationBar {{showMenu? 'show-mask': ''}} {{showMenuLayer? 'show-layer': ''}}" 
   style="min-height: {{navBarHeight }}px; width: {{windowWidth}}px; padding-top: {{statusBarHeight}}px; --bar-height: {{navBarHeight}}px; --operation-height: {{navBarHeight - statusBarHeight}}px"
-  bindtap="handleMenuClick"
+  
 >
   <view 
     class="slot {{hiddenLayer? 'hidden-layer': ''}} {{hiddenOther? 'hidden': ''}}" 
@@ -18,7 +18,7 @@
     </view>
   </view>
   
-  <view class="title-btn-wrapper">
+  <view class="title-btn-wrapper" bindtap="handleMenuClick">
     <view class="title-btn {{showMenu?'show':'hidden'}}" id="title">
       {{title}}
       <fa wx:if="{{enableMenu}}" icon="fa fa-angle-down fa-lg"></fa> 

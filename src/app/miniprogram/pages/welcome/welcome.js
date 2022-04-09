@@ -25,7 +25,7 @@ Page({
     // changeTheme('dark')
 
     // 测试强制清空数据
-    const version = "abcd104"
+    const version = "abcd105"
     if (wx.getStorageSync('version') !== version && wx.getStorageSync('binded') !== ""){
       await wx.showModal({
         title: '升级提示',

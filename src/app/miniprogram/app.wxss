@@ -100,11 +100,10 @@ page {
     --color-pink-1: #ff617c;
     --color-pink-2: #FF8B9C;
     --color-pink-3: #ef8b9a;
-    --color-red-1: #FF3030;
     --color-green-1: #57C35A;
     --color-purple-1: #A42FFF;
     --color-red-1: #FF3030;
-    --color-orange-1: #FF694C;
+    --color-orange-1: #ff8733;
 
     --color-warning: #FF7227;
 
@@ -179,11 +178,10 @@ page {
     --color-pink-1: #ff617c;
     --color-pink-2: #cc6373;
     --color-pink-3: #ef8b9a;
-    --color-red-1: #FF3030;
     --color-green-1: #449c47;
     --color-purple-1: #994ad6;
-    --color-red-1: #FF3030;
-    --color-orange-1: #d4573e;
+    --color-red-1: #b11c1c;
+    --color-orange-1: #e25236;
 
     --color-warning: #FF7227;
 

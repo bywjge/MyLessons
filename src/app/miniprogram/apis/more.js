@@ -98,11 +98,13 @@ const allRooms = {
 
 /**
  * 从教务系统获取全校课表
- * @param {string} date 需要查询的日期，格式为yyyy-mm-dd；为空则不限制日期
- * @param {string} teacherName 需要查询的老师姓名，为空则全校查询
- * @param {string} collegeId 需要查询的院校代码
+ * @param {Object} payload
+ * @param {string} payload.date 需要查询的日期，格式为yyyy-mm-dd；为空则不限制日期
+ * @param {string} payload.teacherName 需要查询的老师姓名，为空则全校查询
+ * @param {string} payload.collegeId 需要查询的院校代码
+ * @param {string} payload.lessonId 需要查询的课程代码
  */
-async function getAllLessonsFromSchool(date, teacherName = '', collegeId = '') {
+async function getAllLessonsFromSchool({ date, teacherName = '', collegeId = '', lessonId = '' }) {
   const { year, term } = lessonApi.getTerm()
   const ret = await request.post(
     `https://jxgl.wyu.edu.cn/xsgrkbcx!getQxkbDataList.action`,
@@ -111,7 +113,7 @@ async function getAllLessonsFromSchool(date, teacherName = '', collegeId = '') {
       xqdm: '',
       zc: '',
       xq: '',
-      kcdm: '',
+      kcdm: lessonId,
       kkyxdm: collegeId,
       kkjysdm: '',
       jcdm: '',

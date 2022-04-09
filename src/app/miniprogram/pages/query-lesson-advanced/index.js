@@ -1,17 +1,36 @@
-import tools from "../../utils/tools"
+import tools from '../../utils/tools'
 import moreApi from '../../apis/more'
-import { getTeacherInfo } from '../../apis/wyu'
+import { getLessonInfo } from '../../apis/wyu'
+
+const collegeList = {
+  "全部": "",
+  "土木建筑学院": "00011",
+  "外国语学院": "00005",
+  "应用物理与材料学院": "00007",
+  "政法学院": "00003",
+  "文学院": "00004",
+  "智能制造学部": "105230934",
+  "生物科技与大健康学院": "00012",
+  "纺织材料与工程学院": "00013",
+  "经济管理学院": "00002",
+  "继续教育学院": "00035",
+  "美育教育中心": "107412358",
+  "艺术设计学院": "00014",
+  "轨道交通学院": "00018",
+  "通识教育学院": "105230931",
+  "马克思主义学院": "00015",
+}
 
 Page({
   data: {
     showElement: 'main',
     visibleElement: '',
-    teacherList: [{
+    collegeList: [{
       name: '张三',
       college: '智能制造学部'
     }],
     teacher: '',
-    teacherQueryName: '',
+    lessonQueryName: '',
     // 禁用的按钮
     disableButton: {
       done: false,
@@ -20,6 +39,11 @@ Page({
     doneList: [],
     undoneList: [],
     empty: true,
+    collegeIndex: 0,
+    collegeList: Object.keys(collegeList),
+    lessonList: [],
+    endDate: new Date().nDaysLater(365).format('YYYY-mm-dd'),
+    date: null
   },
 
   async onReady() {
@@ -29,24 +53,45 @@ Page({
     })
   },
 
-  /** 老师姓名输入 */
   handleNameInput(e){
     this.setData({
-      teacherQueryName: e.detail.value.trim()
+      lessonQueryName: e.detail.value.trim()
     })
   },
 
   /** 下一步 */
   async handleNextStep() {
-    wx.showLoading({ title: '查询数据中' })
-    /** 查询教师列表 */
-    let list = null
-    try {
-      list = await getTeacherInfo(this.data.teacherQueryName)
-    } catch {
+    // 一定要指定两个条件以上才能开始查询
+    if (
+      this.data.lessonQueryName === '' && 
+      (this.data.date === null || this.data.collegeIndex === 0)
+    ) {
       tools.showModal({
-        title: '找不到老师',
-        content: '找不到这个老师，请重新输入哦',
+        title: '条件过少...',
+        content: '必须指定两个及以上的条件才能开始查询哦～不然结果会太多'
+      })
+      return ;
+    }
+
+    const collegeId = collegeList[this.data.collegeList[this.data.collegeIndex]]
+
+    // 1.如果指定了课程名称，则优先选择getLessonInfo查询课程，并提供课程选择页面选择，最后getAllLessonsFromSchool查询结果
+    // 2.如果没有指定，则不需要选择课程，直接getAllLessonsFromSchool显示结果
+    /** 查询教师列表 */
+    let list = []
+    if (this.data.lessonQueryName === '') {
+      this.showLesson(collegeId, undefined, this.data.date || '')
+      return ;
+    }
+
+    wx.showLoading({ title: '查询数据中' })
+    try {
+      list = await getLessonInfo(collegeId, this.data.lessonQueryName)
+    } catch(e) {
+      console.log(e)
+      tools.showModal({
+        title: '找不到课程',
+        content: '找不到相关课程，请重新输入哦',
         showCancel: false
       })
       return ;
@@ -54,17 +99,15 @@ Page({
       wx.hideLoading().catch(() => {})
     }
 
-    /** 如果只有一个老师，则直接转到结果页面 */
-    if (list.length === 1 && list[0]['姓名'] === this.data.teacherQueryName) {
+    /** 如果只有一个课程符合，则直接使用该id */
+    if (list.length === 1) {
       const item = list[0]
-      const collegeId = moreApi.collegeId[item['学院']]
-      this.showLesson(item['姓名'], collegeId)
-      // this.switchToContainer('result')
+      this.showLesson(undefined, item['id'])
       return ;
     }
 
     this.setData({
-      teacherList: list
+      lessonList: list
     })
     this.switchToContainer('select')
   },
@@ -87,18 +130,28 @@ Page({
     })
   },
 
-  /** 在教师列表中选择教师 */
+  /** 在课程列表中选择课程*/
   async handleSelectTeacher({ currentTarget }) {
     const { dataset: { item } } = currentTarget
-    const collegeId = moreApi.collegeId[item['学院']]
-
-    this.showLesson(item['姓名'], collegeId)
+    this.showLesson(collegeList[item['学院']], item['id'])
   },
 
-  async showLesson(name, collegeId) {
+  async showLesson(collegeId = '', lessonId = '', date = '') {
     wx.showLoading({ title: '查询课程中' })
-    const lessons = await moreApi.getAllLessonsFromSchool('', name, collegeId)
+    const lessons = await moreApi.getAllLessonsFromSchool({
+      date,
+      collegeId,
+      lessonId
+    })
     wx.hideLoading().catch(() => {})
+
+    if (lessons.length === 0) {
+      tools.showModal({
+        title: '无课程',
+        content: '没有开课数据哦～'
+      })
+      return ;
+    }
 
     const doneList = []
     const undoneList = []
@@ -126,7 +179,6 @@ Page({
     }
 
     this.setData({
-      teacher: name,
       doneList,
       undoneList,
       empty: lessons.length === 0
@@ -142,5 +194,32 @@ Page({
     this.setData({
       [`disableButton.${key}`]: !this.data.disableButton[key]
     })
+  },
+
+  bindCollegeChange(e) {
+    this.setData({
+      collegeIndex: e.detail.value
+    })
+  },
+
+
+  bindDateChange(e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      date: e.detail.value
+    })
+  },
+
+  clearDate() {
+    if (this.data.date === null)
+      return ;
+
+    wx.showModal({
+      title: '日期选择',
+      content: '是否要清除上课日期条件？'
+    }).then(({ confirm }) => {
+      if (confirm)
+        this.setData({ date: null })
+    }).catch(() => {})
   }
 })

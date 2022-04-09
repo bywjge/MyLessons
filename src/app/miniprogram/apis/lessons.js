@@ -492,11 +492,14 @@ async function syncLessons(forceFromSchool = false){
   const isTeacher = wx.getStorageSync('usertype') === 'teacher'
   let lessons = await getLessonFromSchool(year, term, isTeacher)
 
+  // const newLesson = cloneDeep(lessons)
+
+  lessons = convertAndStorage(lessons)
+
+  /** 一定要在转换后上传 */
   log.info('上传课程到数据库')
-  const newLesson = cloneDeep(lessons)
   database.updateLesson(lessons, year, term)
 
-  lessons = convertAndStorage(newLesson)
   wx.setStorageSync('lastSyncTime', new Date())
   wx.setStorageSync('lastSyncTerm', `${year}0${term}`)
   
