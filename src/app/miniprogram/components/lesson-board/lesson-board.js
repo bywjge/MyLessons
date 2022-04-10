@@ -86,7 +86,7 @@ Component({
         (this.data.showAddButton.day === day) &&
         (this.data.showAddButton.index === index)
       ) {
-        wx.vibrateShort()
+        wx.vibrateShort({ type: 'heavy' })
         console.log("添加课程", day, index)
         this.triggerEvent('addLesson', { day, index })
         return ;
@@ -94,7 +94,7 @@ Component({
 
       // 如果对着课程长按，编辑课程
       if (!empty) {
-        wx.vibrateShort()
+        wx.vibrateShort({ type: 'heavy' })
         console.log("编辑课程", item)
         this.triggerEvent('editLesson', item)
         return ;

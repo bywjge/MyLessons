@@ -111,10 +111,10 @@ Component({
 
     async handleBarClick(e){
       const { id } = e.target
-      if (id === 'title' || !this.data.showMenu){
+      if (id === 'title' || id === 'title-bar' || !this.data.showMenu){
         return ;
       }
-      this.handleMenuClick()
+      this.handleMenuClick(null, false)
     },
 
     goBack() {

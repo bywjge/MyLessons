@@ -133,7 +133,7 @@ Page({
   /** 在课程列表中选择课程*/
   async handleSelectTeacher({ currentTarget }) {
     const { dataset: { item } } = currentTarget
-    this.showLesson(collegeList[item['学院']], item['id'])
+    this.showLesson(collegeList[item['学院']], item['id'], this.data.date || '')
   },
 
   async showLesson(collegeId = '', lessonId = '', date = '') {
@@ -148,7 +148,7 @@ Page({
     if (lessons.length === 0) {
       tools.showModal({
         title: '无课程',
-        content: '没有开课数据哦～'
+        content: '(所选择的日期)没有开课数据哦～'
       })
       return ;
     }

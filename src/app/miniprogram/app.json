@@ -28,17 +28,21 @@
     "pages/query-lesson-advanced/index"
   ],
   "window": {
+    "backgroundColor": "@pageBackground",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FFB8C5",
     "navigationBarTitleText": "My Lesson",
     "navigationBarTextStyle": "white",
-    "navigationStyle": "custom"
+    "navigationStyle": "custom",
+    "initialRenderingCache": "static"
   },
   "usingComponents": {
     "navigation": "./components/navigation-bar/navigation-bar",
     "developHint": "./components/developHint/develop",
     "fa": "./components/includes/fa/index"
   },
+  "darkmode": true,
+  "themeLocation": "theme.json",
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }
