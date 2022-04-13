@@ -63,6 +63,7 @@ page {
 }
 
 .date-button .day{
+  font-family: "Avenir";
   font-weight: 650;
   font-size: 46rpx;
   line-height: 60rpx;
@@ -97,11 +98,26 @@ page {
 /* 课程数量统计器 */
 .lesson-counter{
   /* font-family: "Avenir"; */
+  position: relative;
   font-weight: Bold;
   font-size: 32rpx;
+  width: 100%;
+  box-sizing: border-box;
   /* letter-spacing: 0.89x`rpx; */
   align-self: flex-start;
-  margin-left: 67rpx;
+  padding-left: 67rpx;
+  padding-right: 67rpx;
   margin-bottom: 20rpx;
   color: var(--text-black-3);
+}
+
+.lesson-counter.pass-lesson:after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 480rpx;
+  right: 46rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--color-black-10);
 }

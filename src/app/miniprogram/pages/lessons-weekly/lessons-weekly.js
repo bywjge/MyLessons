@@ -55,6 +55,7 @@ Component({
     detailLessons: [],
     detailIndex: 0,
     activeDay: -1,
+    disableAnimation: wx.getStorageSync('disableAnimation'),
 
     outOfTerm: false
   },

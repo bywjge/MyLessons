@@ -103,8 +103,9 @@ const allRooms = {
  * @param {string} payload.teacherName 需要查询的老师姓名，为空则全校查询
  * @param {string} payload.collegeId 需要查询的院校代码
  * @param {string} payload.lessonId 需要查询的课程代码
+ * @param {boolean} payload.isIgnoreBuildingCheck 是否忽略上课地点检查
  */
-async function getAllLessonsFromSchool({ date, teacherName = '', collegeId = '', lessonId = '' }) {
+async function getAllLessonsFromSchool({ date = '', teacherName = '', collegeId = '', lessonId = '', isIgnoreBuildingCheck = false }) {
   const { year, term } = lessonApi.getTerm()
   const ret = await request.post(
     `https://jxgl.wyu.edu.cn/xsgrkbcx!getQxkbDataList.action`,
@@ -151,7 +152,7 @@ async function getAllLessonsFromSchool({ date, teacherName = '', collegeId = '',
     }],
     // xq: '星期',
     jxcdmc: '教学地点',
-    pkrs: ['排课人数', ret => Number(ret)],
+    pkrs: ['排课人数', n => Number(n)],
     pkrq: '上课日期'
   }
 
@@ -163,15 +164,18 @@ async function getAllLessonsFromSchool({ date, teacherName = '', collegeId = '',
 
   // 过滤
   formattedRows = formattedRows.filter(e => {
+    // 判断是否为指定的上课地点
     const 上课地点 = e['教学地点'].replace(/\w/g, "")
-    if (!buildings.includes(上课地点))
-      return false;
-
     let 上课教室编号 = /\d+/.exec(e['教学地点'])
     上课教室编号 = 上课教室编号 ? 上课教室编号[0]: ''
+    
+    if (!isIgnoreBuildingCheck) {
+      if (!buildings.includes(上课地点))
+        return false;
 
-    if (allRooms[上课地点].value.indexOf(上课教室编号) === -1) {
-      return false
+      if (allRooms[上课地点].value.indexOf(上课教室编号) === -1) {
+        return false
+      }
     }
 
     const dayDate = new Date(e['上课日期'])
@@ -195,6 +199,7 @@ async function getAllLessonsFromSchool({ date, teacherName = '', collegeId = '',
   })
   // formattedRows = formattedRows.filter(e => buildings.indexOf(e['教学地点'].substr(0, 3)) !== -1)
   formattedRows.sort((a, b) => a['上课时间'] - b['上课时间'])
+
   return Promise.resolve(formattedRows)
 }
 
@@ -218,7 +223,7 @@ async function getAllLessons(date, forceFromSchool = false) {
 
   /** 如果数据库没有，则从教务系统获取 */
   log.info('从教务系统获取全校课程')
-  const lessons = await getAllLessonsFromSchool(date)
+  const lessons = await getAllLessonsFromSchool({ date })
   log.info('上传当日全校课程到数据库')
   database.updateSchoolLesson(lessons, date)
   return Promise.resolve({

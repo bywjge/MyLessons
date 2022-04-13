@@ -190,8 +190,16 @@ async function getLessonInfo(collegeId, lessonName) {
   const ret = (await requestWithCookie.post(`https://jxgl.wyu.edu.cn/teagrkbcx!getKcxx.action?kkbmdm=${collegeId}&kkjysdm=`, {
     q: lessonName
   })).data
+
+
   if (Array.isArray(ret) && ret.length > 0) {
-    return Promise.resolve(tools.keyMapConvert(ret, keyMap))
+    const _t = {}
+    const filteredData = tools.keyMapConvert(ret, keyMap).filter(e => {
+      if (_t.hasOwnProperty(e.id))
+        return false
+      return _t[e.id] = true
+    })
+    return Promise.resolve(filteredData)
   }
   return Promise.reject('课程不存在')
 }

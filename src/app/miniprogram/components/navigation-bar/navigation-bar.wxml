@@ -1,5 +1,5 @@
 <view 
-  class="navigationBar {{showMenu? 'show-mask': ''}} {{showMenuLayer? 'show-layer': ''}}" 
+  class="navigationBar {{disableAnimation? 'disable-animation': ''}} {{showMenu? 'show-mask': ''}} {{showMenuLayer? 'show-layer': ''}}" 
   style="min-height: {{navBarHeight }}px; width: {{windowWidth}}px; padding-top: {{statusBarHeight}}px; --bar-height: {{navBarHeight}}px; --operation-height: {{navBarHeight - statusBarHeight}}px"
   bindtap="handleBarClick"
 >

@@ -265,6 +265,20 @@ Page({
     })
   },
 
+  // 切换动画效果 开关
+  debugSwitchAnimation() {
+    const newStatus = !this.data.disableAnimation
+    wx.setStorageSync('disableAnimation', newStatus)
+    this.setData({
+      disableAnimation: newStatus
+    })
+
+    tools.showModal({
+      title: '动画过渡效果',
+      content: `动画过渡效果已${!newStatus? '打开': '关闭'}，如无效果请重启应用`
+    })
+  },
+
   // 重新分配课程颜色
   async debugRecolorize() {
     wx.showLoading({ title: '重新着色中' })

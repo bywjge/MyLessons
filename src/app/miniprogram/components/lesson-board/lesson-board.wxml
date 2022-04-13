@@ -7,14 +7,14 @@
     wx:key="day"
   >
     <view
-      wx:if="{{!e['ignore']}}"
-      class="{{e === null? 'empty-item': 'item'}} {{e['long']? 'connected': ''}} {{!!e['冲突']? 'conflict': ''}} {{~~e['节次'][1] % 2 == 1? 'half': ''}}"
+      wx:if="{{e !== null}}"
+      class="item {{!!e['冲突']? 'conflict': ''}}"
       hover-class="item-tap"
       data-item="{{e}}"
       data-status="{{e !== null && e['日期'] === nowDate && ~~e['节次'][0] == nowIndex ? 'underway' : 'normal'}}"
       data-day="{{index}}"
-      data-empty="{{e === null}}"
-      data-index="{{indexInDay}}"
+      data-from="{{~~e['节次'][0]}}"
+      data-merge-count="{{e['节次'][1] - e['节次'][0] + 1}}"
       wx:for="{{day}}"
       wx:for-item="e"
       wx:for-index="indexInDay"
@@ -22,16 +22,15 @@
       catchlongpress="handleLessonLongPress"
       catchtap="handleLessonTap"
     >
-      <!-- <text>{{(day[indexInDay - 1]['long'] + day[indexInDay - 1]['课程名称']) !== (e['long'] + e['课程名称'])}}</text> -->
       <view wx:if="{{e !== null}}" class="name">{{e['课程名称']}}</view>
       <view wx:if="{{e !== null}}" class="bottom" style="background-color: {{e['卡片颜色']}}">
         <view wx:if="{{e['编号'] !== ''}} "class="number">{{e['编号']}}</view>
         <view class="location">{{e['地点']}}</view>
       </view>
-      <fa 
+      <!-- <fa 
         icon="fa fa-plus fa-lg" 
         wx:if="{{showAddButton['day'] === index && showAddButton['index'] === indexInDay}}"
-      />
+      /> -->
     </view>
   </view>
 </view>

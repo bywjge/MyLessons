@@ -78,7 +78,7 @@ view[data-status="coming"] .card-info .status::after{
 }
 
 /* 普通卡片（还没上课） */
-view[data-status="normal"] .card-info .status{
+view[data-status="normal"] .card-info .status, view[data-status="passed"] .card-info .status{
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
@@ -93,14 +93,14 @@ view[data-status="normal"] .card-info .status{
   margin-bottom: 12rpx;
 }
 
-view[data-status="normal"] .card-info .status > span{
+view[data-status="normal"] .card-info .status > span, view[data-status="passed"] .card-info .status > span{
   font-weight: 700;
   font-size: 32rpx;
   font-family: "Avenir";
   text-align: center;
 }
 
-view[data-status="normal"] .card-info .status::after{
+view[data-status="normal"] .card-info .status::after, view[data-status="passed"] .card-info .status::after{
   content: '至';
   position: absolute;
   left: 50%;
@@ -185,6 +185,10 @@ view[data-status="coming"] .card:before{
 /* 未上课 */
 view[data-status="normal"] .card:before{
   background-color: var(--card-normal);
+}
+/* 已上完 */
+view[data-status="passed"] .card:before{
+  background-color: var(--card-passed);
 }
 /* ------------------------------- */
 

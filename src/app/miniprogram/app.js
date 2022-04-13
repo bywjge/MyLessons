@@ -4,6 +4,18 @@ const updateManager = wx.getUpdateManager()
 
 console.log("hello {0}, I am {1}".format("World", "MeetinaXD"));
 
+!function(){
+  var PageTmp = Page;
+  Page = function (pageConfig) {
+    // 设置全局默认分享
+    Object.assign(pageConfig.data || {}, {
+      disableAnimation: wx.getStorageSync('disableAnimation')
+    })
+ 
+    PageTmp(pageConfig);
+  };
+}();
+
 App({
   onLaunch: function () {
 
@@ -29,7 +41,7 @@ App({
       indexMode: "day",
       theme: 'dark',
 
-      version: "0.4.1.8"
+      version: "0.4.2.0"
     }
 
     updateManager.onUpdateReady(function () {

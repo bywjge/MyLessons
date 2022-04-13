@@ -4,11 +4,14 @@
 
 
 import api from '../../apis/lessons'
+import lessonApi from '../../apis/lessons'
 import logger from '../../utils/log'
+import tools from '../../utils/tools'
 
 const app = getApp();
 const eventBus = app.globalData.eventBus;
 const log = new logger()
+let rawLesson = []
 
 /**
  * @TODOS
@@ -30,7 +33,10 @@ Component({
     dayToChinese: ["日", "一", "二", "三", "四", "五", "六"],
     timer: null,
     nowWeek: "",
-    termStarted: true
+    termStarted: true,
+    passedLessons: [],
+    passedKeys: {},
+    isSelectToday: false
   },
 
   // 页面开始加载
@@ -53,6 +59,7 @@ Component({
     // 添加/删除课程后会调用，重新获取数据
     eventBus.on('refreshLesson', this.getData.bind(this))
     this.getData()
+    this.refreshPassed()
   },
 
   // 页面卸载
@@ -69,8 +76,9 @@ Component({
       }
   
       // 每五秒刷新一次状态
-      const handler = setInterval(function(){
+      const handler = setInterval(() => {
         eventBus.emit("show");
+        this.refreshPassed()
       }, 5000)
   
       this.setData({
@@ -82,6 +90,9 @@ Component({
 
   methods: {
     getData() {
+      if (rawLesson.length > 0)
+        rawLesson = []
+
       const lessons = this.data.dates.map((date, index) => {
         const formatDate = new Date(date.time).format('YYYY-mm-dd')
         let lessons = wx.getStorageSync('lessonsByDay')[formatDate]
@@ -89,8 +100,9 @@ Component({
           lessons = []
   
         // 添加需要的信息
+
         lessons.forEach(e => {
-          e['keyid'] = Math.random()
+          e['keyid'] = tools.randomString(8)
           // 班级需要为数组
           if (!Array.isArray(e['上课班级'])){
             e['上课班级'] = e['上课班级'].split(',')
@@ -100,6 +112,7 @@ Component({
         })
         lessons.sort((a, b) => a['节次'][0] - b['节次'][0] )
         
+        rawLesson.push(...lessons)
         return { ...date, lessons, index }
       })
   
@@ -139,10 +152,13 @@ Component({
         })
       }
 
+      const nowSelected = Math.floor(new Date(Math.max(0, today - baseDate)).getTime() / (24 * 3600 * 1000))
       this.setData({
         dates: ret,
-        nowSelected: Math.floor(new Date(Math.max(0, today - baseDate)).getTime() / (24 * 3600 * 1000))
+        isSelectToday: new Date(ret[nowSelected].time).format('YYYY-mm-dd') === new Date().format('YYYY-mm-dd'),
+        nowSelected,
       })
+
     },
 
     // 日期选择器点击
@@ -152,10 +168,50 @@ Component({
         return;
       
       this.setData({
+        isSelectToday: new Date(date.time).format('YYYY-mm-dd') === new Date().format('YYYY-mm-dd'),
         nowSelected: date.index
       })
 
       eventBus.emit("allClose")
     },
+
+    /* 刷新已经上完的课程 */
+    refreshPassed() {
+      /* 只有今天的课程需要刷新，只需要维护一个已经上完的列表 */
+      const now = new Date()
+      const nowDate = now.format('YYYY-mm-dd')
+      const index = [1, 3, 5, 7, 9, 11, 13]
+      // 确定现在的节次
+      let nowIndex = index.find(e => {
+        const t1 = lessonApi.convertIndexToTime(e)[1]
+        const t2 = lessonApi.convertIndexToTime(e + 1, true)[1]
+        return (t1 <= now && t2 >= now)
+      })
+
+      if (typeof nowIndex === 'undefined'){
+        this.setData({
+          passedLessons: []
+        })
+        return ;
+      }
+
+      let ret = []
+      let retKeys = {}
+      rawLesson.forEach(e => {
+        if (!e || e['日期'] !== nowDate)
+          return ;
+
+        // 取出是今天而且已经上完的部分
+        if (e['节次'][0] < nowIndex) {
+          ret.push(e)
+          retKeys[e.keyid] = true
+        }
+      })
+
+      this.setData({
+        passedLessons: ret,
+        passedKeys: retKeys
+      })
+    }
   }
 })

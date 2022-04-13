@@ -1,6 +1,7 @@
 import tools from '../../utils/tools'
 import moreApi from '../../apis/more'
 import { getLessonInfo } from '../../apis/wyu'
+let durationTime = 0
 
 const collegeList = {
   "全部": "",
@@ -46,8 +47,13 @@ Page({
     date: null
   },
 
+  onload() {
+    if (wx.getStorageSync('disableAnimation'))
+      durationTime = 0
+  },
+
   async onReady() {
-    await tools.sleep(500)
+    await tools.sleep(durationTime)
     this.setData({
       visibleElement: 'main'
     })
@@ -120,7 +126,7 @@ Page({
     this.setData({
       visibleElement: ''
     })
-    await tools.sleep(700)
+    await tools.sleep(durationTime)
     this.setData({
       showElement: name
     }, function() {
@@ -141,10 +147,11 @@ Page({
     const lessons = await moreApi.getAllLessonsFromSchool({
       date,
       collegeId,
-      lessonId
+      lessonId,
+      isIgnoreBuildingCheck: true
     })
     wx.hideLoading().catch(() => {})
-
+    console.log(lessons)
     if (lessons.length === 0) {
       tools.showModal({
         title: '无课程',

@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container {{disableAnimation? 'disable-animation': ''}}">
   <navigation enableMenu="{{false}}" title="{{showElement === 'result'? teacher + '的所有课程': '教师课程查询'}}" />
   <view class="content">
     <!-- 主页 -->

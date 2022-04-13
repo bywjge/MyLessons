@@ -1,6 +1,5 @@
 
 import logger from '../../utils/log'
-import api from '../../apis/app'
 import tools from '../../utils/tools'
 import lessonApi from '../../apis/lessons'
 import accountApi from '../../apis/account'
@@ -23,6 +22,11 @@ Page({
   onLoad: async function () {
     require('../../utils/debug')
     // changeTheme('dark')
+
+    // 默认禁用所有安卓设备的动画效果
+    if (wx.getStorageSync('disableAnimation') === "") {
+      wx.setStorageSync('disableAnimation', wx.getSystemInfoSync().platform === 'android')
+    }
 
     // 测试强制清空数据
     const version = "abcd105"
@@ -52,7 +56,6 @@ Page({
     const binded = wx.getStorageSync('binded')
     const lessons = wx.getStorageSync('lessonsByDay')
     log.info("binded = ", binded);
-
     // 微信未授权，留在本页面
 
     // 已经授权未绑定，跳到绑定页面

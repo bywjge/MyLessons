@@ -246,12 +246,15 @@ page {
 }
 
 /* 弹出课程卡片时，背景模糊 */
-.container[data-blur-filter="true"] .lesson-wrapper {
+.container[data-blur-filter="true"] .lesson-wrapper, 
+.container[data-blur-filter="true"] .selector-wrapper {
   animation: fadeBlur var(--lesson-detail-blur-time) ease forwards;
   pointer-events: none;
 }
-.container[data-blur-filter="true"] .selector-wrapper {
-  animation: fadeBlur var(--lesson-detail-blur-time) ease forwards;
+
+.container.disable-animation[data-blur-filter="true"] .lesson-wrapper, .container.disable-animation[data-blur-filter="true"] .selector-wrapper {
+  animation: none;
+  filter: opacity(.5);
   pointer-events: none;
 }
 
@@ -268,14 +271,14 @@ page {
   padding: 50rpx;
   background-color: var(--color);
   border-radius: 27rpx;
-  box-shadow: 0px 2px 15px 0px var(--shadow);
+  box-shadow: 0px 2px 20px 0px var(--shadow);
   transform: translate3d(-50%, -50%, 0);
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  z-index: 2;
+  z-index: 10;
   animation-name: windowPop;
   animation-fill-mode: forwards;
   animation-timing-function: ease;
@@ -283,11 +286,11 @@ page {
 }
 
 .container .lesson-detail .lesson-title {
-  font-size: 36rpx;
+  font-size: 32rpx;
   font-weight: 500;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
   color: var(--text-black-2);
-  letter-spacing: 0.47px;
+  letter-spacing: 0.5px;
   text-align: center;
   /* line-height: 15px; */
   }
@@ -319,15 +322,15 @@ page {
 
 /* 详细信息标题 */
 .container .lesson-detail .item .title {
-  font-size: 12px;
-  font-weight: 450;
+  font-size: 24rpx;
+  /* font-weight: 450; */
   color: var(--text-black-3);
   margin-right: 20rpx;
 }
 
 /* 详细信息每一行 的值 */
 .container .lesson-detail .item .text {
-  font-size: 14px;
+  font-size: 26rpx;
   color: var(--text-black-2);
   text-align: right;
   word-break: break-word;

@@ -6,6 +6,10 @@ Component({
    * 组件的属性列表 props
    */
   properties: {
+    passed: {
+      type: Boolean,
+      value: false
+    },
     // status
     info: {
       type: Object,
@@ -97,6 +101,14 @@ Component({
       // 是否正在上课
       const now = new Date()
       const date = new Date().format("YYYY-mm-dd")
+
+      if (this.properties.passed) {
+        this.setData({
+          status: "passed"
+        })
+        
+        return ;
+      }
 
       // 不是同一天，直接*返回*normal
       if (date !== info['日期']){

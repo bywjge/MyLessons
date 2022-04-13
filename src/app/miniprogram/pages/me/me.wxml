@@ -92,6 +92,11 @@
     <view class="module app-functions" wx:if="{{enableDebug}}">
       <span class="title">调试工具</span>
       <view class="content">
+        <view bindtap="debugSwitchAnimation" class="icon-button multiple icon icon-code red" hover-class="icon-button-tap">
+          <span class="title">动画过渡效果</span>
+          <view class="description">安卓设备默认禁用动画效果(Animation和Transition)，点击以{{disableAnimation?'打开':'关闭'}}动画</view>
+        </view>
+
         <view bindtap="debugGetInfo" class="icon-button multiple icon icon-code red" hover-class="icon-button-tap">
           <span class="title">重新获取个人信息</span>
           <view class="description">手动从教务系统获取个人信息，可能需要重新进入个人页面</view>

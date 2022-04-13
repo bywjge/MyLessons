@@ -1,4 +1,4 @@
-<view class="view-container" data-theme="{{theme}}">
+<view class="view-container {{disableAnimation? 'disable-animation': ''}}" data-theme="{{theme}}">
   <navigation>
     <view slot="left" class="operation-btn" bindtap="handleClick" hover-class="operation-btn-tap">
       {{indexMode === 'day'?'周视图':'日视图'}}

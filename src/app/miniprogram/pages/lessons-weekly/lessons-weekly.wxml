@@ -1,4 +1,4 @@
-<view class="container" data-color-scheme="light" catchtap="handleTapMask" data-blur-filter="{{showDetail}}">
+<view class="container {{disableAnimation? 'disable-animation': ''}}" data-color-scheme="light" catchtap="handleTapMask" data-blur-filter="{{showDetail}}">
 
   <!-- 课程详情卡片 -->
   <view class="lesson-detail {{!showDetail?'hidden':''}}">
@@ -39,11 +39,11 @@
     </view>
 
     <progress 
-      style="width: 100%; margin-top: 20rpx;" 
+      style="width: 100%; margin-top: 40rpx;" 
       percent="{{currentDetail['课程进度']}}"
-      active-color="#FFAFCF" 
-      backgroundColor="{{theme==='dark'?'#d8d8d8':'#FFF0F8'}}"
-      stroke-width="32" 
+      active-color="var(--color-pink-2)" 
+      backgroundColor="var(--color-black-10)"
+      stroke-width="20" 
       border-radius="8"
       duration="10"
       active 

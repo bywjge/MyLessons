@@ -584,14 +584,6 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
       return true
     })
 
-    // 如果是大课，标识它
-    lessons.forEach(e => {
-      if (Number(e['节次'][1]) - Number(e['节次'][0]) > 1) {
-        e['long'] = true
-      } else {
-        e['long'] = false
-      }
-    })
     lessonsByDay[key] = lessons
   }
 
@@ -698,12 +690,6 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
         t['lessons'].push(lesson)
       } else {
         lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = lesson
-        if (lesson['long'] === true) {
-          // 加上ignore标识，忽视该课的渲染
-          const newLesson = cloneDeep(lesson)
-          newLesson['ignore'] = true
-          lessonsByWeek[week - 1][day - 1][课程开始节次 / 2 + 1] = newLesson
-        }
       }
     })
   }

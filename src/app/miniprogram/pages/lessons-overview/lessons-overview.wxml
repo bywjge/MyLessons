@@ -55,7 +55,19 @@
         wx:for="{{dates[nowSelected].lessons}}"
         wx:for-item="i"
         wx:key="keyid"
+        wx:if="{{!passedKeys[i.keyid]}}"
         info="{{i}}"
+      />
+
+      <!-- 已经上完的课程展示（仅仅展示今天） -->
+      <view class="lesson-counter pass-lesson" wx:if="{{isSelectToday && passedLessons.length > 0}}">已上完 ({{passedLessons.length}})</view>
+      <lesson-card 
+        wx:for="{{passedLessons}}"
+        wx:for-item="i"
+        wx:key="keyid"
+        info="{{i}}"
+        passed="{{true}}"
+        wx:if="{{isSelectToday && passedLessons.length > 0}}"
       />
     </view>
   </scroll-view>

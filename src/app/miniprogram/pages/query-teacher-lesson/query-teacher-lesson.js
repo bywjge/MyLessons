@@ -1,6 +1,7 @@
 import tools from "../../utils/tools"
 import moreApi from '../../apis/more'
 import { getTeacherInfo } from '../../apis/wyu'
+let durationTime = 0
 
 Page({
   data: {
@@ -22,8 +23,13 @@ Page({
     empty: true,
   },
 
+  onload() {
+    if (wx.getStorageSync('disableAnimation'))
+      durationTime = 0
+  },
+
   async onReady() {
-    await tools.sleep(500)
+    await tools.sleep(durationTime)
     this.setData({
       visibleElement: 'main'
     })
@@ -38,6 +44,13 @@ Page({
 
   /** 下一步 */
   async handleNextStep() {
+    if (this.data.teacherQueryName === '') {
+      tools.showModal({
+        title: '查询条件不完整',
+        content: '要输入名字哦，如果想不起全名，可以输入其中的一部分～'
+      })
+      return ;
+    }
     wx.showLoading({ title: '查询数据中' })
     /** 查询教师列表 */
     let list = null
@@ -77,7 +90,7 @@ Page({
     this.setData({
       visibleElement: ''
     })
-    await tools.sleep(700)
+    await tools.sleep(durationTime)
     this.setData({
       showElement: name
     }, function() {
@@ -99,7 +112,8 @@ Page({
     wx.showLoading({ title: '查询课程中' })
     const lessons = await moreApi.getAllLessonsFromSchool({
       teacherName: name,
-      collegeId
+      // collegeId,
+      isIgnoreBuildingCheck: true
     })
     wx.hideLoading().catch(() => {})
 

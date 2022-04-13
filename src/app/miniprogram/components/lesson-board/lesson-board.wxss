@@ -19,9 +19,10 @@ page {
 }
 
  .day-lesson-wrapper .strip{
+  position: relative;
   width: 81rpx;
   padding-top: 10rpx;
-  /* height: 100%; */
+  height: calc(var(--indexer-height) * 7 + var(--indexer-margin-bottom) * 7);
 }
 .day-lesson-wrapper .strip.active{
   background-color: var(--highlight-background);
@@ -33,6 +34,7 @@ page {
 
 /* 课程卡片 */
 .day-lesson-wrapper .strip .item{
+  position: absolute;
   padding-top: var(--lesson-item-tile);
   box-sizing: border-box;
 
@@ -59,14 +61,9 @@ page {
   padding-top: calc(var(--lesson-item-tile) - var(--lesson-item-highlight-height));
 }
 
- .day-lesson-wrapper .strip .item{
+.day-lesson-wrapper .strip .item{
   /* 保持和左侧一样的高度 */
   height: var(--indexer-height);
-}
-
- .day-lesson-wrapper .strip .item.connected{
-  /* 保持和左侧一样的高度 */
-  height: calc(var(--indexer-height) * 2 + var(--indexer-margin-bottom));
 }
 
 /* 课程冲突警告 */
@@ -76,10 +73,81 @@ page {
     0 4px 7px 2px var(--shadow-20);
 }
 
-/* 课程有半节课的情况发生 */
-.day-lesson-wrapper .strip .item.connected.half {
-  height: calc(var(--indexer-height) * 1.5 + var(--indexer-margin-bottom)) !important;
-  margin-bottom: calc(var(--indexer-margin-bottom) + var(--indexer-height) / 2);
+.day-lesson-wrapper .strip .item[data-from = "1"] {
+  transform: translateY(0);
+}
+.day-lesson-wrapper .strip .item[data-from = "3"] {
+  transform: translateY(calc( 
+    (var(--indexer-height) + var(--indexer-margin-bottom))
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "5"] {
+  transform: translateY(calc( 
+    (var(--indexer-height) + var(--indexer-margin-bottom)) * 2
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "7"] {
+  transform: translateY(calc( 
+    (var(--indexer-height) + var(--indexer-margin-bottom)) * 3
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "9"] {
+  transform: translateY(calc( 
+    (var(--indexer-height) + var(--indexer-margin-bottom)) * 4
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "11"] {
+  transform: translateY(calc( 
+    (var(--indexer-height) + var(--indexer-margin-bottom)) * 5
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "13"] {
+  transform: translateY(calc( 
+    (var(--indexer-height) + var(--indexer-margin-bottom)) * 6
+  ));
+}
+
+.day-lesson-wrapper .strip .item[data-merge-count = "1"] {
+  height: calc(var(--indexer-height) / 2);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "2"] {
+  height: var(--indexer-height);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "3"] {
+  height: calc(var(--indexer-height) * 1.5 + var(--indexer-margin-bottom));
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "4"] {
+  height: calc(var(--indexer-height) * 2 + var(--indexer-margin-bottom));
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "5"] {
+  height: calc(var(--indexer-height) * 2.5 + var(--indexer-margin-bottom) * 2);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "6"] {
+  height: calc(var(--indexer-height) * 3 + var(--indexer-margin-bottom) * 2);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "7"] {
+  height: calc(var(--indexer-height) * 3.5 + var(--indexer-margin-bottom) * 2);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "8"] {
+  height: calc(var(--indexer-height) * 4 + var(--indexer-margin-bottom) * 3);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "9"] {
+  height: calc(var(--indexer-height) * 4.5 + var(--indexer-margin-bottom) * 3);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "10"] {
+  height: calc(var(--indexer-height) * 5 + var(--indexer-margin-bottom) * 4);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "11"] {
+  height: calc(var(--indexer-height) * 5.5 + var(--indexer-margin-bottom) * 4);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "12"] {
+  height: calc(var(--indexer-height) * 6 + var(--indexer-margin-bottom) * 5);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "13"] {
+  height: calc(var(--indexer-height) * 6.5 + var(--indexer-margin-bottom) * 5);
+}
+.day-lesson-wrapper .strip .item[data-merge-count = "14"] {
+  height: calc(var(--indexer-height) * 7 + var(--indexer-margin-bottom) * 6);
 }
 
 /* 用户点下课程卡片时显示按下效果 */
@@ -111,10 +179,6 @@ page {
   height: 97rpx;
   /* 不知道有什么用 */
   /* margin-bottom: 15rpx; */
-}
-
- .day-lesson-wrapper .strip .item.connected .name{
-  height: calc(122rpx + 196rpx);
 }
 
  .day-lesson-wrapper .strip .item .bottom{
@@ -160,11 +224,18 @@ page {
   margin-bottom: var(--indexer-margin-bottom);
 }
 
+/* 点击后的动画效果，不是用scale，因为会覆盖transform效果 */
 @keyframes pressIn{
-  30%{
-    transform: scale(0.9);
+  30% {
+    box-shadow: 
+      0 4px 6px 0 var(--shadow-20),
+      0 0 0 3px var(--color-black-10);
+    /* transform: scale(0.9); */
   }
-  100%{
-    transform: scale(1);
+  100% {
+    box-shadow: 
+      0 4px 6px 0 var(--shadow-20),
+      0 0 0 0px transparent;
+    /* transform: scale(1); */
   }
 }

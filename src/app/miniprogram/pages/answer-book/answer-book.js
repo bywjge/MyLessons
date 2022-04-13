@@ -9,6 +9,7 @@ const diceMap = [
   [6, 4, 1, 3],
   [2, 4, 5, 3]
 ]
+let durationTime = 800
 
 Page({
   data: {
@@ -40,8 +41,10 @@ Page({
     rightCount: 0,
     wrongCount: 0
   },
-  async onReady() {
-    await tools.nextTick()
+
+  onload() {
+    if (wx.getStorageSync('disableAnimation'))
+      durationTime = 0
   },
 
   random(from, to) {
@@ -49,7 +52,7 @@ Page({
   },
 
   async changeVisible(key) {
-    const animationTime = 800 //ms
+    let animationTime = durationTime //ms
     if (!this.data.visible.hasOwnProperty(key) || this.data.visible[key])
       return ;
 

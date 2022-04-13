@@ -126,7 +126,7 @@ page {
 }
 
 .container > .content .visible {
-  animation: zoomIn ease .8s forwards !important;
+  animation: zoomIn ease .8s forwards;
 }
 
 .container > .content .invisible {

@@ -11,6 +11,12 @@
     background: #f7f7f7;
   }
 }
+
+.disable-animation view:not(.ignore-disable-animation) {
+  animation-duration: .0001s !important;
+  transition-duration: .0001s !important;
+}
+
 page {
   --icon-calendar: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAxNCAxNSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNS4zMzMgMi4yODloNC4wODV2LS42NzVjMC0uOTIzIDEuMzUtLjkyMyAxLjM1IDB2LjY3NWguODUyYTIuMDYgMi4wNiAwIDAgMSAyLjA2IDIuMDZ2OC4xN2MwIDEuMTM2LS45MjMgMi4wNi0yLjA2IDIuMDZIMi43NGEyLjA2MiAyLjA2MiAwIDAgMS0yLjA2LTIuMDZ2LTguMTdjMC0xLjEzNy45MjQtMi4wNiAyLjA2LTIuMDZoMS4yMDh2LS42NzVjMC0uOTIzIDEuMzUtLjkyMyAxLjM1IDB2LjY3NWguMDM1ek0yLjEwMSA1LjIwMmgxMC4yM3YtLjg1M2MwLS4zOS0uMzItLjY3NS0uNjc1LS42NzVoLTguODhhLjY3NS42NzUgMCAwIDAtLjY3NS42NzV2Ljg1M3ptMTAuMjMgMS4zNUgyLjF2NS45NjZjMCAuMzkxLjMyLjY3NS42NzUuNjc1aDguODhjLjM5IDAgLjY3NC0uMzIuNjc0LS42NzVWNi41NTF6bS0xLjYzNCAxLjg4MnYuMTc3YzAgLjkyNC0xLjM1LjkyNC0xLjM1IDB2LS4xNzdjMC0uODg4IDEuMzUtLjg4OCAxLjM1IDB6bS0yLjgwNyAwdi4xNzdjMCAuOTI0LTEuMzUuOTI0LTEuMzUgMHYtLjE3N2MwLS44ODggMS4zNS0uODg4IDEuMzUgMHptLTIuNzcgMHYuMTc3YzAgLjkyNC0xLjM1LjkyNC0xLjM1IDB2LS4xNzdjLS4wMzUtLjg4OCAxLjM1LS44ODggMS4zNSAwem01LjU3NyAyLjUyMnYuMTc3YzAgLjkyNC0xLjM1LjkyNC0xLjM1IDB2LS4xNzdjMC0uODg4IDEuMzUtLjg4OCAxLjM1IDB6bS0yLjgwNyAwdi4xNzdjMCAuOTI0LTEuMzUuOTI0LTEuMzUgMHYtLjE3N2MwLS44ODggMS4zNS0uODg4IDEuMzUgMHptLTIuNzcgMHYuMTc3YzAgLjkyNC0xLjM1LjkyNC0xLjM1IDB2LS4xNzdjLS4wMzUtLjg4OCAxLjM1LS44ODggMS4zNSAweiIvPjwvc3ZnPg==');
   --icon-edit: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTUuNDA0IDMuMjk0bC0yLjc0LTIuNzVhMS45OTUgMS45OTUgMCAwIDAtMi42Ni0uMDdsLTkgOS4wMzNhMi4wMSAyLjAxIDAgMCAwLS41NyAxLjIxNGwtLjQzIDQuMTg1YS45OTguOTk4IDAgMCAwIDEgMS4wOTRoLjA5bDQuMTctLjM4MWExLjk5NyAxLjk5NyAwIDAgMCAxLjIxLS41NzJsOS05LjAzM2ExLjkzMiAxLjkzMiAwIDAgMC0uMDctMi43MnptLTMuNCAzLjM1MmwtMi42OC0yLjY5IDEuOTUtMi4wMDcgMi43MyAyLjc0LTIgMS45NTd6Ii8+PC9zdmc+');
@@ -87,6 +93,7 @@ page {
     --card-underway: #FF7D7D;
     --card-normal: #66BFFF;
     --card-coming: #FFAF66;
+    --card-passed: #D4D4D4;
 
     --button-background: #FFA6B5;
     --button-tap-background: #f092a2;
@@ -165,6 +172,7 @@ page {
     --card-underway: #ce7d89;
     --card-normal: #5e87a1;
     --card-coming: #d4a57b;
+    --card-passed: #424242;
 
     --button-background: #d47383;
     --button-tap-background: #b35867;

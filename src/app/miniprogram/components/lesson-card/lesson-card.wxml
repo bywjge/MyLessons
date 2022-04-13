@@ -1,12 +1,12 @@
 <view class="card-wrapper" data-status="{{status}}">
   <view class="card-info">
     <!-- 正在上课 -->
-    <view class="status" wx:if="{{status !== 'normal'}}">
+    <view class="status" wx:if="{{status !== 'normal' && status !== 'passed'}}">
       {{status==='underway'?'正在上课':'准备上课'}}
     </view>
 
     <!-- 还没上课 -->
-    <view class="status" wx:if="{{status === 'normal'}}">
+    <view class="status" wx:else>
       <span>{{from.index}}</span>
       <span>{{to.index}}</span>
     </view>

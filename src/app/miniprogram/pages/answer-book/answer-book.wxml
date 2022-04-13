@@ -1,4 +1,4 @@
-<view class="container" data-theme="{{theme}}">
+<view class="container {{disableAnimation? 'disable-animation': ''}}" data-theme="{{theme}}">
   <navigation title="答案之书" enableMenu="{{false}}" />
   <view class="content">
     <view class="results">
@@ -6,7 +6,7 @@
     </view>
 
     <view class="front">
-      <view class="stage inner-wrapper invisible {{visible.main? 'visible': ''}}" wx:if="{{render.main}}">
+      <view class="stage inner-wrapper {{visible.main? 'visible': 'invisible'}}" wx:if="{{render.main}}">
         <view class="title backgrounded-item">替你做决定</view>
         <view class="subtitle backgrounded-item" wx:if="{{!isRunning}}">需要一个答案吗？在下方选择所需的答案类型吧</view>
         <view class="button-wrapper">
@@ -15,15 +15,15 @@
         </view>
       </view>
 
-      <view class="stage choose invisible {{visible.choose? 'visible': ''}}" wx:if="{{render.choose}}">
+      <view class="stage choose {{visible.choose? 'visible': 'invisible'}}" wx:if="{{render.choose}}">
         <view class="square-button {{nowRound}} result {{(!isRunning && results.length > 0)? 'show': ''}}"><view class="inner" /></view>
-        <view class="square-button right {{isRunning? 'shake': ''}}" style="animation-delay: .2s;"><view class="inner" /></view>
-        <view class="square-button wrong {{isRunning? 'shake': ''}}" style="animation-delay: .4s;"><view class="inner" /></view>
+        <view class="square-button right {{isRunning? 'shake': ''}} ignore-disable-animation" style="animation-delay: .2s;"><view class="inner" /></view>
+        <view class="square-button wrong {{isRunning? 'shake': ''}} ignore-disable-animation" style="animation-delay: .4s;"><view class="inner" /></view>
       </view>
 
-      <view class="stage invisible {{visible.dice? 'visible': ''}}" wx:if="{{render.dice}}">
+      <view class="stage {{visible.dice? 'visible': 'invisible'}}" wx:if="{{render.dice}}">
         <view class="cube-container" bindtap="startDice">
-          <view class="cube" style="transform: scale(.4) rotateX({{rotate.x}}deg) rotateY({{rotate.y}}deg)">
+          <view class="cube ignore-disable-animation" style="transform: scale(.4) rotateX({{rotate.x}}deg) rotateY({{rotate.y}}deg)">
             <view class="front dice-1" ><view class="inner" /></view>
             <view class="back dice-6" ><view class="inner" /></view>
             <view class="right dice-2" ><view class="inner" /></view>
