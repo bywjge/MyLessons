@@ -12,7 +12,7 @@
   }
 }
 
-.disable-animation view:not(.ignore-disable-animation) {
+.disable-animation, .disable-animation::before, .disable-animation::after, .disable-animation view:not(.ignore-disable-animation) {
   animation-duration: .0001s !important;
   transition-duration: .0001s !important;
 }
@@ -95,6 +95,45 @@ page {
     --card-coming: #FFAF66;
     --card-passed: #D4D4D4;
 
+    /* --lesson-item-red: #e94e3d;
+    --lesson-item-orange: #ef9836;
+    --lesson-item-yellow: #f6cc45;
+    --lesson-item-green: #5cc264;
+    --lesson-item-blue-1: #65a9ec;
+    --lesson-item-blue-2: #3a75d4;
+    --lesson-item-purple: #5658ce;
+    --lesson-item-violet: #b47cd5;
+    --lesson-item-tan: #988566;
+    --lesson-item-burlywood: #d0a79f;
+    --lesson-item-pink: #f14c6d;
+    --lesson-item-black: #5c656e; */
+
+    --lesson-item-red: #ED7F7F;
+    --lesson-item-orange: #F59F6A;
+    --lesson-item-yellow: #FFD490;
+    --lesson-item-green: #8ACDA7;
+    --lesson-item-blue-1: #9BCCED;
+    --lesson-item-blue-2: #85AADC;
+    --lesson-item-purple: #9797E5;
+    --lesson-item-violet: #C79DD9;
+    --lesson-item-tan: #B99D85;
+    --lesson-item-burlywood: #E7C7BD;
+    --lesson-item-pink: #F28FB7;
+    --lesson-item-black: #8D8D8D;
+
+    --lesson-item-red-text: #ffffff;
+    --lesson-item-orange-text: #ffffff;
+    --lesson-item-yellow-text: #2F2F2F;
+    --lesson-item-green-text: #2F2F2F;
+    --lesson-item-blue-1-text: #2F2F2F;
+    --lesson-item-blue-2-text: #ffffff;
+    --lesson-item-purple-text: #ffffff;
+    --lesson-item-violet-text: #ffffff;
+    --lesson-item-tan-text: #ffffff;
+    --lesson-item-burlywood-text: #2F2F2F;
+    --lesson-item-pink-text: #ffffff;
+    --lesson-item-black-text: #ffffff;
+
     --button-background: #FFA6B5;
     --button-tap-background: #f092a2;
     --button-text: white;
@@ -173,6 +212,45 @@ page {
     --card-normal: #5e87a1;
     --card-coming: #d4a57b;
     --card-passed: #424242;
+
+    /* --lesson-item-red: #eb5545;
+    --lesson-item-orange: #f1a23b;
+    --lesson-item-yellow: #f9d64a;
+    --lesson-item-green: #67cd69;
+    --lesson-item-blue-1: #87c2f8;
+    --lesson-item-blue-2: #3685f6;
+    --lesson-item-purple: #5a5fde;
+    --lesson-item-violet: #c885ee;
+    --lesson-item-tan: #c3a57a;
+    --lesson-item-burlywood: #e1b7af;
+    --lesson-item-pink: #ec5c7b;
+    --lesson-item-black: #737c85; */
+
+    --lesson-item-red: #8D4848;
+    --lesson-item-orange: #9C613C;
+    --lesson-item-yellow: #8E7349;
+    --lesson-item-green: #558067;
+    --lesson-item-blue-1: #486F89;
+    --lesson-item-blue-2: #3D6292;
+    --lesson-item-purple: #606097;
+    --lesson-item-violet: #825A92;
+    --lesson-item-tan: #796554;
+    --lesson-item-burlywood: #906F64;
+    --lesson-item-pink: #93506B;
+    --lesson-item-black: #575757;
+
+    --lesson-item-red-text: #c5c5c5;
+    --lesson-item-orange-text: #c5c5c5;
+    --lesson-item-yellow-text: #c5c5c5;
+    --lesson-item-green-text: #c5c5c5;
+    --lesson-item-blue-1-text: #c5c5c5;
+    --lesson-item-blue-2-text: #c5c5c5;
+    --lesson-item-purple-text: #c5c5c5;
+    --lesson-item-violet-text: #c5c5c5;
+    --lesson-item-tan-text: #c5c5c5;
+    --lesson-item-burlywood-text: #c5c5c5;
+    --lesson-item-pink-text: #c5c5c5;
+    --lesson-item-black-text: #c5c5c5;
 
     --button-background: #d47383;
     --button-tap-background: #b35867;
@@ -262,6 +340,13 @@ text[class="bold"]{
 
 .disable {
   color: #888;
+}
+
+.dot-10px{
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: black;
 }
 
 .dot-12px{

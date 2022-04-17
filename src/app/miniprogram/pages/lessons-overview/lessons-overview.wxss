@@ -96,7 +96,7 @@ page {
 }
 
 /* 课程数量统计器 */
-.lesson-counter{
+.lesson-counter {
   /* font-family: "Avenir"; */
   position: relative;
   font-weight: Bold;

@@ -1,0 +1,14 @@
+<view class="pop-container {{disableAnimation? 'disable-animation': ''}} {{visible.layer? 'visible': ''}}" bindtap="handleLayerTap" wx:if="{{render}}">
+  <view id="pop-window" class="pop-window {{expanded? 'expanded': ''}}  {{visible.window? 'visible': ''}}" bindtouchmove="handleTouchMove" catchtap="empty">
+    <!-- 标题栏 -->
+    <view class="title-bar">
+      <view class="slot left"><slot name="left" /></view>
+      <view class="title">{{title}}</view>
+      <view class="slot right"><slot name="right" /></view>
+    </view>
+
+    <view class="content">
+      <slot />
+    </view>
+  </view>
+</view>

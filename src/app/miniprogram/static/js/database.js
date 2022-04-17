@@ -183,6 +183,7 @@ async function updateLesson(lessonsByDay, year, term){
       delete e.冲突
       delete e.卡片颜色
       delete e.课序号
+      delete e._key
     })
     lessons.push(...t)
   }

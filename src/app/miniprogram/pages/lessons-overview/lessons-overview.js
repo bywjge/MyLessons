@@ -180,29 +180,17 @@ Component({
       /* 只有今天的课程需要刷新，只需要维护一个已经上完的列表 */
       const now = new Date()
       const nowDate = now.format('YYYY-mm-dd')
-      const index = [1, 3, 5, 7, 9, 11, 13]
-      // 确定现在的节次
-      let nowIndex = index.find(e => {
-        const t1 = lessonApi.convertIndexToTime(e)[1]
-        const t2 = lessonApi.convertIndexToTime(e + 1, true)[1]
-        return (t1 <= now && t2 >= now)
-      })
-
-      if (typeof nowIndex === 'undefined'){
-        this.setData({
-          passedLessons: []
-        })
-        return ;
-      }
 
       let ret = []
       let retKeys = {}
+
+      // 取出是今天而且已经上完的部分
       rawLesson.forEach(e => {
         if (!e || e['日期'] !== nowDate)
           return ;
 
-        // 取出是今天而且已经上完的部分
-        if (e['节次'][0] < nowIndex) {
+        const lessonEndTime = lessonApi.convertIndexToTime(e['节次'][1], true)[1]
+        if (lessonEndTime < now) {
           ret.push(e)
           retKeys[e.keyid] = true
         }

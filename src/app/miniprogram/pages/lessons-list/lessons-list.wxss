@@ -155,3 +155,24 @@ page {
 .lesson-wrapper > .item > .content > .progress-bar {
   margin-top: 20rpx;
 }
+
+.add-button{
+  /* width: 100%; */
+  /* width: 400rpx; */
+  margin-top: 80rpx;
+  margin-bottom: 40rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 30rpx;
+  color: #FFFFFF;
+  text-align: center;
+  user-select: none;
+  transition: all 0.3s;
+  font-weight: 500;
+  background: var(--button-background);
+  border-radius: 11px;
+}
+
+.button-tap {
+  background-color: var(--button-tap-background);
+}

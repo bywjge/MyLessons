@@ -16,7 +16,6 @@ export default {
   deleteLesson
 };
 
-import cloneDeep from 'lodash.clonedeep'
 import logger from '../utils/log'
 import request from '../utils/request'
 import tools from '../utils/tools'
@@ -492,8 +491,6 @@ async function syncLessons(forceFromSchool = false){
   const isTeacher = wx.getStorageSync('usertype') === 'teacher'
   let lessons = await getLessonFromSchool(year, term, isTeacher)
 
-  // const newLesson = cloneDeep(lessons)
-
   lessons = convertAndStorage(lessons)
 
   /** 一定要在转换后上传 */
@@ -520,6 +517,9 @@ async function syncLessons(forceFromSchool = false){
 function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
   // firstWeekDate 是课表里第一周的星期日
   // 课表的排序是：(日 一 二 三 四 五 六)
+
+  // 为课程加上key标识符以区分
+  lessons.forEach(e => e._key = tools.randomString(8))
 
   /** 生成每日课表 */
   let lessonsByDay = {}
@@ -705,22 +705,24 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
  * @description 循环使用颜色表内的颜色进行着色
  */
 function colorizeLesson(lessons){
-  let colors = [
-    "#B1C7DC",
-    "#B4C2D0",
-    "#9FB2B4",
-    "#B3B3B3",
-    "#C79DD9",
-    "#F69EAD",
-    "#E8ACCE",
-    "#E5C38F",
-    "#FFB26E",
-    "#4DB67A",
-    "#8ACDA7",
-    "#70A99E",
-    "#9CC1DA",
-    "#8CB5D0"
-  ]
+  // let colors = [
+  //   "#B1C7DC",
+  //   "#B4C2D0",
+  //   "#9FB2B4",
+  //   "#B3B3B3",
+  //   "#C79DD9",
+  //   "#F69EAD",
+  //   "#E8ACCE",
+  //   "#E5C38F",
+  //   "#FFB26E",
+  //   "#4DB67A",
+  //   "#8ACDA7",
+  //   "#70A99E",
+  //   "#9CC1DA",
+  //   "#8CB5D0"
+  // ]
+
+  let colors = ['red', 'orange', 'yellow', 'green', 'blue-1', 'blue-2', 'purple', 'violet', 'tan', 'burlywood', 'pink', 'black']
 
   let colorMap = { }
   let i = 0

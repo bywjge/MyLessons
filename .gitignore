@@ -4,3 +4,4 @@ dist
 CaptchaSolution/
 */**/*-lock.json
 src/app/miniprogram/miniprogram_npm/*
+更新通知.md

@@ -35,16 +35,25 @@
   >
     <view class="lesson-container">
       <!-- 显示当天有多少节课 -->
+      <!-- 如果有已经上完的课程 -->
       <view 
-        wx:if="{{dates[nowSelected].lessons.length > 0}}"
+        wx:if="{{isSelectToday && passedLessons.length !== dates[nowSelected].lessons.length}}"
         class="lesson-counter"
       >
-      当日有 {{dates[nowSelected].lessons.length}} 节课
+        今天剩余 {{dates[nowSelected].lessons.length - passedLessons.length}} 节课
+      </view>
+
+      <!-- 否则 -->
+      <view 
+        wx:elif="{{isSelectToday? passedLessons.length !== dates[nowSelected].lessons.length:dates[nowSelected].lessons.length > 0}}"
+        class="lesson-counter"
+      >
+        当日有 {{dates[nowSelected].lessons.length}} 节课
       </view>
 
       <!-- 如果当天没有课程 -->
       <view 
-        wx:else
+        wx:if="{{dates[nowSelected].lessons.length === 0}}"
         class="empty-lesson"
       >
         当日无课程
@@ -60,6 +69,10 @@
       />
 
       <!-- 已经上完的课程展示（仅仅展示今天） -->
+      <view
+        style="margin-top: 40rpx"
+        wx:if="{{isSelectToday && passedLessons.length !== dates[nowSelected].lessons.length}}"
+      />
       <view class="lesson-counter pass-lesson" wx:if="{{isSelectToday && passedLessons.length > 0}}">已上完 ({{passedLessons.length}})</view>
       <lesson-card 
         wx:for="{{passedLessons}}"

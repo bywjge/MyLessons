@@ -174,7 +174,7 @@ page {
   -webkit-box-orient: vertical;
 }
 
- .day-lesson-wrapper .strip .item .name{
+.day-lesson-wrapper .strip .item .name {
   -webkit-line-clamp: 4;
   height: 97rpx;
   /* 不知道有什么用 */

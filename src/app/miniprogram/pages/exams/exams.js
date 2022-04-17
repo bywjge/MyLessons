@@ -139,7 +139,7 @@ Page({
         doneList.push(element)
       } else {
         // 如果考试已经开始
-        if (startTime > now)
+        if (startTime <= now)
           element['剩余天数'] = '进行中'
         undoneList.push(element)
       }

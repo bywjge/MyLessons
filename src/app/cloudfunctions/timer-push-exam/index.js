@@ -142,6 +142,7 @@ exports.main = async (event, context) => {
   console.log('今日推送考试安排')
   getCurrentExams(dates, async (list) => {
     list.forEach(({ _openid, exam }) => {
+      console.log(_openid, exam)
       doSendExamMessage(_openid, exam)
     })
     return Promise.resolve()

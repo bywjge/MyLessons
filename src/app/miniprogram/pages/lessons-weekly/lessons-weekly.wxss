@@ -248,6 +248,7 @@ page {
 /* 弹出课程卡片时，背景模糊 */
 .container[data-blur-filter="true"] .lesson-wrapper, 
 .container[data-blur-filter="true"] .selector-wrapper {
+  will-change: filter;
   animation: fadeBlur var(--lesson-detail-blur-time) ease forwards;
   pointer-events: none;
 }
@@ -283,6 +284,8 @@ page {
   animation-fill-mode: forwards;
   animation-timing-function: ease;
   animation-duration: .3s;
+
+  will-change: transform;
 }
 
 .container .lesson-detail .lesson-title {

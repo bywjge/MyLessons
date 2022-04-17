@@ -245,11 +245,8 @@ Component({
       .then(({ tapIndex: index }) => {
         const item = editItems[index]
         if (item === '编辑课程') {
-          tools.showModal({
-            title: '提示',
-            content: '功能正在开发中～'
-          })
-          return ;
+          wx.navigateTo({ url: `/pages/lesson-edit/lesson-edit?mode=edit&key=${lesson._key}&date=${lesson['日期']}`  })
+          return;
         }
 
         tools.showModal({

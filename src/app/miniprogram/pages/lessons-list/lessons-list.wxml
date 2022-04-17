@@ -37,8 +37,8 @@
             <progress 
               class="progress-bar" 
               percent="{{e['进度']}}" 
-              color="#ff617c" 
-              backgroundColor="{{theme==='dark'?'#d8d8d8':''}}"
+              color="var(--color-pink-1)" 
+              backgroundColor="var(--color-black-10)"
               active 
               stroke-width="4" 
               border-radius="10"
@@ -72,6 +72,7 @@
         </view>
       </view>
     </view>
+    <view class="add-button" hover-class="button-tap" bindtap="handleAddLesson">添加课程</view>
 
   </view>
 </view>

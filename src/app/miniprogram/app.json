@@ -25,7 +25,8 @@
     "pages/announce/announce",
     "pages/announce-new-post/announce-new-post",
     "pages/answer-book/answer-book",
-    "pages/query-lesson-advanced/index"
+    "pages/query-lesson-advanced/index",
+    "pages/lesson-edit/lesson-edit"
   ],
   "window": {
     "backgroundColor": "@pageBackground",
