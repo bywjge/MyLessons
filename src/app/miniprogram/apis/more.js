@@ -170,9 +170,9 @@ async function getAllLessonsFromSchool({ date = '', teacherName = '', collegeId 
     上课教室编号 = 上课教室编号 ? 上课教室编号[0]: ''
     
     if (!isIgnoreBuildingCheck) {
-      if (!buildings.includes(上课地点))
+      if (!上课地点 || !上课教室编号 || !buildings.includes(上课地点))
         return false;
-
+        
       if (allRooms[上课地点].value.indexOf(上课教室编号) === -1) {
         return false
       }

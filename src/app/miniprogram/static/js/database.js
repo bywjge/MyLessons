@@ -242,19 +242,32 @@ async function updateSchoolLesson(lessons, date){
     date: _.eq(date)
   }).get()).data
 
+  let pack = lessons.splice(0, 20)
   const data = {
     date,
-    lessons,
+    lessons: pack,
     time: new Date()
   }
 
+  let id = null
   if (records.length > 0) {
-    const id = records[0]._id
+    id = records[0]._id
     // data.time = records[0].time || data.time
-    return db.collection('all-lessons').doc(id).update({ data })
+    await db.collection('all-lessons').doc(id).update({ data })
+  } else {
+    await db.collection('all-lessons').add({ data }).then(ret => id = ret._id)
   }
 
-  return db.collection('all-lessons').add({ data })
+  while (lessons.length > 0) {
+    pack = lessons.splice(0, 20)
+    await db.collection('all-lessons').doc(id).update({ 
+      data: {
+        lessons: _.push(pack)
+      } 
+    })
+  }
+
+  return Promise.resolve()
 }
 
 /**

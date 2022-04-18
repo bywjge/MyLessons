@@ -9,18 +9,20 @@
     </view>
 
     <view class="module" style="margin-top: 40rpx">
-      <view class="title">
+      <view class="title" wx:if="{{ready}}">
         你好，我是{{info['姓名']}}
         <view class="{{info['性别'] === '男'? 'male': 'female'}} gender-icon" />
       </view>
-      <view class="brief" wx:if="{{!isTeacher}}">{{info['学号']}}</view>
-      <view class="brief">{{info['学院']}}</view>
-      <view class="brief" wx:if="{{!isTeacher}}">{{info['年级']}} {{info['班级']}}班</view>
+      <view class="title" wx:else>你好，同学</view>
+      <view class="brief">上方头像可点击修改</view>
+      <view class="brief" wx:if="{{!isTeacher && ready}}">{{info['学号']}}</view>
+      <view class="brief" wx:if="{{ready}}">{{info['学院']}}</view>
+      <view class="brief" wx:if="{{!isTeacher && ready}}">{{info['年级']}} {{info['班级']}}班</view>
     </view>
 
     <view class="divider" /> 
 
-    <view class="module detail" wx:if="{{!isTeacher}}">
+    <view class="module detail" wx:if="{{!isTeacher && ready}}">
       <view class="title">学籍卡片</view>
       <view class="item">
         <view class="title">姓名</view>
@@ -44,7 +46,7 @@
     </view>
 
     <!-- 教师展示的卡片 -->
-    <view class="module detail" wx:else>
+    <view class="module detail" wx:elif="{{ready}}">
       <view class="title">教师卡片</view>
       <view class="item">
         <view class="title">姓名</view>

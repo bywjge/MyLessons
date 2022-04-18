@@ -41,7 +41,7 @@ App({
       indexMode: "day",
       theme: 'dark',
 
-      version: "0.4.2.0"
+      version: "0.4.2.1"
     }
 
     updateManager.onUpdateReady(function () {
