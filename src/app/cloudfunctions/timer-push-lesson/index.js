@@ -88,7 +88,7 @@ function convertIndexToTime(index, endTime = false){
   return [`${t.getHours().prefixZero(2)}:${t.getMinutes().prefixZero(2)}`, t]
 }
 
-/** 
+/**
  * 获取某个时间的课程列表
  * @param {string} index 节次,需要两位数
  * @param {(list: Array<Object>) => Promise} 遍历函数
@@ -125,10 +125,10 @@ async function getCurrentLessons(index, fn) {
         _app_openid: true,
         lesson: '$lessons'
       })
-      
+
       .limit(100)
       .end()
-    
+
     const result = ret.list
     if (result.length === 0)
       break ;
@@ -155,6 +155,10 @@ async function getCurrentLessons(index, fn) {
 async function doSendLessonMessage(openid, lesson) {
   const startTime = convertIndexToTime(Number(lesson['节次'][0]), false)[0]
   const endTime = convertIndexToTime(Number(lesson['节次'][1]), true)[0]
+  let introduce = lesson['上课内容']?lesson['上课内容']: ''
+  if (introduce.length > 100)
+    introduce = introduce.substr(0, 100) + '...'
+
   // console.log(' >>> openid & lesson', openid, lesson)
   const ret = await cloud.openapi.uniformMessage.send({
     "touser": openid,
@@ -183,7 +187,7 @@ async function doSendLessonMessage(openid, lesson) {
           "color": "#FF617C"
         },
         "remark": {
-          "value": `${lesson['上课内容']?lesson['上课内容'] + '\n\n': ''} 此条推送由于你打开了课程推送而产生，如不需要收到推送，请取关公众号或在下方菜单关闭该功能`,
+          "value": `${introduce? introduce + '\n\n': ''} 此条推送由于你打开了课程推送而产生，如不需要收到推送，请取关公众号或在下方菜单关闭该功能`,
           "color": "#2F2F2F"
         }
       }

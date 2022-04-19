@@ -17,6 +17,15 @@ Date.prototype.format = function (fmt) {
   return fmt;
 }
 
+Date.prototype.nDaysAgo = function(day){
+  if (!day || typeof day !== "number"){
+    return;
+  }
+  const ms = 86400000 * day;
+  // this.setTime(this.getTime() - ms);
+  return new Date(this.getTime() - ms);
+}
+
 Date.prototype.nDaysLater = function(day){
   if (typeof day !== "number"){
     return;
@@ -28,9 +37,4 @@ Date.prototype.nDaysLater = function(day){
 
 Number.prototype.prefixZero = function(digitLength){
   return (Array(digitLength).join(0) + this).slice(-digitLength);
-}
-
-Date.prototype.diffDay = function(date) {
-  const dayGap = 3600 * 24 * 1000 //ms
-  return Math.floor((date.getTime() - this.getTime()) / dayGap)
 }

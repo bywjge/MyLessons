@@ -12,7 +12,7 @@ cloud.init({
 const db = cloud.database()
 const _ = db.command
 
-/** 
+/**
  * 获取某个时间的课程列表
  * @param {Array<string>} dates 需要推送的日期数组，格式必须为YYYY/mm/dd
  * @param {(list: Array<Object>) => Promise} 遍历函数
@@ -47,7 +47,7 @@ async function getCurrentExams(dates, fn) {
       })
       .limit(100)
       .end()
-    
+
     const result = ret.list
     if (result.length === 0)
       break ;
@@ -105,6 +105,7 @@ async function doSendExamMessage(openid, exam) {
         },
         "remark": {
           "value": `考试通知会在考试前一个月内每周推送一次，考试一周内每两天推送一次，请留意考试时间`,
+          "value": `距离考试还有: ${new Date().diffDay(exam['开始时间'])}天\n\n 考试通知会在考试前一个月内每周推送一次，考试一周内每两天推送一次，请留意考试时间`,
           "color": "#2F2F2F"
         }
       }
@@ -115,7 +116,7 @@ async function doSendExamMessage(openid, exam) {
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-   
+
   /**
    * 1.获取30天后（刚好还有30天）的考试安排
    * 2.获取23天后（刚好还有23天）的考试安排
@@ -142,7 +143,7 @@ exports.main = async (event, context) => {
   console.log('今日推送考试安排')
   getCurrentExams(dates, async (list) => {
     list.forEach(({ _openid, exam }) => {
-      console.log(_openid, exam)
+      console.log(_openid, exam, "剩余天数", new Date().diffDay(exam['开始时间']))
       doSendExamMessage(_openid, exam)
     })
     return Promise.resolve()
