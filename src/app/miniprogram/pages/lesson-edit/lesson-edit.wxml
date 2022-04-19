@@ -12,7 +12,7 @@
         <view class="title">卡片颜色</view>
         <view class="content color-picker" style="color: var(--lesson-item-{{lesson.color}})">
           <view class="dot-10px" style="margin-right: 10rpx; background-color: var(--lesson-item-{{lesson.color}})" />
-          {{lesson.color}}
+          {{colorMap[lesson.color]}}
           <fa class="more-icon {{lessonLock?'disabled': ''}}" icon="fa fa-angle-down fa-lg" /> 
         </view>
       </view>
@@ -109,14 +109,14 @@
     <view slot="right">添加</view>
     <view 
       class="item"
-      wx:for="{{lessonsMap}}"
+      wx:for="{{lessonsList}}"
       wx:key="title"
       wx:for-item="lesson"
       hover-class="tap"
       data-lesson="{{lesson}}"
       bindtap="handleLessonItemSelect"
     >
-      <view class="color-bar" style="background: {{lesson['卡片颜色']}}" />
+      <view class="color-bar" style="background: var(--lesson-item-{{lesson['卡片颜色']}})" />
       <view class="title">{{lesson['课程名称']}}</view>
       <view class="name">{{lesson['教师姓名']}}</view>
       <fa class="more-icon" icon="fa fa-angle-down fa-lg" /> 

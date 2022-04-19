@@ -93,6 +93,15 @@ function dateUtils(){
     const b = e.format("YYYY-mm-dd")
     return a === b
   }
+  
+  /**
+   * 计算两个日期之间的天数差，向下取整
+   * @param {Date} date 另一个日期
+   */
+  Date.prototype.diffDay = function(date) {
+    const dayGap = 3600 * 24 * 1000 //ms
+    return Math.floor((date.getTime() - this.getTime()) / dayGap)
+  }
 }
 
 function proxyingWxObject(){

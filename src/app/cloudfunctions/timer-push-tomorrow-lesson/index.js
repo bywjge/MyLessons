@@ -123,8 +123,8 @@ async function getTomorrowLessons(fn) {
  */
 async function doSendLessonMessage(openid, lessons) {
   // 需要合并节次
-  let indexList = lessons.map(e => e['节次']).reduce((total, now) => total.concat(now))
-  indexList = Array.from(new Set(indexList)).sort((a, b) => Number(a) - Number(b)).join(', ')
+  let indexList = lessons.map(e => e['节次'])
+  indexList = generateIndex(indexList).join(', ')
   const lessonName = lessons.map(e => e['课程名称']).join('、')
 
   const date = new Date().nDaysLater(1).format('YYYY/mm/dd')
@@ -160,6 +160,23 @@ async function doSendLessonMessage(openid, lessons) {
       }
     }
   })
+}
+
+/**
+ * 将节次列表转换为节次序列
+ * @param {Array<String[2]>} indexList 节次列表
+ * @returns {Array<String>} 节次，两位数的字符串
+ */
+function generateIndex(indexList) {
+  let ret = []
+  indexList.forEach(e => {
+    const from = Number(e[0])
+    const to = Number(e[1])
+    const index = new Array(to - from + 1).fill(from).map((e, i) => e + i)
+    ret.push(...index)
+  })
+  ret = Array.from(new Set(ret)).sort((a, b) => Number(a) - Number(b))
+  return ret.map(e => e < 10 ? '0' + e: e + '')
 }
 
 // 云函数入口函数

@@ -72,7 +72,7 @@
         </view>
       </view>
     </view>
-    <view class="add-button" hover-class="button-tap" bindtap="handleAddLesson" wx:if="{{false}}">添加课程</view>
+    <view class="add-button" hover-class="button-tap" bindtap="handleAddLesson" wx:if="{{true}}">添加课程</view>
 
   </view>
 </view>

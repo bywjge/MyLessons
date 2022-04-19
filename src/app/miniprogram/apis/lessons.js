@@ -608,6 +608,7 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
         lessonMap[name] = Object.assign({}, {
           '课程节数': 0,
           '教师姓名': new Array(0),
+          '上课安排': new Array(0),
           '教学地点': new Array(0),
           '排课人数': Number(lesson['排课人数']),
           '上课班级': lesson['上课班级'],
@@ -626,12 +627,23 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
 
       e['课程节数']++
       e['上课时间'].push(time)
+      e['上课安排'].push(Object.assign({}, {
+        '课程名称': lesson['课程名称'],
+        '教师姓名': lesson['教师姓名'],
+        '教学地点': lesson['教学地点'],
+        '上课班级': lesson['上课班级'],
+        '上课内容': lesson['上课内容'],
+        '上课周次': lesson['周次'],
+        '节次': lesson['节次'],
+        '周次': lesson['周次'],
+        '日期': lesson['日期'],
+        '上课时间': time
+      }))
       e['上课时间'] = e['上课时间'].sort((a, b) => a.getTime() - b.getTime())
 
       if (e['教师姓名'].indexOf(lesson['教师姓名']) === -1) {
         e['教师姓名'].push(lesson['教师姓名'])
       }
-
       if (e['教学地点'].indexOf(lesson['教学地点']) === -1) {
         e['教学地点'].push(lesson['教学地点'])
       }

@@ -76,7 +76,7 @@ Page({
 
   handleAddLesson() {
     wx.navigateTo({
-      url: '/pages/lesson-edit/lesson-edit',
+      url: '/pages/lesson-edit/lesson-edit?mode=add',
     })
   }
 })

@@ -6,7 +6,7 @@ const { navBarHeight, eventBus } = getApp().globalData
 
 // 长按课程时弹出的菜单项目
 const editItems = [
-  // '编辑课程',
+  '编辑课程',
   '删除这节课程',
   '删除整门课程'
 ]
