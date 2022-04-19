@@ -193,11 +193,12 @@ async function getLessonInfo(collegeId, lessonName) {
 
 
   if (Array.isArray(ret) && ret.length > 0) {
-    const _t = {}
+    const _t = []
     const filteredData = tools.keyMapConvert(ret, keyMap).filter(e => {
-      if (_t.hasOwnProperty(e.id))
+      if (_t.indexOf(e.id + e['学院']) !== -1)
         return false
-      return _t[e.id] = true
+      _t.push(e.id + e['学院'])
+      return true
     })
     return Promise.resolve(filteredData)
   }
