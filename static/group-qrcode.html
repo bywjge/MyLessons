@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
+  <title>添加My Lesson小程序官方群聊</title>
+</head>
+<body>
+  <!-- 主页 -->
+  <div class="card main">
+    <div class="title">添加官方交流群</div>
+    <div class="subtitle">欢迎加入My Lesson公测交流群</div>
+    <div class="subtitle">长按扫描下方二维码，即可加入群聊</div>
+    <img class="qrcode" src="./group.jpg" />
+  </div>
+</body>
+<style>
+:root {
+  overflow: hidden;
+  --border-radius: 14px;
+  font-family: Avenir,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji',sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --item-background: #1e1e1e;
+    --border-optional: rgba(255, 255, 255, .1);
+    --shadow-10: transparent;
+    --text-black-1: #dbdbdb;
+    --text-black-2: #c5c5c5;
+    --text-black-3: #888888;
+    --text-black-4: #666666;
+    --color-black-05: rgba(255, 255, 255, .05);
+    --color-black-07: rgba(255, 255, 255, .07);
+    --color-black-10: rgba(255, 255, 255, .1);
+    --color-black-20: rgba(255, 255, 255, .2);
+    --color-black-30: rgba(255, 255, 255, .3);
+    --color-black-40: rgba(255, 255, 255, .4);
+    background: #181818;
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --item-background: white;
+    --border-optional: transparent;
+    --shadow-10: rgba(0, 0, 0, .1);
+    --text-black-1: #2F2F2F;
+    --text-black-2: #424242;
+    --text-black-3: #727272;
+    --text-black-4: #B1B1B1;
+    --color-black-05: rgba(0, 0, 0, .05);
+    --color-black-07: rgba(0, 0, 0, .07);
+    --color-black-10: rgba(0, 0, 0, .1);
+    --color-black-20: rgba(0, 0, 0, .2);
+    --color-black-30: rgba(0, 0, 0, .3);
+    --color-black-40: rgba(0, 0, 0, .4);
+    background: #f7f7f7;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+/* .button-tap {
+  box-shadow: 0 4rpx 26rpx 0 var(--shadow-20) !important;
+} */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  background: var(--item-background);
+  box-shadow:
+    0 0 17px 3px var(--shadow-10),
+    0 0 0 1px var(--border-optional);
+  border-radius: var(--border-radius);
+  padding: 35px 30px;
+  color: var(--text-black-2);
+  /* margin: 0 11%; */
+  width: 240px;
+}
+
+.card{
+  position: absolute;
+  min-height: 375px;
+  top: 50%;
+  left: 50%;
+  transform:translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+}
+
+.card .title {
+  font-size: 19px;
+  font-weight: 450;
+  margin-bottom: 7px;
+}
+
+.card .title .back-icon i {
+  margin-left: -13px;
+  margin-right: 5px;
+  color: var(--text-black-4);
+  transform: rotate(90deg) scale(0.9);
+}
+
+.card .subtitle {
+  font-size: 12px;
+  line-height: 19px;
+  color: var(--text-black-4);
+  max-width: 90%;
+}
+
+.card .qrcode {
+  --size: 240px;
+  height: var(--size);
+  width: var(--size);
+  background-color: var(--color-black-05);
+  border-radius: 8px;
+  border: solid 1px var(--color-black-10);
+  margin-top: 35px;
+  align-self: center;
+}
+</style>
+</html>

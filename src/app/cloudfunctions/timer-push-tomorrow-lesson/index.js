@@ -154,7 +154,7 @@ async function doSendLessonMessage(openid, lessons) {
           "color": "#FF617C"
         },
         "remark": {
-          "value": `${lessonName}\n\n${indexList.indexOf('01') !== -1? '明天有早八，请注意时间\n\n': ''}以上为明天的课程安排。此条推送由于你打开了课程推送而产生，如不需要收到推送，请取关公众号或在下方菜单关闭该功能`,
+          "value": `${lessonName}\n\n${indexList.indexOf('01') !== -1? '🛑👉明天有早八，请注意时间👈🛑\n\n': ''}以上为明天的课程安排。此条推送由于你打开了课程推送而产生，如不需要收到推送，请取关公众号或在下方菜单关闭该功能`,
           "color": "#2F2F2F"
         }
       }
