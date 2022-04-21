@@ -7,6 +7,8 @@ cloud.init({
 const db = cloud.database()
 const _ = db.command
 
+const groupUrl = "https://meetinaxd.ltiex.com/static/group-qrcode.html"
+
 /**
  * 根据节数获取上/下课时间
  * @param {number} index 节数索引，从1开始，不得大于14
@@ -100,10 +102,10 @@ async function queryExamWithinMonth() {
   const text = ret.list.map(({ exam }) => {
     const t = [
       `【${exam['课程名称']}】\n`,
-      `剩余时间: ${new Date().diffDay(exam['开始时间'])}天\n`,
-      `考试时间: ${exam['考试日期']} ${exam['考试时间']}\n`,
-      `考试地点: ${exam['考试场地']}\n`,
-      `监考老师: ${exam['监考老师'].join(',')}\n`
+      `  剩余时间: <a href="${groupUrl}">${new Date().diffDay(exam['开始时间'])}天</a>\n`,
+      `  考试时间: <a href="${groupUrl}">${exam['考试时间']}</a>\n`,
+      `  考试地点: <a href="${groupUrl}">${exam['考试场地']}</a>\n`,
+      `  监考老师: ${exam['监考老师'].join(',')}\n`
     ]
     return t.join('')
   })
@@ -157,11 +159,11 @@ async function queryTomorrowLesson() {
     if (introduce.length > 100)
       introduce = introduce.substr(0, 100) + '...'
     const t = [
-      `【${lesson['课程名称']}】\n`,
-      `授课教师: ${lesson['教师姓名']}\n`,
-      `上课时间: ${lesson['日期']} ${startTime} - ${endTime}\n`,
-      `上课地点: ${lesson['教学地点']}\n`,
-      `简介: ${introduce? introduce: '无简介'}`
+      `📖 ${lesson['课程名称']}\n`,
+      `  授课教师: ${lesson['教师姓名']}\n`,
+      `  上课时间: <a href="${groupUrl}">${startTime} - ${endTime}</a>\n`,
+      `  上课地点: <a href="${groupUrl}">${lesson['教学地点']}</a>\n`,
+      `  简介: ${introduce? introduce: '无简介'}`
     ]
     return t.join('')
   })
@@ -225,11 +227,11 @@ async function queryNextLesson() {
   if (introduce.length > 100)
     introduce = introduce.substr(0, 100) + '...'
   const t = [
-    `【${result['课程名称']}】\n`,
-    `授课教师: ${result['教师姓名']}\n`,
-    `上课时间: ${result['日期']} ${startTime} - ${endTime}\n`,
-    `上课地点: ${result['教学地点']}\n`,
-    `简介: ${introduce? introduce: '无简介'}`
+    `📖 ${result['课程名称']}\n`,
+    `  授课教师: ${result['教师姓名']}\n`,
+    `  上课时间: <a href="${groupUrl}">${startTime} - ${endTime}</a>\n`,
+    `  上课地点: <a href="${groupUrl}">${result['教学地点']}</a>\n`,
+    `  简介: ${introduce? introduce: '无简介'}`
   ]
 
   return `【查询下节课程】\n接下来的课程是\n\n` + t.join('')
