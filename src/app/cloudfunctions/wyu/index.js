@@ -14,7 +14,9 @@ let events = {
   getOpenid,
   getLesson,
   getCookie,
-  getInfo
+  getInfo,
+  getInfoNew,
+  uploadInfo
 }
 /**
  * 这个示例将经自动鉴权过的小程序用户 openid 返回给小程序端
@@ -64,7 +66,7 @@ async function login({username, password}){
 }
 
 /**
- * 获取学籍卡信息
+ * 获取学籍卡信息（原版兼容）
  * @param {Boolean} forceNew 是否强制获取新信息
  * @description 假定cookie有效，请自行验证cookie
  */
@@ -113,7 +115,60 @@ async function getInfo({ username, forceNew = false }) {
   return Promise.resolve({ info, type })
 }
 
+/**
+ * 获取学籍卡信息
+ * @param {Boolean} forceNew 是否强制获取新信息
+ */
+async function getInfoNew({ username }) {
+  // 从数据库取出info记录
+  const records = (await _db.collection('info').where({
+    username: _.eq(username)
+  }).get()).data
 
+  // 有记录且不强制获取新信息
+  if (records.length > 0) {
+    const info = records[0]
+    return Promise.resolve(info)
+  }
+
+  throw new Error('没有查询到用户记录')
+}
+
+/**
+ * 上传用户信息
+ * @param {Object} payload
+ * @param {string} payload.username 用户名
+ * @param {Object} payload.info 用户信息对象
+ * @param {'teacher' | 'student'} payload.usertype 用户类型
+ * @returns
+ */
+async function uploadInfo({ username, info = {}, usertype }) {
+  // if (usertype === 'teacher')
+  //   Object.assign(info, wyu.parseTeacherInfo(document))
+  // else
+  //   Object.assign(info, wyu.parseStudentInfo(document))
+
+  console.log(info)
+
+  const data = {
+    info,
+    username,
+    type: usertype,
+    time: new Date()
+  }
+
+  // 从数据库取出info记录
+  const records = (await _db.collection('info').where({
+    username: _.eq(username)
+  }).get()).data
+
+  // 有记录且不强制获取新信息
+  if (records.length > 0) {
+    const id = records[0]._id
+    return _db.collection('info').doc(id).update({ data })
+  }
+  return _db.collection('info').add({ data })
+}
 
 async function getLesson({ week = null }){
   const cookie = await getCookie({})

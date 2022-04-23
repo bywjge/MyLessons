@@ -198,6 +198,17 @@ async function doSendLessonMessage(openid, lesson) {
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
+
+  const muteFrom = new Date('2022/04/30 00:00:00')
+  const muteTo = new Date('2022/05/04 23:59:59')
+  const nowTime = new Date()
+
+  // 假期不推送
+  if (muteFrom < nowTime && nowTime < muteTo) {
+    console.log('劳动节不推送')
+    return ;
+  }
+
   const timeList = {
     "07:30": "01",
     "09:30": "03",

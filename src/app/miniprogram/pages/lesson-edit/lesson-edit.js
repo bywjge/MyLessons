@@ -1,5 +1,6 @@
 import tools from "../../utils/tools"
-// let nowLesson = null
+let nowLesson = null
+
 const colorList = [
   { name: 'Red', value: 'red' },
   { name: 'Orange', value: 'orange' },
@@ -35,6 +36,10 @@ Page({
       name: '',
       teacher: '',
       color: 'pink',
+    },
+    lessonEditor: {
+      location: '',
+      description: ''
     },
     lessonsList: [],
     scheduleList: [],
@@ -72,7 +77,7 @@ Page({
 
     const lessons = wx.getStorageSync('lessonsByDay')[date] || []
     const lesson = lessons.find(e => e._key === key)
-    console.log()
+    console.log(lesson)
     if (!lesson) {
       tools.showModal({
         title: '参数错误',
@@ -82,6 +87,12 @@ Page({
     }
 
     nowLesson = lesson
+    Object.assign(lesson, {
+      日期: new Date(lesson['日期']).format('YYYY/mm/dd'),
+      节次名称: this.convertIndexToName(lesson['节次'][0], lesson['节次'][1])
+    })
+    const newSchedule = new Array()
+    newSchedule.push(lesson)
 
     this.setData({
       lesson: {
@@ -90,6 +101,7 @@ Page({
         color: lesson['卡片颜色']
       },
       mode,
+      scheduleList: newSchedule,
       lessonLock: true
     })
   },
@@ -126,9 +138,27 @@ Page({
     this.selectComponent('#lesson-selector').switchVisible(true)
   },
 
+  // 点击“添加上课安排”
+  editSchedule({ currentTarget }) {
+    let { dataset: { item } } = currentTarget
+    console.log(item)
+    item = item || {}
+    this.setData({
+      'lessonEditor.name': item['课程名称'] || '',
+      'lessonEditor.location': item['教学地点'] || '',
+      'lessonEditor.description': item['上课内容'] || ''
+    })
+    this.selectComponent('#lesson-editor').switchVisible(true)
+  },
+
+  handleLessonEditConfirm() {
+    this.selectComponent('#lesson-editor').switchVisible(false)
+  },
+
   handleLessonItemSelect({ currentTarget }) {
     const { dataset: { lesson } } = currentTarget
     lesson['上课安排'].forEach(e => Object.assign(e, {
+      日期: new Date(e['上课时间']).format('YYYY/mm/dd'),
       节次名称: this.convertIndexToName(e['节次'][0], e['节次'][1])
     }))
     this.setData({
@@ -156,7 +186,7 @@ Page({
   },
 
   convertIndexToName(from, to) {
-    const key = `${Number(from)-Number(to)}`
+    const key = `${Number(from)}-${Number(to)}`
     if (!timeNameMap[key])
       return `第${from}-${to}节`
     return timeNameMap[key]

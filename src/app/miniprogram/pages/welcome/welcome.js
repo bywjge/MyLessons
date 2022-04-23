@@ -29,7 +29,7 @@ Page({
     }
 
     // 测试强制清空数据
-    const version = "abcd106"
+    const version = "abcd107"
     if (wx.getStorageSync('version') !== version && wx.getStorageSync('binded') !== ""){
       await wx.showModal({
         title: '升级提示',
@@ -78,7 +78,16 @@ Page({
 
       // 获取个人信息
       wx.showLoading({ title: '获取身份' })
-      await accountApi.getPersonInfo()
+      try {
+        await accountApi.getPersonInfo(undefined, true)
+      } catch(e) {
+        wx.hideLoading().catch(() => {})
+        tools.showModal({
+          title: '获取身份失败',
+          content: '服务器忙碌，请稍后重新进入小程序'
+        })
+        return ;
+      }
       
       // 获取课表
       wx.showLoading({ title: '同步课表中' })

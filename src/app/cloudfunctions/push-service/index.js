@@ -103,7 +103,7 @@ async function queryExamWithinMonth() {
     const t = [
       `【${exam['课程名称']}】\n`,
       `  剩余时间: <a href="${groupUrl}">${new Date().diffDay(exam['开始时间'])}天</a>\n`,
-      `  考试时间: <a href="${groupUrl}">${exam['考试时间']}</a>\n`,
+      `  考试时间: <a href="${groupUrl}">${exam['考试日期']} ${exam['考试时间']}</a>\n`,
       `  考试地点: <a href="${groupUrl}">${exam['考试场地']}</a>\n`,
       `  监考老师: ${exam['监考老师'].join(',')}\n`
     ]

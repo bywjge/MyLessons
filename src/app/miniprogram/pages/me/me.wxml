@@ -18,7 +18,7 @@
         </view>
         <view class="description">
           <view class="collage">{{info['学院']}}</view>
-          <span>{{info['学号']}}</span>
+          <span>{{username}}</span>
         </view>
       </view>
       <fa class="more-icon" icon="fa fa-angle-down fa-lg"></fa> 
@@ -61,27 +61,32 @@
     <view class="module app-functions">
       <span class="title">应用功能</span>
       <view class="content">
+        <view bindtap="jumpToSettings" class="icon-button multiple icon icon-settings pink" hover-class="icon-button-tap">
+          <span class="title">设置</span>
+          <view class="description">默认视图、自定义配色及其他配置</view>
+        </view>
+        
         <view bindtap="jumpToPushService" class="icon-button multiple icon icon-bell lesson-push orange" hover-class="icon-button-tap">
           <span class="title">课程推送服务</span>
           <view class="description">无需手动打开小程序，上课前自动推送课程信息到微信</view>
         </view>
 
-        <view bindtap="resetStorage" class="icon-button multiple icon icon-reload reload-lesson blue" hover-class="icon-button-tap">
+        <view bindtap="resetStorage" class="icon-button multiple icon icon-reload reload-lesson purple" hover-class="icon-button-tap">
           <span class="title">重新获取课程</span>
           <view class="description">手动从教务系统获取最新课表</view>
         </view>
 
-        <view bindtap="jumpToContact" class="icon-button multiple icon icon-face delelop-mode purple" hover-class="icon-button-tap">
+        <view bindtap="jumpToContact" class="icon-button multiple icon icon-face blue" hover-class="icon-button-tap">
           <span class="title">官方交流群</span>
           <view class="description">遇到问题需要帮助，还是有更好的建议呢？点击联系并寻找作者帮助吧</view>
         </view>
 
-        <view bindtap="jumpToAbout" class="icon-button multiple icon icon-info delelop-mode green" hover-class="icon-button-tap">
+        <view bindtap="jumpToAbout" class="icon-button multiple icon icon-info green" hover-class="icon-button-tap">
           <span class="title">关于应用</span>
           <view class="description">关于My Lesson小程序应用</view>
         </view>
 
-        <view bindtap="switchDebugMode" class="icon-button multiple icon icon-debug delelop-mode red" hover-class="icon-button-tap">
+        <view bindtap="switchDebugMode" class="icon-button multiple icon icon-debug red" hover-class="icon-button-tap">
           <span class="title">开发者模式</span>
           <view class="description">为开发和测试人员提供的一系列排错选项和工具，点击以{{!enableDebug?'启用':'禁用'}}</view>
         </view>
@@ -92,7 +97,7 @@
     <view class="module app-functions" wx:if="{{enableDebug}}">
       <span class="title">调试工具</span>
       <view class="content">
-        <view bindtap="debugSwitchAnimation" class="icon-button multiple icon icon-code red" hover-class="icon-button-tap">
+        <view bindtap="debugSwitchAnimation" class="icon-button multiple icon icon-code red" hover-class="icon-button-tap" wx:if="{{false}}">
           <span class="title">动画过渡效果</span>
           <view class="description">安卓设备默认禁用动画效果(Animation和Transition)，点击以{{disableAnimation?'打开':'关闭'}}动画</view>
         </view>

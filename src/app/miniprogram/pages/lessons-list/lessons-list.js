@@ -1,4 +1,5 @@
 import { bindTheme, unbindTheme } from '../../utils/theme'
+import tools from '../../utils/tools'
 
 Page({
   data: {
@@ -15,11 +16,21 @@ Page({
     bindTheme(this)
     this.checkBind()
     const lesson = wx.getStorageSync('lessonsMap')
+    if (!lesson) {
+      tools.showModal({
+        title: '错误',
+        content: '数据损坏，请到"我的"页面中重新获取课表'
+      }).then(() => {
+        wx.navigateBack({ delta: 1 })
+      }).catch(() => {})
+      return ;
+    }
     const doneList = []
     const undoneList = []
     const now = new Date()
     for (const key in lesson) {
       const element = lesson[key];
+      if (!element || !element['上课时间']) continue ;
       let 已上节数 = element['上课时间']
         .map(e => new Date(e))
         .findIndex(e => e > now)

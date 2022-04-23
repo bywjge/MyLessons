@@ -4,8 +4,8 @@
     <!-- 日期显示 -->
     <view class="date-week-viewer">
       <view 
-        class="dot-12px"
-        style="background-color: #EF8B9A !important; margin-right: 10px;" 
+        class="dot-10px"
+        style="background-color: var(--color-pink-1) !important; margin-right: 10px;" 
       />
         {{nowDate.year}}年{{nowDate.month}}月，{{nowWeek === null? '放假中': '第'+nowWeek+'周'}}
         {{!termStarted?'(还没开学哦)':''}}

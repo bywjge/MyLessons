@@ -93,11 +93,17 @@ page {
 
 .card-container .item[data-disabled=true],
 .card-container .item[data-disabled=true] input,
+.card-container .item[data-disabled=true] textarea,
 .card-container .option-item[data-disabled=true],
 .card-container .option-item[data-disabled=true] input,
-  .card-container .option-item[data-disabled=true] i {
+.card-container .option-item[data-disabled=true] textarea,
+.card-container .option-item[data-disabled=true] i {
   pointer-events: none;
   color: var(--text-black-3);
+}
+
+.card-container .option-item textarea {
+  padding-top: 30rpx;
 }
 
 .card-container .option-item, .card-container .item {
@@ -109,11 +115,11 @@ page {
   justify-content: space-between;
 }
 
-.card-container .option-item:first-child {
+.card-container .option-item:not(.no-radius):first-child {
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
 }
-.card-container .option-item:last-child {
+.card-container .option-item:not(.no-radius):last-child {
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
 }
@@ -133,13 +139,13 @@ page {
   margin-right: 10rpx;
 }
 
-.card-container .option-item > input {
+.card-container .option-item > input, .card-container .option-item > textarea {
   flex: 1;
 }
 
 .card-container.schedule {
-  /* padding: 30rpx 40rpx; */
-  padding-top: 30rpx;
+  padding: 30rpx 0rpx;
+  /* padding-top: 30rpx; */
 }
 
 .text-area textarea, input {
@@ -453,4 +459,55 @@ page {
   text-align: center;
   font-weight: 500;
   line-height: 20rpx;
+}
+
+/* 课程名称 */
+.schedule > .item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 15rpx 0;
+  /* 这是标题距离左边的距离 */
+  padding-left: calc(var(--window-item-padding) + 60rpx);
+  margin: 10rpx 0;
+  box-sizing: border-box;
+  border-bottom: none !important;
+  transition: background-color .2s;
+}
+.schedule > .item > .indexer, .schedule > .item > .more-icon {
+  position: absolute;
+  font-size: 32rpx;
+  font-weight: 450;
+  color: var(--text-black-4);
+}
+
+.schedule > .item > .indexer {
+  left: calc((var(--window-item-padding) + 60rpx - 40rpx) / 2);
+  font-size: 34rpx;
+  font-weight: 500;
+  /* color: var(--text-black-4); */
+  width: 40rpx;
+  text-align: center;
+}
+
+.schedule > .item > .more-icon {
+  right: var(--window-item-padding);
+}
+
+/* 下方文字 */
+.schedule > .item > .description {
+  display: flex;
+  /* justify-content: space-between; */
+  font-size: 24rpx;
+  font-weight: 400;
+  margin-top: 4rpx;
+  color: var(--text-black-3);
+}
+
+/* 上课时间 */
+.schedule > .item > .description > .time {
+  width: 150rpx;
 }

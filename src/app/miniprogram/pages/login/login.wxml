@@ -1,7 +1,7 @@
 <!--miniprogram/pages/login/login.wxml-->
 <!-- <text>miniprogram/pages/login/login.wxml</text> -->
 <view>
-  <navigation isShowSwitch="{{false}}" title="绑定账号"/>
+  <navigation enableBackButton="{{false}}" enableMenu="{{false}}" title="绑定账号"/>
   <view class="container">
     <view class="input-section header-text">
       <view class="headline">教务系统账号登陆

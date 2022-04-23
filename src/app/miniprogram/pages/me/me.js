@@ -34,6 +34,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    username: '',
     info: {
       姓名: 'Unknown',
       学院: 'Unknown',
@@ -59,6 +60,7 @@ Page({
 
   async onLoad() {
     this.setData({
+      username: wx.getStorageSync('username'),
       isTeacher: wx.getStorageSync('usertype') === 'teacher'
     })
     // data中自动添加一个theme
@@ -190,6 +192,13 @@ Page({
     })
   },
 
+  // 设置
+  jumpToSettings() {
+    wx.navigateTo({
+      url: '/pages/settings/settings',
+    })
+  },
+
   // 课程推送服务
   jumpToPushService() {
     wx.navigateTo({
@@ -250,7 +259,7 @@ Page({
   // 重新获取个人信息
   async debugGetInfo() {
     wx.showLoading({ title: '同步数据中' })
-    await accountApi.getPersonInfo()
+    await accountApi.getPersonInfo(undefined, true)
     wx.hideLoading().catch(() => {})
     this.onLoad()
   },

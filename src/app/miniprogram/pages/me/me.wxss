@@ -319,6 +319,11 @@ page {
   -webkit-mask-image: var(--icon-code-2);
 }
 
+.icon-settings:before {
+  mask-image: var(--icon-settings);
+  -webkit-mask-image: var(--icon-settings);
+}
+
 .icon-debug:before {
   mask-image: var(--icon-code-2);
   -webkit-mask-image: var(--icon-code-2);
@@ -387,6 +392,10 @@ page {
 
 .purple:before {
   background: var(--color-purple-1);
+}
+
+.pink:before {
+  background: var(--color-pink-1);
 }
 /* 徽章列表 */
 

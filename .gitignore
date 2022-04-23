@@ -3,5 +3,6 @@ dist
 .DS_*
 CaptchaSolution/
 */**/*-lock.json
-src/app/miniprogram/miniprogram_npm/*
+src/app/miniprogram/miniprogram_npm
+Design/海报/
 更新通知.md

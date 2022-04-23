@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "pop-window": "../../components/pop-window/pop-window"
+  }
+}
