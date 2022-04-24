@@ -238,6 +238,234 @@ async function queryNextLesson() {
 }
 
 /**
+ * 根据节数获取上/下课时间
+ * @param {number} index 节数索引，从1开始，不得大于14
+ * @param {boolean} [endTime = false] 是否获取本节课的结束时间，默认为否
+ * @return {[string, Date]} 时间数组，包括一个字符串格式的24小时制时间，以及Date格式的时间
+ * @description 节数指的是小节；返回的格式如08:15
+ */
+function convertIndexToTime(index, endTime = false){
+  // 上课时间
+  const timeMap = {
+    1: "08:15",
+    2: "09:05",
+    3: "10:10",
+    4: "11:00",
+    5: "14:45",
+    6: "15:35",
+    7: "16:30",
+    8: "17:20",
+    9: "19:30",
+    10: "20:25",
+    11: "21:20",
+    12: "22:15",
+    13: "12:30",
+    14: "13:20"
+  }
+
+  if (typeof index !== 'number' || index < 1 || index > 14)
+    throw new Error("输入错误")
+
+  const time = timeMap[index].split(":")
+  const hour = Number(time[0])
+  const min  = Number(time[1])
+
+  let t = new Date()
+  t.setHours(hour)
+  t.setMinutes(min)
+
+  // 如果不是获取结束时间
+  if (!endTime)
+    return [timeMap[index], t]
+
+  t = new Date(t.getTime() + 45 * 60 * 1000)
+  return [`${t.getHours().prefixZero(2)}:${t.getMinutes().prefixZero(2)}`, t]
+}
+
+/**
+ * 获取一月内所有考试
+*/
+async function queryExamWithinMonth() {
+  const wxContext = cloud.getWXContext()
+  const { FROM_OPENID } = wxContext
+
+  let fromDate = new Date()
+  fromDate.setDate(1)
+  let toDate = new Date(fromDate)
+  toDate.setMonth(fromDate.getMonth() + 1)
+  fromDate = fromDate.format('YYYY/mm/dd')
+  toDate = toDate.format('YYYY/mm/dd')
+
+  const ret = await db.collection('push-accounts')
+    .aggregate()
+    .match({
+      _openid: FROM_OPENID
+    })
+    .lookup({
+      from: 'exams',
+      localField: '_app_openid',
+      foreignField: '_openid',
+      as: 'exams'
+    })
+    .project({
+      _openid: true,
+      _app_openid: true,
+      exams: '$exams.exams',
+    })
+    .unwind('$exams')
+    .unwind('$exams')
+    .match({
+      'exams.考试日期':  _.gte(fromDate).lt(toDate),
+    })
+    .project({
+      _openid: true,
+      _app_openid: true,
+      exam: '$exams'
+    })
+    .end()
+
+  if (ret.list.length === 0) {
+    return Promise.resolve('【查询当月考试】\n\n✨ 亲，本月无考试安排哦～\n\n⚠️ 考试查询结果存在延迟，实时结果请在小程序内手动刷新。')
+  }
+  const text = ret.list.map(({ exam }) => {
+    const t = [
+      `【${exam['课程名称']}】\n`,
+      `剩余时间: ${new Date().diffDay(exam['开始时间'])}天\n`,
+      `考试时间: ${exam['考试日期']} ${exam['考试时间']}\n`,
+      `考试地点: ${exam['考试场地']}\n`,
+      `监考老师: ${exam['监考老师'].join(',')}\n`
+    ]
+    return t.join('')
+  })
+
+  return `【查询当月考试】\n当月共有${text.length}门考试\n\n` + text.join('\n\n') + '\n\n⚠️ 考试查询结果存在延迟，实时结果请在小程序内手动刷新。'
+}
+
+/**
+ * 获取该用户明天的所有课程
+*/
+async function queryTomorrowLesson() {
+  const wxContext = cloud.getWXContext()
+  const { FROM_OPENID } = wxContext
+  const nowDate = new Date().nDaysLater(1).format('YYYY-mm-dd')
+
+  const ret = await db.collection('push-accounts')
+    .aggregate()
+    .match({
+      _openid: FROM_OPENID
+    })
+    .lookup({
+      from: 'lessons',
+      localField: '_app_openid',
+      foreignField: '_openid',
+      as: 'lessons'
+    })
+    .project({
+      _openid: true,
+      _app_openid: true,
+      lessons: '$lessons.lessons',
+    })
+    .unwind('$lessons')
+    .unwind('$lessons')
+    .match({
+      'lessons.日期': _.eq(nowDate),
+    })
+    .project({
+      _openid: true,
+      _app_openid: true,
+      lesson: '$lessons'
+    })
+    .end()
+
+  if (ret.list.length === 0) {
+    return Promise.resolve('【查询明日课程】\n\n✨ 亲，明天没有课程哦～')
+  }
+  const text = ret.list.map(({ lesson }) => {
+    const startTime = convertIndexToTime(Number(lesson['节次'][0]), false)[0]
+    const endTime = convertIndexToTime(Number(lesson['节次'][1]), true)[0]
+    let introduce = lesson['上课内容']?lesson['上课内容']: ''
+    if (introduce.length > 100)
+      introduce = introduce.substr(0, 100) + '...'
+    const t = [
+      `【${lesson['课程名称']}】\n`,
+      `授课教师: ${lesson['教师姓名']}\n`,
+      `上课时间: ${lesson['日期']} ${startTime} - ${endTime}\n`,
+      `上课地点: ${lesson['教学地点']}\n`,
+      `简介: ${introduce? introduce: '无简介'}`
+    ]
+    return t.join('')
+  })
+
+  return `【查询明日课程】\n明日共有${text.length}节课\n\n` + text.join('\n\n')
+}
+
+/**
+ * 获取该用户今日的下一节课程
+*/
+async function queryNextLesson() {
+  const wxContext = cloud.getWXContext()
+  const { FROM_OPENID } = wxContext
+  const nowDate = new Date().format('YYYY-mm-dd')
+
+  const ret = await db.collection('push-accounts')
+    .aggregate()
+    .match({
+      _openid: FROM_OPENID
+    })
+    .lookup({
+      from: 'lessons',
+      localField: '_app_openid',
+      foreignField: '_openid',
+      as: 'lessons'
+    })
+    .project({
+      _openid: true,
+      _app_openid: true,
+      lessons: '$lessons.lessons',
+    })
+    .unwind('$lessons')
+    .unwind('$lessons')
+    .match({
+      'lessons.日期': _.eq(nowDate),
+    })
+    .project({
+      _openid: true,
+      _app_openid: true,
+      lesson: '$lessons'
+    })
+    .end()
+  const now = new Date()
+  if (ret.list.length === 0) {
+    return Promise.resolve('【查询下节课程】\n\n✨ 亲，今天没有课程哦～')
+  }
+  let result = ret.list.find(({ lesson }) => {
+    // 只保留比现在后的课程
+    return convertIndexToTime(Number(lesson['节次'][0]), false)[1] > now
+  })
+
+  if (!result) {
+    return Promise.resolve('【查询下节课程】\n\n✨ 今天的课上完了哦～')
+  }
+
+  result = result.lesson
+
+  const startTime = convertIndexToTime(Number(result['节次'][0]), false)[0]
+  const endTime = convertIndexToTime(Number(result['节次'][1]), true)[0]
+  let introduce = result['上课内容']?result['上课内容']: ''
+  if (introduce.length > 100)
+    introduce = introduce.substr(0, 100) + '...'
+  const t = [
+    `【${result['课程名称']}】\n`,
+    `授课教师: ${result['教师姓名']}\n`,
+    `上课时间: ${result['日期']} ${startTime} - ${endTime}\n`,
+    `上课地点: ${result['教学地点']}\n`,
+    `简介: ${introduce? introduce: '无简介'}`
+  ]
+
+  return `【查询下节课程】\n接下来的课程是\n\n` + t.join('')
+}
+
+/**
  * 包装文字为微信所需的格式
  * @param {Object} event 事件
  * @param {string} text 要返回的文字
