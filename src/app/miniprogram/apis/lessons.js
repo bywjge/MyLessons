@@ -118,6 +118,12 @@ async function getLessonFromSchool(year, term = 1, isTeacher = false) {
     zc: '上课周次',
     /** 只有每周课表是jcdm2 */
     jcdm: ['节次', str => {
+      if (!str || str.length < 2)
+        return null
+
+      if (str.length === 2)
+        return [str, str]
+
       str = str.trim()
       if (str.length < 4)
         return null;
@@ -128,9 +134,13 @@ async function getLessonFromSchool(year, term = 1, isTeacher = false) {
       return arr;
     }],
     jcdm2: ['节次', str => {
-      str = str.trim().split(',')
       if(str.length < 2)
         return null;
+
+      if (str.length === 2)
+        return [str, str]
+
+      str = str.trim().split(',')
 
       let arr = [0, 0]
       arr[0] = str[0]
@@ -178,8 +188,9 @@ async function getLessonFromSchool(year, term = 1, isTeacher = false) {
     const classes = e['上课班级'].split(',').sort((a, b) => a - b)
     e['上课班级'] = classes
   })
-
-  return formattedRows
+  
+  // 过滤节次不正常的课程
+  return formattedRows.filter(e => e['节次'])
 }
 
 /**
@@ -518,13 +529,12 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
   // firstWeekDate 是课表里第一周的星期日
   // 课表的排序是：(日 一 二 三 四 五 六)
 
-  // 为课程加上key标识符以区分
-  lessons.forEach(e => e._key = tools.randomString(8))
-
   /** 生成每日课表 */
   let lessonsByDay = {}
   if (!skipConvert) {
     lessons.forEach(lesson => {
+      // 为课程加上key标识符以区分
+      lesson._key = tools.randomString(8)
       const date = lesson['日期']
 
       if (!Array.isArray(lessonsByDay[date]))
@@ -628,6 +638,7 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
       e['课程节数']++
       e['上课时间'].push(time)
       e['上课安排'].push(Object.assign({}, {
+        '_key': lesson._key,
         '课程名称': lesson['课程名称'],
         '教师姓名': lesson['教师姓名'],
         '教学地点': lesson['教学地点'],
@@ -639,7 +650,8 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
         '日期': lesson['日期'],
         '上课时间': time
       }))
-      e['上课时间'] = e['上课时间'].sort((a, b) => a.getTime() - b.getTime())
+      e['上课时间'].sort((a, b) => a.getTime() - b.getTime())
+      e['上课安排'].sort((a, b) => a['上课时间'].getTime() - b['上课时间'].getTime())
 
       if (e['教师姓名'].indexOf(lesson['教师姓名']) === -1) {
         e['教师姓名'].push(lesson['教师姓名'])

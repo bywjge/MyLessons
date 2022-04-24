@@ -19,18 +19,21 @@ page {
   display: flex;
   flex-direction: column;
   box-shadow: 0 2px 4px 0 var(--shadow-10);
-  padding: 23rpx 46rpx;
+  /* padding: 23rpx 46rpx; */
+  padding: 23rpx 46rpx 30rpx 46rpx;
 }
 
 .selector-wrapper .date-week-viewer{
-  font-size: 37rpx;
+  /* font-size: 37rpx; */
+  font-size: 34rpx;
   line-height: 50rpx;
   font-weight: 500;
   color: var(--text-black-1);
   letter-spacing: -0.22px;
   display: flex;
   align-items: center;
-  margin-bottom: 28rpx;
+  /* margin-bottom: 28rpx; */
+  margin-bottom: 16rpx;
 }
 
 .selector-wrapper .date-selector{
@@ -42,6 +45,7 @@ page {
 }
 
 .date-selector .date-button{
+  position: relative;
   height: 102rpx; min-height: 102rpx;
   width: 102rpx; min-width: 102rpx;
   border-radius: 51rpx;
@@ -54,26 +58,48 @@ page {
   transition: all 0.1s;
 }
 .date-selector .date-button.selected {
-  background-color: var(--color-pink-2);
-  color: var(--color-white);
+  transform: scale(1.1);
+  color: var(--highlight-font-color);
+}
+.date-selector .date-button.selected:after {
+  content: '';
+  position: absolute;
+  height: 4px;
+  width: 24%;
+  border-radius: 4px;
+  top: calc(100% + 6rpx);
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  background-color: var(--color-pink-1);
+
+  /* background-color: var(--color-pink-2);
+  color: var(--color-white); */
 }
 .date-selector .date-button {
   /* background-color: var(--color-white); */
   color: var(--text-black-1);
 }
+@media (prefers-color-scheme: dark) {
+  .date-selector .date-button.selected {
+    color: var(--color-pink-1);
+  }
+}
 
-.date-button .day{
+.date-button .day {
   font-family: "Avenir";
   font-weight: 650;
-  font-size: 46rpx;
-  line-height: 60rpx;
+  /* font-size: 46rpx; */
+  font-size: 40rpx;
+  /* line-height: 60rpx; */
+  line-height: 56rpx;
   letter-spacing: -0.28px;
   margin-top: -5rpx;
 }
 
 .date-button .day-of-week{
   font-weight: 500;
-  font-size: 23rpx;
+  /* font-size: 23rpx; */
+  font-size: 20rpx;
   line-height: 20rpx;
   letter-spacing: -0.28px;
 }

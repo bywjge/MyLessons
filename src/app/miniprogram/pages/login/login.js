@@ -27,7 +27,7 @@ Page({
 
   handleUserInput(e){
     this.setData({
-      username: e.detail.value.trim()
+      username: e.detail.value.trim().replaceAll(/[\s\W]/g, '')
     })
   },
 
@@ -125,7 +125,17 @@ Page({
    */
   async bindFinished(){
     wx.showLoading({ title: '获取身份' })
-    await accountApi.getPersonInfo()
+    try {
+      await accountApi.getPersonInfo(this.data.username, true)
+    } catch(e) {
+      console.log(e)
+      wx.hideLoading().catch(() => {})
+      tools.showModal({
+        title: '获取身份失败',
+        content: '服务器忙碌，请稍后重新进入小程序'
+      })
+      return ;
+    }
 
     const lessons = wx.getStorageSync('lessonsByDay')
     if (!lessons) {

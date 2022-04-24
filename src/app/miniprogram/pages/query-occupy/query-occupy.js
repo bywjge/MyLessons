@@ -1,6 +1,8 @@
 import moreApi from '../../apis/more'
 import lessonApi from '../../apis/lessons'
 import tools from '../../utils/tools'
+import cloneDeep from 'lodash.clonedeep'
+let dayLessons = []
 const 南主楼教室 = moreApi.allRooms['南主楼'].value.split(',')
 
 Page({
@@ -54,7 +56,6 @@ Page({
       },
     ],
 
-    dayLessons: [],
     onGoingCount: 0
   },
 
@@ -95,12 +96,12 @@ Page({
 
     wx.showLoading({ title: '加载数据中' })
     const { time, lessons } = await moreApi.getAllLessons(date, force)
-    this.setData({
-      dayLessons: lessons,
-      selectedDateIndex: index
-    })
+    dayLessons = cloneDeep(lessons)
 
-    this.refreshData()
+    this.setData({
+      selectedDateIndex: index
+    }, () => this.refreshData())
+
     wx.hideLoading().catch(() => {})
   },
 
@@ -134,11 +135,13 @@ Page({
     // lessonApi.convertIndexToTime()
     // let 当前节次 = this.getNowIndex()
     let 当前节次 = this.data.lessonIndexRaw
-    const lessons = this.data.dayLessons
+    const lessons = dayLessons
     let onGoingCount = 0
+    let q = 0
     lessons.forEach(e => {
-      if (e['节次'][0] !== 当前节次)
+      if (Number(e['节次'][0]) !== 当前节次)
         return ;
+      // console.log(e['教学地点'], e['编号'], ++q)
       
       let floor = Number(e['编号'].substr(0,1)) - 1
       let index = Number(e['编号'].substr(1,2)) - 1
@@ -149,16 +152,16 @@ Page({
 
       switch(e['教学地点']) {
         case '北主楼':
-          北主楼[floor][index] = e
           onGoingCount++
+          北主楼[floor][index] = e
           break;
         case '黄浩川教学楼':
-          黄浩川[floor][index] = e
           onGoingCount++
+          黄浩川[floor][index] = e
           break;
         case '马兰芳教学楼':
-          马兰芳[floor][index] = e
           onGoingCount++
+          马兰芳[floor][index] = e
           break;
         case '南主楼':
           南主楼[floor].push(e['编号'])
@@ -204,9 +207,7 @@ Page({
     this.setData({
       lessonIndexRaw: i * 2 - 1,
       lessonIndex: i
-    })
-
-    this.refreshData()
+    }, () => this.refreshData())
   },
 
   handlePrevLessons() {

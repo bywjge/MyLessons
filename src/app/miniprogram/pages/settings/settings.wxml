@@ -1,0 +1,37 @@
+<view class="container">
+  <navigation enableMenu="{{false}}" title="设置" />
+  <view class="content">
+    <!-- 课程基本信息 -->
+    <view class="card-container">
+      <view class="title">偏好设置</view>
+      <view bindtap="handleMainViewSelect" class="option-item no-radius" hover-class="item-tap">
+        <view class="title">默认主页视图</view>
+        <view class="content">
+          <view class="text">{{viewMode === 'daily'? '日': '周'}}视图</view> 
+          <fa class="more-icon" icon="fa fa-angle-down fa-lg" /> 
+        </view>
+      </view>
+
+      <view bindtap="handleAnimationSwitch" class="option-item no-radius" hover-class="item-tap">
+        <view class="title">动画效果</view>
+        <view class="content">
+          <view class="text">{{disableAnimation?'关闭':'打开'}}</view> 
+          <fa class="more-icon" icon="fa fa-angle-down fa-lg" /> 
+        </view>
+        <view class="description">由于性能以及体验原因，动画效果在安卓设备上默认禁用，我们建议安卓用户不要开启动画效果</view>
+      </view>
+
+      <view class="option-item no-radius" hover-class="item-tap" data-disabled="true">
+        <view class="title">应用主题色</view>
+        <view class="content">
+          <view class="dot-10px" style="margin-right: 14rpx; background-color: var(--color-pink-2)" />
+          <view class="text" style="color: var(--color-pink-2)">Pink</view> 
+          <fa class="more-icon" icon="fa fa-angle-down fa-lg" /> 
+        </view>
+        <view class="description">更改状态栏以及强调元素的主色调，暂不支持更改</view>
+      </view>
+    </view>
+
+    <view class="bottom-hint">请注意，所有设置将不会同步到云端保存</view>
+  </view>
+</view>

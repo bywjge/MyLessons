@@ -6,25 +6,26 @@
       <input class="option-item" hover-class="item-tap" type="text" placeholder="课程名称" value="{{lesson.name}}" bindinput="handleTitleInput" data-disabled="{{lessonLock}}" />
       <view class="option-item" data-disabled="{{lessonLock}}">
         <input type="text" placeholder="任课教师" value="{{lesson.teacher}}" bindinput="handleTitleInput" />
-        <fa class="content {{lessonLock?'disabled': ''}}" style="color: var(--color-pink-2);" icon="fa fa-plus" /> 
+        <fa class="content {{lessonLock?'disabled': ''}}" style="color: var(--color-pink-2);" icon="fa fa-plus" wx:if="{{false}}" /> 
       </view>
       <view class="option-item" hover-class="item-tap" bindtap="selectColor" data-disabled="{{lessonLock}}">
         <view class="title">卡片颜色</view>
         <view class="content color-picker" style="color: var(--lesson-item-{{lesson.color}})">
           <view class="dot-10px" style="margin-right: 10rpx; background-color: var(--lesson-item-{{lesson.color}})" />
           {{colorMap[lesson.color]}}
-          <fa class="more-icon {{lessonLock?'disabled': ''}}" icon="fa fa-angle-down fa-lg" /> 
+          <fa class="more-icon {{lessonLock?'disabled': ''}}" icon="fa fa-angle-down fa-lg"/> 
         </view>
       </view>
     </view>
-    <view class="line-button {{lessonLock?'active': ''}}" hover-class="tap" bindtap="selectLesson" wx:if="{{mode !== 'edit'}}">{{lessonLock?'自定义课程': '添加到已有到课程中'}}</view>
+    <view class="line-button {{lessonLock?'active': ''}}" hover-class="tap" bindtap="selectLesson" wx:if="{{mode !== 'edit'}}">{{lessonLock?'自定义课程': '添加到已有课程中'}}</view>
 
     <!-- 课程上课时间 -->
-    <view class="card-container schedule">
+    <view class="card-container schedule" wx:if="{{scheduleList.length > 0}}">
       <view class="option-item" style="min-height: 30px; border: none; margin-bottom: 15rpx;">
-        <view class="title">上课安排 1</view>
-        <fa class="content close-icon" style="color: var(--color-pink-2)" icon="fa fa-plus" /> 
+        <view class="title">上课安排 ({{scheduleList.length}})</view>
+        <!-- <fa class="content close-icon" style="color: var(--color-pink-2)" icon="fa fa-plus" />  -->
       </view>
+      <!--
       <view class="option-item" hover-class="item-tap">
         <view class="title">时间</view>
         <view class="content color-picker">
@@ -42,14 +43,34 @@
 
       <view class="option-item">
         <input type="text" placeholder="上课内容" value="{{lesson.teacher}}" bindinput="handleTitleInput" />
+      </view> -->
+
+      <view
+        wx:for="{{scheduleList}}"
+        wx:for-item="item"
+        wx:for-index="index"
+        wx:key="_key"
+        class="item option-item no-radius"
+        hover-class="item-tap"
+        data-item="{{item}}"
+        bindtap="editSchedule"
+      >
+        <!-- 序号 -->
+        <view class="indexer">{{index + 1}}</view>
+        <view class="title">{{item['日期']}}</view>
+        <view class="description">
+          <view class="time">{{item['节次名称']}}</view>
+          <view class="location">{{item['教学地点']}}</view>
+        </view>
+        <fa class="more-icon" icon="fa fa-angle-down fa-lg" /> 
       </view>
     </view>
 
     <!-- 添加上课时间 -->
-    <view class="line-button" hover-class="tap">添加上课安排</view>
+    <view class="line-button" hover-class="tap" bindtap="editSchedule">添加上课安排</view>
 
     <!-- 底栏 -->
-    <view class="card-container">
+    <!-- <view class="card-container">
       <view class="option-item" hover-class="item-tap">
         <view class="title">上课周次</view>
         <view class="content">
@@ -57,7 +78,7 @@
           <fa class="content more-icon" icon="fa fa-angle-down fa-lg" /> 
         </view>
       </view>
-    </view>
+    </view> -->
 
     <!-- 添加按钮 -->
     <view class="add-button" hover-class="button-tap" bindtap="handleAddLesson">添加课程</view>
@@ -120,6 +141,31 @@
       <view class="title">{{lesson['课程名称']}}</view>
       <view class="name">{{lesson['教师姓名']}}</view>
       <fa class="more-icon" icon="fa fa-angle-down fa-lg" /> 
+    </view>
+  </pop-window>
+
+  <!-- 课程安排编辑器 -->
+  <pop-window class="lesson-editor" id="lesson-editor" title="编辑课程安排" enableExpand="{{false}}">
+    <view slot="right" bindtap="handleLessonEditConfirm">添加</view>
+    <view class="card-container schedule" style="box-shadow: none;">
+      <view class="option-item no-radius" hover-class="item-tap">
+        <view class="title">时间</view>
+        <view class="content color-picker">
+          <view class="multi-text">
+            <text>2022/04/10</text>
+            <text>下午第二大节</text>
+          </view>
+          <fa class="more-icon" icon="fa fa-angle-down fa-lg" /> 
+        </view>
+      </view>
+
+      <view class="option-item">
+        <input type="text" placeholder="地点" value="{{lessonEditor.location}}" bindinput="handleTitleInput" />
+      </view>
+
+      <view class="option-item">
+        <textarea type="text" placeholder="上课内容" value="{{lessonEditor.description}}" bindinput="handleTitleInput" />
+      </view>
     </view>
   </pop-window>
 </view>

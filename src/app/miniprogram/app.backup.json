@@ -11,7 +11,11 @@
     "pages/lessons-list/lessons-list",
     "pages/score/score",
     "pages/exams/exams",
+    "pages/social-bind/social-bind",
     "pages/creative-score/creative-score",
+    "pages/discuss/discuss",
+    "pages/feedback/feedback",
+    "pages/discuss-new-post/discuss-new-post",
     "pages/query-occupy/query-occupy",
     "pages/query-teacher-lesson/query-teacher-lesson",
     "pages/push-service/push-service",
@@ -22,8 +26,7 @@
     "pages/announce-new-post/announce-new-post",
     "pages/answer-book/answer-book",
     "pages/query-lesson-advanced/index",
-    "pages/lesson-edit/lesson-edit",
-    "pages/settings/settings"
+    "pages/lesson-edit/lesson-edit"
   ],
   "window": {
     "backgroundColor": "@pageBackground",

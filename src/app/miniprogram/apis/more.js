@@ -148,7 +148,7 @@ async function getAllLessonsFromSchool({ date = '', teacherName = '', collegeId 
       let arr = [0, 0]
       arr[0] = Number(str.slice(0, 2))
       arr[1] = Number(str.slice(str.length - 2, str.length))
-      return arr;``
+      return arr;
     }],
     // xq: '星期',
     jxcdmc: '教学地点',
@@ -157,7 +157,19 @@ async function getAllLessonsFromSchool({ date = '', teacherName = '', collegeId 
   }
 
   const { total, rows } = ret.data
-  let formattedRows = tools.keyMapConvert(rows, keyMap)
+  const nameList = []
+  
+  // 去重
+  let formattedRows = tools.keyMapConvert(rows, keyMap).filter(e => {
+    if (!e['节次'])
+      return false
+    const name = `${e['教学地点']}${e['节次'].join('')}`
+    if (nameList.indexOf(nameList) === -1) {
+      nameList.push(name)
+      return true
+    }
+    return false
+  })
 
   // 所有可以查询的教学楼
   const buildings = Object.keys(allRooms).join('')
@@ -223,7 +235,7 @@ async function getAllLessons(date, forceFromSchool = false) {
 
   /** 如果数据库没有，则从教务系统获取 */
   log.info('从教务系统获取全校课程')
-  const lessons = await getAllLessonsFromSchool({ date })
+  const lessons = await getAllLessonsFromSchool({ date, isIgnoreBuildingCheck: false })
   log.info('上传当日全校课程到数据库')
   database.updateSchoolLesson(lessons, date)
   return Promise.resolve({

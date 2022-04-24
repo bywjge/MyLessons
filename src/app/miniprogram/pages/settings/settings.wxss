@@ -1,0 +1,243 @@
+page {
+  overflow: hidden;
+
+  --border-radius: 28rpx;
+  --button-icon-size: 38rpx;
+
+  --item-padding: 40rpx;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+  scroll-behavior: smooth;
+}
+
+.container > .content {
+  /* width: 90%; */
+  /* 不然box-shadow会被截断 */
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 8%;
+  padding-top: 60rpx;
+  padding-bottom: 50rpx;
+  flex: 1;
+  overflow: scroll;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx 0;
+  /* padding: 10rpx 40rpx; */
+  margin-bottom: 60rpx;
+  /* background-color: var(--card-background); */
+  background-color: var(--item-background);
+  box-shadow: 0 1rpx 16rpx 0 var(--shadow-10);
+  border-radius: var(--border-radius);
+  color: var(--text-black-2);
+}
+
+.card-container > .title {
+  margin-top: 20rpx;
+  margin-left: var(--item-padding);
+  margin-bottom: 30rpx;
+  font-size: 34rpx;
+  font-weight: 450;
+}
+
+.card-container .item {
+  position: relative;
+  padding: 25rpx 0;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-container .item[data-disabled=true],
+.card-container .item[data-disabled=true] input,
+.card-container .item[data-disabled=true] textarea,
+.card-container .option-item[data-disabled=true],
+.card-container .option-item[data-disabled=true] input,
+.card-container .option-item[data-disabled=true] textarea {
+  pointer-events: none;
+  color: var(--text-black-3);
+}
+
+.card-container .option-item[data-disabled=true] i {
+  pointer-events: none;
+  color: var(--text-black-4);
+}
+
+.card-container .item:not([data-disabled=true]).item-tap,
+.card-container .option-item:not([data-disabled=true]).item-tap {
+  background: var(--color-black-10);
+}
+
+.card-container .item > .description,
+.card-container .option-item > .description {
+  width: 100%;
+  font-size: 24rpx;
+  margin-top: 10rpx;
+  color: var(--text-black-4);
+  box-sizing: border-box;
+  padding-right: 30%;
+
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.card-container > .option-item > .content > .text {
+  color: var(--color-pink-1);
+}
+
+.card-container .option-item textarea {
+  padding-top: 30rpx;
+}
+
+/* 每一个项目 */
+.card-container .option-item, .card-container .item {
+  position: relative;
+  padding: 30rpx var(--item-padding);
+  min-height: 100rpx;
+  font-size: 32rpx;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.card-container .option-item:not(.no-radius):first-child {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+.card-container .option-item:not(.no-radius):last-child {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+.card-container .option-item:not(:last-child) {
+  border-bottom: solid 1px var(--color-black-10);
+}
+
+
+.card-container .option-item .content {
+  /* flex: 1; */
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 10rpx;
+  right: var(--item-padding);
+}
+
+.card-container .option-item > input, .card-container .option-item > textarea {
+  flex: 1;
+}
+
+.text-area textarea, input {
+  width: auto;
+  color: var(--text-black-2);
+}
+
+.to-top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 40rpx;
+  color: var(--text-black-2);
+}
+
+.bottom-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 50rpx;
+  padding: 20rpx 50rpx;
+}
+
+.operations {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.bottom-bar .post-button {
+  color: var(--highlight-font-color);
+}
+
+.content fa {
+  color: var(--text-black-3);
+  font-size: 32rpx;
+  margin-left: 16rpx;
+}
+
+.more-icon i {
+  transform: rotate(-90deg);
+}
+.close-icon i {
+  transform: rotate(-45deg);
+}
+
+.content .multi-text {
+  display: flex;
+  flex-direction: column;
+  color: var(--highlight-font-color);
+  font-size: 30rpx;
+  justify-content: flex-end;
+  text-align: end;
+}
+
+.line-button {
+  border: solid 1px var(--color-black-10);
+  border-radius: 10px;
+  padding: 15rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+  color: var(--text-black-3);
+  width: 100%;
+  margin-bottom: 60rpx;
+  transition: all .3s;
+}
+.line-button.active {
+  background: var(--color-pink-2);
+  color: white;
+}
+
+.line-button:not(.active).tap {
+  border-color: var(--color-pink-2);
+  color: var(--highlight-font-color);
+}
+
+.add-button {
+  /* width: 100%; */
+  /* width: 400rpx; */
+  margin-top: 80rpx;
+  margin-bottom: 40rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  font-size: 30rpx;
+  color: #FFFFFF;
+  text-align: center;
+  user-select: none;
+  transition: all 0.3s;
+  font-weight: 400;
+  background: var(--button-background);
+  border-radius: 11px;
+}
+
+.button-tap {
+  background-color: var(--button-tap-background);
+}
+
+.bottom-hint {
+  font-size: 24rpx;
+  color: var(--text-black-4);
+  text-align: center;
+}

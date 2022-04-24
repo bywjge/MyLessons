@@ -9,6 +9,7 @@
       <view class="subtitle">长按小程序码即可分享或保存</view>
 
       <image class="qrcode" mode="aspectFill" show-menu-by-longpress="{{true}}" src="/assets/app-code.jpg" />
+      <view class="subtitle" style="margin-top: 20rpx; color: var(--color-pink-1); max-width: 100%;">您也可以通过点击右上角来分享给朋友或者发朋友圈</view>
     </view>
   </view>
 </view>

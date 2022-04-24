@@ -12,6 +12,7 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "lodash.clonedeep": "^4.5.0",
+    "node-html-parser": "^5.3.3",
     "qs": "^6.10.3"
   }
 }

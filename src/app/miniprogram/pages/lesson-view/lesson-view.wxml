@@ -1,16 +1,16 @@
 <view class="view-container {{disableAnimation? 'disable-animation': ''}}" data-theme="{{theme}}">
   <navigation>
     <view slot="left" class="operation-btn" bindtap="handleClick" hover-class="operation-btn-tap">
-      {{indexMode === 'day'?'周视图':'日视图'}}
+      {{indexMode === 'daily'?'周视图':'日视图'}}
     </view>
   </navigation>
 
   <lessons-overview 
-    style="display: {{indexMode === 'day'?'block':'none'}}; height: calc(100% - {{navBarHeight}}px)" 
+    style="display: {{indexMode === 'daily'?'block':'none'}}; height: calc(100% - {{navBarHeight}}px)" 
     class="item" 
   />
   <lessons-weekly 
-    style="display: {{indexMode === 'week'?'block':'none'}}; height: calc(100% - {{navBarHeight}}px)" 
+    style="display: {{indexMode === 'weekly'?'block':'none'}}; height: calc(100% - {{navBarHeight}}px)" 
     class="item"
   />
 </view>

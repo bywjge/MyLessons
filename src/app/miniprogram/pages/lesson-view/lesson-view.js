@@ -8,14 +8,14 @@ import tools from '../../utils/tools';
 
 Page({
   data: {
-    indexMode: "day",
+    indexMode: "daily",
     navBarHeight
   },
 
   handleClick(){
-    let newMode = "day"
-    if (this.data.indexMode === 'day'){
-      newMode = "week"
+    let newMode = "daily"
+    if (this.data.indexMode === 'daily'){
+      newMode = "weekly"
     }
     this.setData({
       indexMode: newMode
@@ -23,6 +23,9 @@ Page({
     eventBus.emit("switchView", newMode)
   },
   onLoad() {
+    this.setData({
+      indexMode: wx.getStorageSync('mainView') || 'daily'
+    })
     // data中自动添加一个theme
     bindTheme(this)
     const { year, term } = lessonApi.getTerm()
