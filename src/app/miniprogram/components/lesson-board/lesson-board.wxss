@@ -106,6 +106,36 @@ page {
     (var(--indexer-height) + var(--indexer-margin-bottom)) * 6
   ));
 }
+.day-lesson-wrapper .strip .item[data-from = "2"] {
+  transform: translateY(calc( 
+    var(--indexer-height) * .5 + var(--indexer-margin-bottom) * 0
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "4"] {
+  transform: translateY(calc( 
+    var(--indexer-height) * 1.5 + var(--indexer-margin-bottom) * 1
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "6"] {
+  transform: translateY(calc( 
+    var(--indexer-height) * 2.5 + var(--indexer-margin-bottom) * 2
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "8"] {
+  transform: translateY(calc( 
+    var(--indexer-height) * 3.5 + var(--indexer-margin-bottom) * 3
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "10"] {
+  transform: translateY(calc( 
+    var(--indexer-height) * 4.5 + var(--indexer-margin-bottom) * 4
+  ));
+}
+.day-lesson-wrapper .strip .item[data-from = "12"] {
+  transform: translateY(calc( 
+    var(--indexer-height) * 5.5 + var(--indexer-margin-bottom) * 5
+  ));
+}
 
 .day-lesson-wrapper .strip .item[data-merge-count = "1"] {
   height: calc(var(--indexer-height) / 2);

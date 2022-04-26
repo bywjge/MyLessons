@@ -148,7 +148,8 @@ async function getLessonFromSchool(year, term = 1, isTeacher = false) {
       return arr
     }],
     xq: '星期',
-    jxcdmc: '教学地点',
+    pkrq: '日期',
+    jxcdmc: ['教学地点', str => str || '(无地点)'],
     pkrs: '排课人数',
     kxh: '课序号',
     jxhjmc: '讲课',
@@ -176,13 +177,13 @@ async function getLessonFromSchool(year, term = 1, isTeacher = false) {
   const { total, rows } = ret.data
   const formattedRows = tools.keyMapConvert(rows, keyMap)
   formattedRows.forEach(e => {
-    const week = Number(e['上课周次'])
+    // const week = Number(e['上课周次'])
     /** 课程所在周的第一天（星期一）是什么时候 */
-    const firstDayInWeek = convertWeekToDate(week)
+    // const firstDayInWeek = convertWeekToDate(week)
     /** 课程对应的星期几是第几天，从0开始算 */
-    const dayInWeek = Number(e['星期']) - 1
+    // const dayInWeek = Number(e['星期']) - 1
     /** 为每一节课加上对应的日期 */
-    e['日期'] = firstDayInWeek.nDaysLater(dayInWeek).format("YYYY-mm-dd")
+    // e['日期'] = firstDayInWeek.nDaysLater(dayInWeek).format("YYYY-mm-dd")
 
     /** 班级升序排序 */
     const classes = e['上课班级'].split(',').sort((a, b) => a - b)
@@ -526,6 +527,38 @@ async function syncLessons(forceFromSchool = false){
  * @param {boolean} skipConvert 是否跳过前面的转换
  */
 function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
+  /**
+   * 获取某节课程在一天内的冲突课程
+   * @param {Object} lesson 单节课程
+   * @param {Array<Object>} lessonList 单日课程列表
+   * 
+   * @returns {{ conflict: Array<Object>, rest: Array<Object>}} 返回结果，conflict为有冲突的课程，rest为剩余的课程，不包括conflict以及lesson
+   */
+  const getConflictInList = function (lesson, lessonList) {
+    const ret = [], rest = []
+    if (!lesson)
+      return { conflict: [], rest: lessonList }
+
+    for (let i = 0; i < lessonList.length; i++) {
+      const e = lessonList[i];
+      if (!e || lesson === e || e._key === lesson._key)
+        continue ;
+
+      if (
+        (e['节次'][0] <= lesson['节次'][0] && e['节次'][1] >= lesson['节次'][0]) ||
+        (e['节次'][0] <= lesson['节次'][1] && e['节次'][1] >= lesson['节次'][1])
+      ) {
+        // 有冲突
+        ret.push(e)
+      } else {
+        rest.push(e)
+      }
+    }
+    return {
+      conflict: ret,
+      rest
+    }
+  }
   // firstWeekDate 是课表里第一周的星期日
   // 课表的排序是：(日 一 二 三 四 五 六)
 
@@ -535,6 +568,11 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
     lessons.forEach(lesson => {
       // 为课程加上key标识符以区分
       lesson._key = tools.randomString(8)
+
+      const 教室编号 = /\w+/.exec(lesson['教学地点'])
+      lesson['编号'] = 教室编号? 教室编号[0]: ""
+      lesson['地点'] = lesson['教学地点'].replace(/\w/g, "")
+
       const date = lesson['日期']
 
       if (!Array.isArray(lessonsByDay[date]))
@@ -554,6 +592,7 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
     lessons.sort((a, b) => Number(a['节次'][0]) - Number(b['节次'][0]))
 
     // 先进行课程冲突标识
+    // ! 冲突检测需要重写
     lessons.forEach((now, index, raw) => {
       if (index === 0) {
         raw[index]['冲突'] = false
@@ -674,50 +713,53 @@ function convertAndStorage(lessons, skipConvert = false, skipColorize = false) {
   wx.setStorageSync('lessonsByDay', lessonsByDay)
 
   /** 生成每周课表 */
-  // 初始化一个[22][7][7]的数组，而且里面全部是null
+  // 初始化一个[22][7]的数组，而且里面全部是[]
   const lessonsByWeek = new Array(22).fill(null).map(() => {
     return Array.from({ length: 7 }, () => {
-      return new Array(7).fill(null)
+      return new Array()
+      // return new Array(7).fill(null)
     })
   })
 
   for (const date in lessonsByDay) {
-    const lessons = lessonsByDay[date]
-    lessons.forEach(lesson => {
-      const 上课教室编号 = /\w+/.exec(lesson['教学地点'])
-      lesson['编号'] = 上课教室编号? 上课教室编号[0]: ""
-      lesson['地点'] = lesson['教学地点'].replace(/\w/g, "")
+    let lessons = lessonsByDay[date]
 
-      /** 对于超长的教学楼给省略号 */
-      if (lesson['地点'].length > 7) {
-        lesson['地点'] = lesson['地点'].substr(0, 6) + "..."
+    while (lessons.length > 0) {
+      let lesson = lessons[0]
+      if (!lesson)
+        break ;
+
+      let week = Number(lesson['上课周次'])
+      let day = Number(lesson['星期'])
+
+      // 如果这一天是星期天，则周次-1
+      if (day === 7)
+        week--
+
+      const { conflict, rest } = getConflictInList(lesson, lessons)
+
+      // 如果有冲突，则将冲突的课程合并为一个课程
+      if (conflict.length > 0) {
+        // 合并时需要生成开始以及结束节次，使用min(开始节次), max(结束节次)作为合并课程的上课节次
+        const all = conflict.concat(lesson)
+        const from = Math.min(...all.map(e => e['节次'][0]))
+        const to = Math.max(...all.map(e => e['节次'][1]))
+        lesson = Object.assign({}, {
+          冲突: true,
+          课程名称: all.map(e => e.课程名称).join('&'),
+          地点: '课程冲突',
+          编号: '⚠️',
+          卡片颜色: lesson['卡片颜色'],
+          节次: [from, to],
+          lessons: all
+        })
       }
 
       /** 加入到每日课表 */
-      const week = Number(lesson['上课周次'])
-      const day = Number(lesson['星期'])
-      const 课程开始节次 = Number(lesson['节次'][0]) - 1
-
-
-      // 如果已经有课了（课程冲突） 没课的时候是null
-      if (lesson['冲突'] === true) {
-        let t = lessonsByWeek[week - 1][day - 1][课程开始节次 / 2]
-        if (!t) {
-          lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = Object.assign({}, lesson)
-        } else {
-          t['课程名称'] += `&${lesson['课程名称']}`
-        }
-        t = lessonsByWeek[week - 1][day - 1][课程开始节次 / 2]
-        t['lessons'] = t['lessons'] || new Array()
-        t['地点'] = '课程冲突'
-        t['编号'] = '⚠️'
-        t['lessons'].push(lesson)
-      } else {
-        lessonsByWeek[week - 1][day - 1][课程开始节次 / 2] = lesson
-      }
-    })
+      lessonsByWeek[week - 1][day - 1].push(lesson)
+      lessons = rest
+    }
   }
-
   wx.setStorageSync('lessonsByWeek', lessonsByWeek)
   log.info("课表存储成功");
 

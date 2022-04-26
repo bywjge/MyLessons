@@ -1,0 +1,122 @@
+var dateutils = {}
+var stringutils = {}
+/**
+ * es6 padStart的实现
+ * @param {string} string 需要被拼接的字符串
+ * @param {number} targetLength 需要的目标长度
+ * @param {string } [padString=""] 用于拼接的字符
+ */
+stringutils.padStart = function(string, targetLength, padString = ' ') {
+  while (string.length < targetLength) {
+    string = padString + string
+  }
+  return string
+}
+
+/**
+ * 获取n天后前的时间
+ * @param {Date} t 时间 
+ * @param {number} day 天数
+ * 
+ * @returns {Date}
+ */
+dateutils.nDaysAgo = function(t, day) {
+  if (!t || t.constructor !== 'Date' || typeof day !== "number")
+    return ;
+  
+  var ms = 86400000 * day;
+  return new Date(t.getTime() - ms);
+}
+
+/**
+ * 获取n天后的时间
+ * @param {Date} t 时间 
+ * @param {number} day 天数
+ * 
+ * @returns {Date}
+ */
+dateutils.nDaysLater = function(t, day) {
+  if (!t || t.constructor !== 'Date' || typeof day !== "number")
+    return ;
+
+  var ms = 86400000 * day;
+  return new Date(t.getTime() + ms);
+}
+
+/**
+ * 将时间按照指定格式输出
+ * @param {Date} t 时间 
+ * @param {string} fmt 格式字符串 
+ * 
+ * @returns {string} 格式化后的时间字符串
+ */
+dateutils.format = function(t, fmt) {
+  if (!t) 
+    return ;
+
+  if (typeof t === 'string')
+    t = getDate(t)
+
+  if (t.constructor !== 'Date' || typeof fmt !== "string")
+    return ;
+
+  var ret;
+  var opt = [
+   ["Y+", t.getFullYear().toString()],
+   ["m+", (t.getMonth() + 1).toString()],
+   ["d+", t.getDate().toString()],
+   ["H+", t.getHours().toString()],
+   ["M+", t.getMinutes().toString()],
+   ["S+", t.getSeconds().toString()]
+  ]
+
+  for (var index = 0; index < opt.length; index++) {
+    var k = opt[index][0]
+    var v = opt[index][1]
+    ret = getRegExp("(" + k + ")").exec(fmt);
+    if (ret) {
+      fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (v) : (stringutils.padStart(v, ret[1].length, "0")))
+    };
+  }
+  return fmt;
+}
+
+/** 
+ * 判断是否同一天(day)
+ * @param {Date} t 时间1
+ * @param {Date} t1 时间2
+ * 
+ * @returns {boolean}
+ */
+dateutils.dayEquals = function(t, t1) {
+  if (!t || !t1 || t.constructor !== 'Date' || t1.constructor !== 'Date')
+    return ;
+  
+  var a = dateutils.format(t, "YYYY-mm-dd")
+  var b = dateutils.format(t1, "YYYY-mm-dd")
+  return a === b
+}
+
+/**
+ * 计算两个时间之间的天数差，向下取整
+ * @param {Date} t 时间1
+ * @param {Date} t1 时间2
+ * 
+ * @returns {number} 天数差，整数
+ */
+dateutils.diffDay = function(t, t1) {
+  if (!t || t.constructor !== 'Date' || t1.constructor !== 'Date')
+    return ;
+
+  var dayGap = 3600 * 24 * 1000 //ms
+  return Math.floor((t1.getTime() - t.getTime()) / dayGap)
+}
+
+dateutils.getDate = function(t) {
+  return getDate(t)
+}
+
+module.exports = {
+  dateutils: dateutils,
+  stringutils: stringutils
+}

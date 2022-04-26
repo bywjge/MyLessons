@@ -24,12 +24,12 @@
     >
       <view wx:if="{{e !== null}}" class="name">{{e['课程名称']}}</view>
       <view 
-        wx:if="{{e !== null}}" 
+        wx:if="{{e['节次'][1] !== e['节次'][0]}}" 
         class="bottom" 
         style="background-color: var(--lesson-item-{{e['卡片颜色']}}); color: var(--lesson-item-{{e['卡片颜色']}}-text)"
       >
         <view wx:if="{{e['编号'] !== ''}} "class="number">{{e['编号']}}</view>
-        <view class="location">{{e['地点']}}</view>
+        <view class="location">{{util.ellipsis(e['地点'], 7)}}</view>
       </view>
       <!-- <fa 
         icon="fa fa-plus fa-lg" 
@@ -38,3 +38,16 @@
     </view>
   </view>
 </view>
+
+<wxs module="util">
+function ellipsis(str, length) {
+  if (str.length > length) {
+    return str.substring(0, length - 1) + "..."
+  }
+  return str
+}
+
+module.exports = {
+  ellipsis: ellipsis
+}
+</wxs>
